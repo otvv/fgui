@@ -208,8 +208,4 @@
     element->set_boundaries_text(min_text, max_text); \
 \
 
-#define SET_SECONDARY_FONT( element, font ) \
-    element->set_secondary_font( font ); \
-\
-
 #pragma endregion
