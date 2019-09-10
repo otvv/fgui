@@ -88,7 +88,7 @@ namespace fgui {
 		void set_font(std::string font_family, int size, int flags = 0, bool bold = false);
 		void set_font(fgui::element_font element_font);
 
-		// returns the primary/secondary font that the element is currently using
+		// returns the font that the element is currently using
 		fgui::font get_font();
 		
 	protected:
