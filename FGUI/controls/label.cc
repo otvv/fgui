@@ -63,7 +63,7 @@ void fgui::label::draw() {
 
 		// banner body
 		fgui::render.outline(banner_area.left, banner_area.top, banner_area.right, banner_area.bottom, fgui::color(style.label.at(0)));
-		fgui::render.outline(banner_area.left + 2, banner_area.top + 2, banner_area.right - 4, banner_area.bottom - 4, fgui::color(style.button.at(3)));
+		fgui::render.outline(banner_area.left + 2, banner_area.top + 2, banner_area.right - 4, banner_area.bottom - 4, fgui::color(style.label.at(4)));
 		fgui::render.rect(banner_area.left + 3, banner_area.top + 3, banner_area.right - 6, banner_area.bottom - 6, fgui::color(style.label.at(1)));
 
 		// banner label

@@ -12,7 +12,7 @@ namespace fgui {
 
 	// handlers
 	typedef int key;
-	typedef bool status;
+	typedef bool state;
 	typedef unsigned long font;
 
 	enum key_code {
@@ -172,6 +172,12 @@ namespace fgui {
 		COLORED_TEXT,
 	};
 
+	enum text_flags {
+		SECRET = (1 << 0),
+		UPPERCASE = (1 << 1),
+		NORMAL = (1 << 2)
+	};
+
 	enum key_status {
 		KEY_INVALID = -1,
 		KEY_FIRST = 0,
@@ -191,14 +197,15 @@ namespace fgui {
 		TEXTBOX_FAMILY,
 		COLORLIST_FAMILY,
 		CONTAINER_FAMILY,
-		TAB_FAMILY
+		TAB_FAMILY,
+		SPINNER_FAMILY
 	};
 
 	enum element_flag {
-		DRAWABLE = 0x1,
-		CLICKABLE = 0x2,
-		FOCUSABLE = 0x4,
-		SAVABLE = 0x8
+		DRAWABLE = (1 << 0),
+		CLICKABLE = (1 << 1),
+		FOCUSABLE = (1 << 2),
+		SAVABLE = (1 << 3)
 	};
 
 	typedef struct rectangle {
@@ -214,23 +221,59 @@ namespace fgui {
 	} dimension;
 
 	typedef struct point_2d {
-		int x;
-		int y;
+		int x, y;
+
+		point_2d() = default;
+		point_2d(int x1, int y1) : x(x1), y(y1) {}
+
+		// operators
+		point_2d operator+(const point_2d& rhs) {
+			return point_2d(x + rhs.x, y + rhs.y);
+		}
+		
+		point_2d operator-(const point_2d& rhs) {
+			return point_2d(x - rhs.x, y - rhs.y);
+		}
+
+		point_2d operator/(const int& rhs) {
+			return point_2d(x / rhs, y / rhs);
+		}
+
+		point_2d operator*(const int& rhs) {
+			return point_2d(x * rhs, y * rhs);
+		}
+
+		int& operator[](std::size_t index) {
+			return *reinterpret_cast<int*>(this + index);
+		}
+
 	} point;
 
 	typedef struct precision_point_2d {
-		precision_point_2d() {
-			x = 0.f;
-			y = 0.f;
+		float x, y;
+
+		precision_point_2d() = default;
+		precision_point_2d(float x1, float y1) : x(x1), y(y1) {}
+
+		precision_point_2d operator+(const point_2d& rhs) {
+			return precision_point_2d(x + rhs.x, y + rhs.y);
+		}
+		
+		precision_point_2d operator-(const point_2d& rhs) {
+			return precision_point_2d(x - rhs.x, y - rhs.y);
 		}
 
-		precision_point_2d(float x1, float y1) {
-			x = x1;
-			y = y1;
-		};
+		precision_point_2d operator/(const int& rhs) {
+			return precision_point_2d(x / rhs, y / rhs);
+		}
 
-		float x;
-		float y;
+		precision_point_2d operator*(const int& rhs) {
+			return precision_point_2d(x * rhs, y * rhs);
+		}
+
+		float& operator[](std::size_t index) {
+			return *reinterpret_cast<float*>(this + index);
+		}
 
 	} precision_point;
 
@@ -239,23 +282,22 @@ namespace fgui {
 		fgui::precision_point position;
 		fgui::precision_point text_coord;
 
-		vertex() {}
-
+		vertex() = default;
 		vertex(const fgui::precision_point& pos, const fgui::precision_point& coord = fgui::precision_point(0, 0)) {
-			position = pos;
-			text_coord = coord;
+			position = pos; text_coord = coord;
 		}
 	};
 
 	struct item_info {
-		item_info(std::string item, bool state) { m_item = item; m_checked = state; }
-		item_info(std::string item, int value) { m_item = item; m_value = value; }
-		item_info(std::string item) { m_item = item; }
-		item_info(std::vector<std::string> items) { m_items = items; }
+		item_info() { m_item = ""; m_checked = false; };
+		item_info(std::string item, int value) : m_item(item), m_value(value) {}
+		item_info(std::string item, bool state) : m_item(item), m_checked(state) {}
+		item_info(std::string item) : m_item(item) {}
+		item_info(std::vector<std::string> items) : m_items(items) {}
 
 		std::string m_item = "";
 		bool m_checked = false;
 		int m_value = 0;
-		std::vector<std::string> m_items; 
+		std::vector<std::string> m_items;
 	};
 }

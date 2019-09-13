@@ -78,12 +78,12 @@ void fgui::combobox::draw() {
 			unsigned int item_displayed = 0;
 
 			// calculate the amount of items to be displayed
-			int calculated_items = m_height / m_item_height;
+			int calculated_items = (m_height - m_item_height) / m_item_height;
 
 			for (std::size_t i = m_slider_top; (i < m_info.size() && item_displayed < calculated_items); i++) {
 
 				// get the item area on the drop down list
-				fgui::rect item_area = {a.x, a.y + 23 + (m_item_height * item_displayed), (m_width - 8), 20};
+				fgui::rect item_area = {a.x, a.y + 23 + (m_item_height * item_displayed), (m_width - 8), m_item_height };
 
 				// if the user starts hovering a item or selects one
 				if (fgui::input.is_mouse_in_region(item_area) || m_index == i) {
@@ -113,7 +113,7 @@ void fgui::combobox::draw() {
 			if (calculated_position >= 1.f)
 				calculated_position = 1.f;
 
-			calculated_position *= (m_height - m_item_height);
+			calculated_position *= m_height - m_item_height;
 
 			// calculate the slider size
 			float calculated_size = static_cast<float>(calculated_items) / static_cast<float>(m_info.size());
@@ -121,10 +121,10 @@ void fgui::combobox::draw() {
 			if (calculated_size > 1.f)
 				calculated_size = 1.f;
 
-			calculated_size *= (m_height - m_item_height);
+			calculated_size *= m_height - m_item_height;
 
 			// scrollbar body
-			fgui::render.rect(area.left + (area.right - 8), area.top + 23, 8, m_height - 1, fgui::color(style.combobox.at(2)));
+			fgui::render.rect(area.left + (area.right - 8), area.top + 23, 8, (m_height - m_item_height) - 1, fgui::color(style.combobox.at(2)));
 
 			if (m_info.size() > 75)
 				fgui::render.rect((area.left + area.right) - 8 + (8 / 2) - (5 / 2), (area.top + 23) + 5 + calculated_position + 4, 5, 10, fgui::color(style.combobox.at(3)));
@@ -135,7 +135,7 @@ void fgui::combobox::draw() {
 			fgui::render.rect((area.left + area.right) - 8 + (8 / 2) - (5 / 2), (area.top + 24) + 1, 5, 5, fgui::color(style.combobox.at(3)));
 
 			// down button
-			fgui::render.rect((area.left + area.right) - 8 + (8 / 2) - (5 / 2), (area.top + 24) + m_height - 8, 5, 5, fgui::color(style.combobox.at(3)));
+			fgui::render.rect((area.left + area.right) - 8 + (8 / 2) - (5 / 2), (area.top + 24) + (m_height - m_item_height) - 8, 5, 5, fgui::color(style.combobox.at(3)));
 		}
 
 		else if (m_info.size() <= 15) {
@@ -207,13 +207,13 @@ int fgui::combobox::get_value() {
 }
 
 //---------------------------------------------------------
-void fgui::combobox::set_state(bool state) {
+void fgui::combobox::set_state(fgui::state state) {
 
 	m_opened = state;
 }
 
 //---------------------------------------------------------
-bool fgui::combobox::get_state() {
+fgui::state fgui::combobox::get_state() {
 
 	return m_opened;
 }
@@ -267,6 +267,9 @@ void fgui::combobox::handle_input() {
 						
 							if (m_callback)
 								m_callback();
+
+							// close dropdown when a item is selected
+							m_opened = false;
 						}
 					}
 
@@ -306,14 +309,14 @@ void fgui::combobox::update() {
 
 	if (m_opened) {
 
+		// get the control opened area
+		fgui::rect opened_area = { a.x, (a.y + 23), m_width, m_height };
+
 		if (m_info.size() > 15)
-			m_height = m_item_height * 10;
+			m_height = (m_item_height * 10) + m_item_height;
 
 		else if (m_info.size() <= 15)
-			m_height =  m_item_height * m_info.size();
-
-		// get the control opened area
-		fgui::rect opened_area = { a.x, a.y, m_width, m_height };
+			m_height = opened_area.top + (m_item_height * m_info.size());
 
 		if (!fgui::input.is_mouse_in_region(opened_area)) {
 
@@ -334,7 +337,7 @@ void fgui::combobox::update() {
 		fgui::rect scrollbar_slider_area = { a.x + (m_width - 8), a.y + 23, 8, m_height };
 
 		// calculate the amount of items to be drawned
-		int calculated_items = m_height / m_item_height;
+		int calculated_items = (m_height - m_item_height) / m_item_height;
 		
 		if (m_dragging) {
 
@@ -349,7 +352,7 @@ void fgui::combobox::update() {
 
 				// ratio of how many visible to how many are hidden
 				float calculated_size = static_cast<float>(calculated_items) / static_cast<float>(m_info.size());
-				calculated_size *= m_height;
+				calculated_size *= m_height - m_item_height;
 
 				// height delta
 				float height_delta = (cursor.y + calculated_size) - m_height;
@@ -382,8 +385,11 @@ void fgui::combobox::tooltip() {
 	// get the current position of the window
 	fgui::point a = fgui::element::get_absolute_position();
 
+	// get the window style
+	auto style = handler::get_style();
+
 	// get the control area
-	fgui::rect area = { a.x, a.y, m_width, m_original_height };
+	fgui::rect area = { a.x, a.y, m_width, m_height };
 
 	if (m_tooltip.length() > 0) {
 
@@ -391,13 +397,12 @@ void fgui::combobox::tooltip() {
 		int tooltip_text_width, tooltip_text_height;
 		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
 
+		fgui::point cursor = { 0, 0 };
+		fgui::input.get_mouse_position(cursor.x, cursor.y);
+
 		if (fgui::input.is_mouse_in_region(area)) {
-
-			fgui::point cursor = { 0, 0 };
-			fgui::input.get_mouse_position(cursor.x, cursor.y);
-
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(225, 100, 85));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(255, 255, 255), fgui::element::get_font(), m_tooltip);
+			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(style.combobox.at(3)));
+			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
 		}
 	}
 }
@@ -422,6 +427,6 @@ void fgui::combobox::load(const std::string& file_name) {
 	// read config file
 	json_module = nlohmann::json::parse(file_to_load);
 
-	// change the element state to match the one stored on file
+	// change the element value to match the one stored on file
 	m_index = json_module[m_identificator];
 }

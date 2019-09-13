@@ -71,13 +71,13 @@ namespace fgui {
 		void draw();
 
 		// add a new color to the list
-		void add_color(std::string identificator, fgui::color color, bool gradient = false);
+		void add_color(std::string identificator, fgui::color color, fgui::state gradient_state = false);
 
 		// set the color of a specific element on the list
 		void set_color(int index, fgui::color color);
 
 		// set the gradient state for a specific color on the list
-		void set_gradient(int index, bool gradient);
+		void set_gradient(int index, fgui::state gradient_state);
 
 		// get info the color of a specified color picker index
 		fgui::color get_color(int index);

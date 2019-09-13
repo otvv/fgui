@@ -40,10 +40,10 @@ namespace fgui {
 		int get_value();
 
 		// sets a custom state for the combobox (if the dropdown list is opened or not)
-		void set_state(bool state);
+		void set_state(fgui::state state);
 
 		// returns the current state of the combobox (if the dropdown list is opened or not)
-		bool get_state();
+		fgui::state get_state();
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -62,10 +62,10 @@ namespace fgui {
 	private:
 
 		int m_index;
-		bool m_opened;
 		bool m_dragging;
 		int m_slider_top;
 		int m_item_height;
+		fgui::state m_opened;
 		std::function<void()> m_callback;
 		std::vector<fgui::item_info> m_info;
 	};

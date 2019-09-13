@@ -43,6 +43,10 @@ namespace fgui {
 	using clip_rect_alias = std::add_pointer_t<void(int x, int y, int width, int height)>;
 
 	struct rendering_functions {
+		
+		//
+		// Most of this stuff you will be able to do with a rectangle.
+		//
 
 		create_font_alias create_font; // *
 		screen_size_alias get_screen_size; // *

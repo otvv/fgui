@@ -24,10 +24,10 @@ namespace fgui {
 		void draw();
 
 		// set the container state (on/off)
-		void set_state(bool state);
+		void set_state(fgui::state state);
 
 		// returns the state of the container
-		bool get_state();
+		fgui::state get_state();
 
 		// save all elements inside a config file
 		void save_config(const std::string& file_name);
@@ -39,10 +39,13 @@ namespace fgui {
 		bool hovering();
 
 		// set whether or not the scrollbar should be used
-		void set_scrollbar_state(bool state);
+		void set_scrollbar_state(fgui::state state);
 
 		// enable/disable the resizeable option of the container
-		void set_resize_state(bool state);
+		void set_resize_state(fgui::state state);
+
+		// enable/disable the hidden state of the container (hover to unhide)
+		void set_hidden_state(fgui::state state);
 
 		// returns true if the container has a scrollbar
 		bool get_scrollbar_state();
@@ -67,9 +70,8 @@ namespace fgui {
 	private:
 
 		int m_scroll_offset, m_bottom_element_pos;
-		bool m_opened, m_dragging_container;
-		bool m_resizeable, m_size_changing;
-		bool m_scrollbar_state, m_dragging_scrollbar;
+		fgui::state m_opened, m_scrollable, m_resizeable, m_hideable;
+		bool m_dragging_container, m_size_changing, m_dragging_scrollbar;
 		std::vector<std::shared_ptr<fgui::element>> m_elements;
 	};
 }

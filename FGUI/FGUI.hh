@@ -17,6 +17,7 @@
 #include "controls/listbox.hh"
 #include "controls/multibox.hh"
 #include "controls/slider.hh"
+#include "controls/spinner.hh"
 #include "controls/textbox.hh"
 #include "controls/colorlist.hh"
 #include "controls/container.hh"
@@ -89,15 +90,16 @@
     parent->add_control(element, page); \
 } \
 
-#define ADD_GROUPBOX( element, x, y, name, width, height, font, parent, page, scrollbar_state, resizing_state ) \
+#define ADD_GROUPBOX( element, x, y, name, width, height, font, parent, page, scrollable, resizeable, hideable) \
 { \
     element = std::make_shared<fgui::container>(); \
     element->set_position(x, y); \
     element->set_title(name); \
     element->set_size(width, height); \
     element->set_font(font); \
-    element->set_scrollbar_state(scrollbar_state); \
-    element->set_resize_state(resizing_state); \
+    element->set_scrollbar_state(scrollable); \
+    element->set_resize_state(resizeable); \
+    element->set_hidden_state(hideable); \
     parent->add_control(element, page, true);\
 } \
 
@@ -155,7 +157,19 @@
     parent->add_control(element, page); \
 } \
 
-#define ADD_TEXTBOX( element, x, y, name, text, max_length, identificator, font, parent, page ) \
+#define ADD_SPINNER( element, x, y, name, value, min, max, identificator, font, parent, page ) \
+{ \
+    element = std::make_shared<fgui::spinner>(); \
+    element->set_position(x, y); \
+    element->set_title(name); \
+    element->set_value(value); \
+    element->set_boundaries(min, max); \
+    element->set_identificator(identificator); \
+    element->set_font(font); \
+    parent->add_control(element, page, true); \
+} \
+
+#define ADD_TEXTBOX( element, x, y, name, text, max_length, flag, identificator, font, parent, page ) \
 { \
     element = std::make_shared<fgui::textbox>(); \
     element->set_position(x, y); \
@@ -163,6 +177,7 @@
     element->set_text(text); \
     element->set_identificator(identificator); \
     element->set_length(max_length); \
+    element->set_text_flag(flag); \
     element->set_font(font); \
     parent->add_control(element, page); \
 } \
@@ -184,6 +199,7 @@
     tabs->add_tab(name); \
 \
 
+// comboboxes and multiboxes
 #define ADD_ITEM( element, name, value ); \
     element->add_item(name, value); \
 \
@@ -196,15 +212,18 @@
     element->set_tooltip(tooltip); \
 \
 
+// button and comboboxes
 #define ADD_FUNCTION( element, function ) \
     element->set_function(function); \
 \
 
+// colorlist
 #define ADD_COLOR( element, label, color, gradient ) \
     element->add_color(label, color, gradient); \
 \
 
-#define SET_BOUNDARIES_TEXT( element, min_text, max_text ) \
+// slider
+#define ADD_BOUNDARIES_TEXT( element, min_text, max_text ) \
     element->set_boundaries_text(min_text, max_text); \
 \
 

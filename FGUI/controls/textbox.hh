@@ -72,10 +72,16 @@ namespace fgui {
 		void draw();
 
 		// get the state of the textbox (if the user is typing or not)
-		bool get_state();
+		fgui::state get_state();
 
 		// set a custom text
 		void set_text(std::string text);
+
+		// set the text flag (type)
+		void set_text_flag(fgui::text_flags flags);
+
+		// get text flags
+		bool get_text_flag(fgui::text_flags flags);
 
 		// set the max text length
 		void set_length(int length);
@@ -99,10 +105,12 @@ namespace fgui {
 		void load(const std::string& file_name);
 	private:
 
-		std::string m_text;
-		int m_text_input_pos;
+		int m_text_flag;
 		int m_text_length;
-		bool m_is_getting_key;
+		std::string m_text;
+		int m_holding_ticks;
+		int m_text_input_pos;
 		bool m_text_selected;
+		fgui::state m_is_getting_key;
 	};
 }

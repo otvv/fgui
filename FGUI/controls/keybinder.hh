@@ -93,7 +93,7 @@ namespace fgui {
 	private:
 
 		fgui::key m_key;
-		bool m_is_getting_key;
 		std::string m_status;
+		bool m_is_getting_key;
 	};
 }

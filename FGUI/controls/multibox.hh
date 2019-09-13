@@ -30,10 +30,10 @@ namespace fgui {
 		bool get_selected(int index);
 
 		// sets a custom state for the multibox (if the dropdown list is opened or not)
-		void set_state(bool state);
+		void set_state(fgui::state state);
 
 		// returns the current state of the multibox (if the dropdown list is opened or not)
-		bool get_state();
+		fgui::state get_state();
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -51,8 +51,8 @@ namespace fgui {
 		void load(const std::string& file_name);
 	private:
 
-		bool m_opened;
 		int m_item_height;
+		fgui::state m_opened;
 		std::vector<fgui::item_info> m_info;
 	};
 }

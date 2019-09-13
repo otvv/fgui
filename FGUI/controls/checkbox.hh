@@ -21,7 +21,7 @@ namespace fgui {
 		void draw();
 
 		// defines the state of the checkbox
-		void set_bool(bool state);
+		void set_bool(bool onoff);
 
 		// returns the checkbox state
 		bool get_bool();

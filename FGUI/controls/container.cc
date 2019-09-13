@@ -9,7 +9,7 @@
 #include "../dependencies/aliases.hh"
 
 /*
- * TODOs:
+ * TODO:
  *  
  * 1 - Create a "add_function" method for the container, so users can add their own stuff into a specific window 
  * (example: Draw a specific text, textures/images, etc)
@@ -29,7 +29,8 @@ fgui::container::container() {
 	fgui::container::m_size_changing = false;
 	fgui::container::m_bottom_element_pos = 0;
 	fgui::container::m_parent_element = nullptr;
-	fgui::container::m_scrollbar_state = false;
+	fgui::container::m_scrollable = false;
+	fgui::container::m_hideable = false;
 	fgui::container::m_dragging_container = false;
 	fgui::container::m_font = fgui::element::m_font;
 	fgui::container::m_family = fgui::element_family::CONTAINER_FAMILY;
@@ -54,8 +55,8 @@ void fgui::container::draw() {
 		// container window header
 		fgui::render.outline(a.x, a.y, m_width, m_height, fgui::color(style.window.at(0), 150));
 		fgui::render.outline(a.x + 1, a.y + 1, m_width - 2, m_height - 2, fgui::color(style.window.at(2)));
-		fgui::render.colored_gradient(a.x + 2, a.y + 2, m_width - 4, 25, fgui::color(style.window.at(3)), fgui::color(style.window.at(4)), fgui::gradient_type::VERTICAL);
-		fgui::render.rect(a.x + 2, (a.y + 2) + 25, m_width - 4, (m_height - 25) - 4, fgui::color(style.window.at(4)));
+		fgui::render.colored_gradient(a.x + 2, a.y + 2, m_width - 4, 25, fgui::color(style.window.at(3), 150), fgui::color(style.window.at(4), 150), fgui::gradient_type::VERTICAL);
+		fgui::render.rect(a.x + 2, (a.y + 2) + 25, m_width - 4, (m_height - 25) - 4, fgui::color(style.window.at(4), 235));
 		fgui::render.text(a.x + 10, a.y + (text_height / 2), fgui::color(style.text.at(3)), fgui::container::get_font(), m_title);
 
 		// container window background
@@ -120,7 +121,7 @@ void fgui::container::draw() {
 			// get the current position of the window
 			fgui::point a = element->get_absolute_position();
 
-			if (m_scrollbar_state) {
+			if (m_scrollable) {
 			
 				/* 
 			 	 *
@@ -139,7 +140,7 @@ void fgui::container::draw() {
 				}
 			}
 
-			else if (!m_scrollbar_state) {
+			else if (!m_scrollable) {
 
 				// draw the element
 				element->draw();
@@ -179,7 +180,7 @@ void fgui::container::draw() {
 		// get the current position of the window
 		fgui::point a = m_focused_element->get_absolute_position();
 
-		if (m_scrollbar_state) {
+		if (m_scrollable) {
 
 			/* 
 			 *
@@ -198,7 +199,7 @@ void fgui::container::draw() {
 			}
 		}
 
-		else if (!m_scrollbar_state) {
+		else if (!m_scrollable) {
 
 			// draw the element
 			m_focused_element->draw();
@@ -209,7 +210,7 @@ void fgui::container::draw() {
 	}
 
 	// draw the scrollbar
-	if (m_scrollbar_state) {
+	if (m_scrollable) {
 
 		// disable resizing if the groupbox has scrollbars enabled
 		m_resizeable = false;
@@ -235,16 +236,42 @@ void fgui::container::draw() {
 		// down button
 		fgui::render.rect((a.x + m_width) - 8 + (8 / 2) - (5 / 2), (a.y + 2) + (m_height - 8), 5, 5, fgui::color(style.container.at(2)));
 	}
+
+	if (m_parent_element && m_hideable) {
+
+
+		// 'hidden' text size
+		int hidden_text_width, hidden_text_height;
+		fgui::render.get_text_size(fgui::container::get_font(), "Hidden", hidden_text_width, hidden_text_height);
+
+		// container area
+		fgui::rect container_area = {a.x, a.y, m_width, m_height};
+
+		if (!fgui::input.is_mouse_in_region(container_area)) {
+			
+			// don't draw the skipped element
+			if (m_focused_element)
+				m_focused_element.reset();
+
+			// 'hidden' body
+			fgui::render.outline(a.x, a.y, m_width, m_height, fgui::color(style.container.at(0)));
+			fgui::render.outline(a.x + 2, a.y + 2, m_width - 4, m_height - 4, fgui::color(style.container.at(2)));
+			fgui::render.rect(a.x + 3, a.y + 3, m_width - 6, m_height - 6, fgui::color(style.container.at(1)));
+
+			// 'hidden' label
+			fgui::render.text(a.x + (m_width / 2) - (hidden_text_width / 2), a.y + (m_height / 2) - (hidden_text_height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), "Hidden");
+		}
+	}
 }
 
 //---------------------------------------------------------
-void fgui::container::set_state(bool state) {
+void fgui::container::set_state(fgui::state state) {
 
 	m_opened = state;
 }
 
 //---------------------------------------------------------
-bool fgui::container::get_state() {
+fgui::state fgui::container::get_state() {
 
 	return m_opened;
 }
@@ -281,7 +308,7 @@ void fgui::container::add_control(std::shared_ptr<fgui::element> control, int pa
 
 		static int scrollbar_width = 8;
 		
-		if (m_scrollbar_state)
+		if (m_scrollable)
 			control->set_size(m_width - (control->get_position().x * 2) - scrollbar_width, control->get_size().height);
 		else
 			control->set_size(m_width - (control->get_position().x * 2), control->get_size().height);
@@ -325,21 +352,27 @@ bool fgui::container::hovering() {
 }
 
 //---------------------------------------------------------
-void fgui::container::set_scrollbar_state(bool state) {
+void fgui::container::set_scrollbar_state(fgui::state state) {
 
-	m_scrollbar_state = state;
+	m_scrollable = state;
 }
 
 //---------------------------------------------------------
-void fgui::container::set_resize_state(bool state) {
+void fgui::container::set_resize_state(fgui::state state) {
 
 	m_resizeable = state;
 }
 
 //---------------------------------------------------------
-bool fgui::container::get_scrollbar_state() {
+void fgui::container::set_hidden_state(fgui::state state) {
 
-	return m_scrollbar_state;
+	m_hideable = state;
+}
+
+//---------------------------------------------------------
+fgui::state fgui::container::get_scrollbar_state() {
+
+	return m_scrollable;
 }
 
 //---------------------------------------------------------
@@ -414,7 +447,7 @@ void fgui::container::update() {
 		// if the element can receive input
 		if (m_focused_element->get_flag(fgui::element_flag::CLICKABLE) && fgui::input.is_mouse_in_region(focused_control_area) && fgui::input.get_key_press(MOUSE_LEFT)) {
 
-			if (m_scrollbar_state) {
+			if (m_scrollable) {
 
 				if (m_focused_element->get_absolute_position().y + m_focused_element->get_size().height <= get_absolute_position().y + get_size().height && m_focused_element->get_absolute_position().y >= get_absolute_position().y) {
 
@@ -426,7 +459,7 @@ void fgui::container::update() {
 				}
 			}
 
-			else if (!m_scrollbar_state) {
+			else if (!m_scrollable) {
 
 				// handle input
 				m_focused_element->handle_input();
@@ -460,7 +493,7 @@ void fgui::container::update() {
 			// if the element can receive input
 			if (element->get_flag(fgui::element_flag::CLICKABLE) && fgui::input.is_mouse_in_region(control_area) && fgui::input.get_key_press(MOUSE_LEFT) && !focused_element_clicked) {
 
-				if (m_scrollbar_state) {
+				if (m_scrollable) {
 
 					if (element->get_absolute_position().y + element->get_size().height <= get_absolute_position().y + get_size().height && element->get_absolute_position().y >= get_absolute_position().y) {
 
@@ -474,7 +507,7 @@ void fgui::container::update() {
 					}
 				}
 
-				else if (!m_scrollbar_state) {
+				else if (!m_scrollable) {
 
 					// handle input
 					element->handle_input();
@@ -498,7 +531,7 @@ void fgui::container::update() {
 	}
 
 	// handle scrollbar input
-	if (m_scrollbar_state) {
+	if (m_scrollable) {
 
 		// get window current position
 		fgui::point a = fgui::element::get_absolute_position();

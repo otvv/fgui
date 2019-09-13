@@ -200,9 +200,9 @@ void fgui::colorlist::draw() {
 }
 
 //---------------------------------------------------------
-void fgui::colorlist::add_color(std::string identificator, fgui::color color, bool gradient) {
+void fgui::colorlist::add_color(std::string identificator, fgui::color color, fgui::state gradient_state) {
 
-	m_color_list.emplace_back(fgui::color_info(identificator, color, gradient));
+	m_color_list.push_back(fgui::color_info(identificator, color, gradient_state));
 }
 
 //---------------------------------------------------------
@@ -245,9 +245,9 @@ void fgui::colorlist::set_color(int index, fgui::color color) {
 }
 
 //---------------------------------------------------------
-void fgui::colorlist::set_gradient(int index, bool gradient) {
+void fgui::colorlist::set_gradient(int index, fgui::state gradient_state) {
 
-	m_color_list[index].m_gradient_checkbox->set_bool(gradient);
+	m_color_list[index].m_gradient_checkbox->set_bool(gradient_state);
 }
 
 //---------------------------------------------------------
@@ -438,30 +438,7 @@ void fgui::colorlist::update() {
 }
 
 //---------------------------------------------------------
-void fgui::colorlist::tooltip() {
-
-	// get the current position of the window
-	fgui::point a = fgui::element::get_absolute_position();
-
-	// get the control area
-	fgui::rect area = { a.x, a.y, m_width, m_height };
-
-	if (m_tooltip.length() > 0) {
-
-		// tooltip text size
-		int tooltip_text_width, tooltip_text_height;
-		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
-
-		if (fgui::input.is_mouse_in_region(area)) {
-
-			fgui::point cursor = { 0, 0 };
-			fgui::input.get_mouse_position(cursor.x, cursor.y);
-
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(225, 100, 85));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(255, 255, 255), fgui::element::get_font(), m_tooltip);
-		}
-	}
-}
+void fgui::colorlist::tooltip() {}
 
 //---------------------------------------------------------
 void fgui::colorlist::save(const std::string& file_name, nlohmann::json& json_module) {

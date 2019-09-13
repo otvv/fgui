@@ -132,6 +132,9 @@ void fgui::keybinder::tooltip() {
 	// get the current position of the window
 	fgui::point a = fgui::element::get_absolute_position();
 
+	// get the window style
+	auto style = handler::get_style();
+
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_height };
 
@@ -141,13 +144,12 @@ void fgui::keybinder::tooltip() {
 		int tooltip_text_width, tooltip_text_height;
 		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
 
+		fgui::point cursor = { 0, 0 };
+		fgui::input.get_mouse_position(cursor.x, cursor.y);
+
 		if (fgui::input.is_mouse_in_region(area)) {
-
-			fgui::point cursor = { 0, 0 };
-			fgui::input.get_mouse_position(cursor.x, cursor.y);
-
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(225, 100, 85));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(255, 255, 255), fgui::element::get_font(), m_tooltip);
+			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(style.keybinder.at(3)));
+			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
 		}
 	}
 }

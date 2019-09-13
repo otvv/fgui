@@ -50,7 +50,7 @@ namespace fgui {
 		 */
 
 		// general
-		std::array<fgui::color, 4> text = { fgui::color(181, 181, 181), fgui::color(215, 215, 100), fgui::color(65, 135, 255), fgui::color(245, 245, 245) };
+		std::array<fgui::color, 5> text = { fgui::color(181, 181, 181), fgui::color(215, 215, 100), fgui::color(65, 135, 255), fgui::color(245, 245, 245), fgui::color(137, 162, 204) };
 		std::array<fgui::color, 2> cursor = { fgui::color(255, 255, 255), fgui::color(0, 0, 0) };
 
 		// elements
@@ -65,6 +65,7 @@ namespace fgui {
 		std::array<fgui::color, 4> listbox = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255) };
 		std::array<fgui::color, 4> multibox = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255) };
 		std::array<fgui::color, 5> slider = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255), fgui::color(46, 119, 191) };
+		std::array<fgui::color, 4> spinner = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255) };
 		std::array<fgui::color, 5> tabs = { fgui::color(85, 85, 85), fgui::color(15, 15, 15), fgui::color(40, 40, 40), fgui::color(35, 35, 35), fgui::color(60, 60, 60) };
 		std::array<fgui::color, 4> textbox = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255) };
 		std::array<fgui::color, 5> window = { fgui::color(25, 25, 25), fgui::color(40, 40, 40), fgui::color(61, 200, 255), fgui::color(61, 158, 255), fgui::color(46, 119, 191) };

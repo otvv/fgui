@@ -136,13 +136,13 @@ bool fgui::multibox::get_selected(int index) {
 }
 
 //---------------------------------------------------------
-void fgui::multibox::set_state(bool state) {
+void fgui::multibox::set_state(fgui::state state) {
 
 	m_opened = state;
 }
 
 //---------------------------------------------------------
-bool fgui::multibox::get_state() {
+fgui::state fgui::multibox::get_state() {
 
 	return m_opened;
 }
@@ -186,14 +186,14 @@ void fgui::multibox::update() {
 
 	// get the current position of the window
 	fgui::point a = fgui::element::get_absolute_position();
+		
+	// get the control opened area
+	fgui::rect opened_area = { a.x, (a.y + 23), m_width, m_height };
 
 	if (m_opened) {
-		m_height = m_item_height + (m_item_height * m_info.size());
+		m_height = opened_area.top + (m_item_height * m_info.size());
 
-		// get the control area
-		fgui::rect area = { a.x, a.y, m_width, m_height };
-
-		if (!fgui::input.is_mouse_in_region(area)) {
+		if (!fgui::input.is_mouse_in_region(opened_area)) {
 
 			if (fgui::input.get_key_press(MOUSE_LEFT))
 				m_opened = false;
@@ -213,6 +213,9 @@ void fgui::multibox::tooltip() {
 	// get the current position of the window
 	fgui::point a = fgui::element::get_absolute_position();
 
+	// get the window style
+	auto style = handler::get_style();
+
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_original_height };
 
@@ -222,13 +225,12 @@ void fgui::multibox::tooltip() {
 		int tooltip_text_width, tooltip_text_height;
 		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
 
+		fgui::point cursor = { 0, 0 };
+		fgui::input.get_mouse_position(cursor.x, cursor.y);
+
 		if (fgui::input.is_mouse_in_region(area)) {
-
-			fgui::point cursor = { 0, 0 };
-			fgui::input.get_mouse_position(cursor.x, cursor.y);
-
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(225, 100, 85));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(255, 255, 255), fgui::element::get_font(), m_tooltip);
+			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(style.multibox.at(3)));
+			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
 		}
 	}
 }

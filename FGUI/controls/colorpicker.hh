@@ -25,10 +25,10 @@ namespace fgui {
 		fgui::color get_color();
 
 		// sets a custom state for the color picker (if the color pallet is opened or not)
-		void set_state(bool state);
+		void set_state(fgui::state state);
 
 		// returns the current state of the color picker (if the color pallet is opened or not)
-		bool get_state();
+		fgui::state get_state();
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -46,7 +46,7 @@ namespace fgui {
 		void load(const std::string& file_name);
 	private:
 
-		bool m_opened;
+		fgui::state m_opened;
 		fgui::color m_color = { 0, 0, 0 };
 	};
 }
