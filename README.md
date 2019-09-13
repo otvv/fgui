@@ -20,7 +20,7 @@ _You can visit the [wiki](https://github.com/iFloody/fgui/wiki) page for element
 ***
 
 Here is a preview of a window:
-![img](https://raw.githubusercontent.com/iFloody/fgui/master/resources/menu_example.png)
+![img](https://raw.githubusercontent.com/iFloody/fgui/master/resources/menu_example_1.png)
 
 And as I said, the framework is very customizable. You can click [here](https://github.com/iFloody/fgui/tree/master/resources) for more examples.
 
