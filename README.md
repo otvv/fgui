@@ -30,6 +30,6 @@ If you want to contribute, feel free to make a pull request. _(Make sure to foll
 
 <h4>Acknowledgments:</h4>
 
- [@Vulgar1s](https://github.com/Vulgar1s): Helped with some [elements](); [containers](), [textboxes](), and [colorpickers](), bug fixing and feedback.
+ [@Vulgar1s](https://github.com/Vulgar1s): Helped with some [elements](); [Containers](), [Textboxes](), and [Colorpickers](). He also helped with bug fixing and feedback.
  
  [@daanSayajin](https://github.com/daanSayajin): Bug fixing and feedback.
