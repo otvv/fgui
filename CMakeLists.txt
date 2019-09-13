@@ -30,6 +30,7 @@ add_library(fgui SHARED
     FGUI/controls/listbox.cc
     FGUI/controls/multibox.cc
     FGUI/controls/slider.cc
+    FGUI/controls/spinner.cc
     FGUI/controls/tabs.cc
     FGUI/controls/textbox.cc
 
