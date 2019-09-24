@@ -7,6 +7,12 @@
       <a href="https://github.com/iFloody/fgui/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge" alt="mit"></a>
 </p>
 
+<p align="center">
+  
+  <img width="275" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner2" alt="fgui server"/>
+  
+</p>
+
 ***
 
 A multiplatform object-oriented gui framework written in **C++**. This framework is mainly aimed towards game hacking, but you can use it for anything you want.
