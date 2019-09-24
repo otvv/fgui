@@ -7,10 +7,8 @@
       <a href="https://github.com/iFloody/fgui/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge" alt="mit"></a>
 </p>
 
-<p align="center">
-  
-  <img width="275" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner2" alt="fgui server"/>
-  
+<p align="center"> 
+  <a href="https://discord.gg/Kqz5NhP"><img width="275" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner2" alt="discord server"></a>
 </p>
 
 ***
