@@ -35,5 +35,6 @@ add_library(fgui SHARED
     FGUI/controls/textbox.cc
 
     # other
-    FGUI/handler/handler.cc)
+    FGUI/handler/handler.cc
+    FGUI/notifications/notifications.cc)
  
