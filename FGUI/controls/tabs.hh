@@ -21,10 +21,16 @@ namespace fgui {
 		void draw();
 
 		// adds a new tab
-		void add_tab(std::string tab_name);
+		inline void add_tab(const std::string_view tab_name) noexcept {
+
+			m_info.push_back( { tab_name } );
+		}
 
 		// get the current tab selected
-		int get_index();
+		inline int get_index() const noexcept {
+
+			return m_index;
+		} 
 
 		// handle keyboard and mouse input	
 		void handle_input();
@@ -36,13 +42,13 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
-		int m_selected_tab;
-		std::vector<fgui::item_info> m_info;
+		int m_index;
+		std::vector<fgui::detail::item_info> m_info;
 	};
 }

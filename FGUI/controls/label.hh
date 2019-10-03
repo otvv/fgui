@@ -20,10 +20,16 @@ namespace fgui {
 		void draw();
 
 		// sets a custom text in the label
-		void set_text(std::string text);
+		inline void set_text(const std::string_view text) noexcept {
+
+			m_text = text;
+		}
 
 		// sets a custom type for the label
-		void set_type(fgui::label_type label_type);
+		inline void set_type(const fgui::label_type &label_type) noexcept {
+
+			m_type = label_type;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -35,10 +41,10 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
 		std::string m_text;

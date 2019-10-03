@@ -21,16 +21,30 @@ namespace fgui {
 		void draw();
 
 		// set a custom value for the element
-		void set_value(float value);
+		inline void set_value(const float &value) noexcept {
+
+			m_value = value;
+		}
 
 		// get the current value of the element
-		float get_value();
+		inline float get_value() const noexcept {
+
+			return m_value;
+		}
 
 		// set the boundaries of the element
-		void set_boundaries(float min, float max);
+		inline void set_boundaries(const float &min, const float &max) noexcept {
+
+			m_min = min;
+			m_max = max;
+		}
 
 		// set the min and max custom text
-		void set_boundaries_text(std::string min_text, std::string max_text);
+		inline void set_boundaries_text(const std::string_view min_text, const std::string_view max_text) noexcept {
+
+			m_min_text = min_text;
+			m_max_text = max_text;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -42,10 +56,10 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
 		float m_value;

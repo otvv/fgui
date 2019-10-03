@@ -21,19 +21,34 @@ namespace fgui {
 		void draw();
 
 		// add a new item in the element
-		void add_item(std::string item, int value = 0);
+		inline void add_item(const std::string_view item, const int &value = 0) noexcept {
+
+			m_info.push_back( {item, value } );
+		}
 
 		// returns the name of the selected item
-		std::string get_item();
+		inline std::string_view get_item() const noexcept {
+
+			return m_info[m_index].item;
+		}
 
 		// get the index of the selected item
-		int get_index();
+		inline int get_index() const noexcept {
+
+			return m_index;
+		}
 
 		// get the value of a selected item
-		int get_value();
+		inline int get_value() const noexcept {
+
+			return m_info[m_index].value;
+		}
 
 		// set a pre-selected item for the element
-		void set_index(int index);
+		inline void set_index(const int &index) noexcept {
+
+			m_index = index;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -45,16 +60,16 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
 		int m_index;
 		bool m_dragging;
 		int m_slider_top;
 		int m_item_height;
-		std::vector<std::pair<std::string, int>> m_items;
+		std::vector<fgui::detail::item_info> m_info;
 	};
 }

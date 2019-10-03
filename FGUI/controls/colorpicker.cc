@@ -6,7 +6,6 @@
 #include "colorpicker.hh"
 #include "../handler/handler.hh"
 #include "../dependencies/color.hh"
-#include "../dependencies/aliases.hh"
 
 fgui::colorpicker::colorpicker() {
 
@@ -18,8 +17,8 @@ fgui::colorpicker::colorpicker() {
 	fgui::colorpicker::m_font = fgui::element::m_font;
 	fgui::colorpicker::m_original_width = fgui::colorpicker::m_width;
 	fgui::colorpicker::m_original_height = fgui::colorpicker::m_height;
-	fgui::colorpicker::m_family = fgui::element_family::COLORPICKER_FAMILY;
-	fgui::element::m_flags = fgui::element_flag::DRAWABLE | fgui::element_flag::CLICKABLE | fgui::element_flag::FOCUSABLE | fgui::element_flag::SAVABLE;
+	fgui::colorpicker::m_type =  static_cast<int>(fgui::detail::element_type::COLORPICKER);
+	fgui::element::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE) |  static_cast<int>(fgui::detail::element_flags::FOCUSABLE) |  static_cast<int>(fgui::detail::element_flags::SAVABLE);
 }
 
 //---------------------------------------------------------
@@ -37,25 +36,24 @@ void fgui::colorpicker::draw() {
 	// color preview body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.colorpicker.at(0)));
 
-	if (fgui::input.is_mouse_in_region(area) || m_opened)
+	if (fgui::input_system::mouse_in_area(area) || m_opened)
 		fgui::render.outline(area.left + 2, area.top + 2, area.right - 4, area.bottom - 4, fgui::color(style.colorpicker.at(3)));
 	else
 		fgui::render.outline(area.left + 1, area.top + 1, area.right - 2, area.bottom - 2, fgui::color(style.colorpicker.at(2)));
 
 	fgui::render.rect(area.left + 3, area.top + 3, area.right - 6, area.bottom - 6, fgui::color(style.colorpicker.at(1)));
-	fgui::render.colored_gradient(area.left + 3, area.top + 3, area.right - 6, area.bottom - 6, fgui::color(m_color), fgui::color(style.colorpicker.at(2), m_color.m_alpha), fgui::gradient_type::VERTICAL);
+	fgui::render.colored_gradient(area.left + 3, area.top + 3, area.right - 6, area.bottom - 6, fgui::color(m_color), fgui::color(style.colorpicker.at(2), m_color.m_alpha), false);
 
 	if (m_opened) {
 
 		// cursor position
-		fgui::point cursor = { 0, 0 };
-		fgui::input.get_mouse_position(cursor.x, cursor.y);
+		fgui::point cursor = fgui::input_system::mouse_position();
 
 		// picker area
 		fgui::rect picker_area = { a.x + 25, a.y, 150, 150 };
 
 		// color picker pixelation value
-		static int pixelation = 3;
+		constexpr int pixelation = 3;
 
 		// color picker body 
 		fgui::render.outline(picker_area.left, picker_area.top, (picker_area.right + 47), (picker_area.bottom + 5), fgui::color(style.colorpicker.at(0)));
@@ -95,40 +93,10 @@ void fgui::colorpicker::draw() {
 		fgui::render.rect((picker_area.left + picker_area.right) + 25, (picker_area.top + 2) + picker_area.bottom * (m_color.m_alpha / 255.f), 3, 3, fgui::color(style.colorlist.at(3)));
 
 		// draw color code
-		if (fgui::input.is_mouse_in_region(picker_area) && fgui::input.get_key_state(MOUSE_LEFT))
+		if (fgui::input_system::mouse_in_area(picker_area) && fgui::input_system::key_held(fgui::external::MOUSE_LEFT))
 			fgui::render.text(cursor.x - 8, cursor.y + 8, fgui::color(style.text.at(0)), fgui::colorpicker::get_font(), "rgba: " + std::to_string(m_color.m_red) + ", " + std::to_string(m_color.m_green) + ", " +
 			std::to_string(m_color.m_blue) + ", " + std::to_string(m_color.m_alpha));
 	}
-}
-
-//---------------------------------------------------------
-void fgui::colorpicker::set_color(int red, int green, int blue, int alpha) {
-
-	m_color = fgui::color(red, green, blue, alpha);
-}
-
-//---------------------------------------------------------
-void fgui::colorpicker::set_color(fgui::color color) {
-
-	m_color = color;
-}
-
-//---------------------------------------------------------
-fgui::color fgui::colorpicker::get_color() {
-
-	return m_color;
-}
-
-//---------------------------------------------------------
-void fgui::colorpicker::set_state(fgui::state state) {
-
-	m_opened = state;
-}
-
-//---------------------------------------------------------
-fgui::state fgui::colorpicker::get_state() {
-
-	return m_opened;
 }
 
 //---------------------------------------------------------
@@ -140,7 +108,7 @@ void fgui::colorpicker::handle_input() {
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_original_width, m_original_height };
 
-	if (fgui::input.is_mouse_in_region(area))
+	if (fgui::input_system::mouse_in_area(area))
 		m_opened = !m_opened;
 }
 
@@ -163,17 +131,16 @@ void fgui::colorpicker::update() {
 		static bool alpha_selected = false;
 
 		// cursor position
-		fgui::point cursor;
-		fgui::input.get_mouse_position(cursor.x, cursor.y);
+		fgui::point cursor = fgui::input_system::mouse_position();
 
-		if (fgui::input.get_key_press(MOUSE_LEFT)) {
+		if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT)) {
 
-			hue_selected = input.is_mouse_in_region(hue_area);
-			alpha_selected = input.is_mouse_in_region(alpha_area);
-			hsb_selected = input.is_mouse_in_region(hsb_area);
+			hue_selected = fgui::input_system::mouse_in_area(hue_area);
+			alpha_selected = fgui::input_system::mouse_in_area(alpha_area);
+			hsb_selected = fgui::input_system::mouse_in_area(hsb_area);
 		}
 
-		else if (!fgui::input.get_key_state(MOUSE_LEFT)) {
+		else if (!fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 
 			hue_selected = false;
 			alpha_selected = false;
@@ -209,9 +176,9 @@ void fgui::colorpicker::update() {
 		m_width = 25 /* picker_area.left */ + 197 /* picker_area.right + 47 */;
 		m_height = 155 /* picker_area.bottom + 5 */;
 
-		if (!fgui::input.is_mouse_in_region(area)) {
+		if (!fgui::input_system::mouse_in_area(area)) {
 
-			if (fgui::input.get_key_press(MOUSE_LEFT))
+			if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT))
 				m_opened = false;
 		}
 	}
@@ -234,50 +201,49 @@ void fgui::colorpicker::tooltip() {
 	auto style = handler::get_style();
 
 	// get the control area
-	fgui::rect area = { a.x, a.y, m_width, m_original_height };
+	fgui::rect area = { a.x, a.y, m_width, m_height };
 
 	if (m_tooltip.length() > 0) {
 
 		// tooltip text size
-		int tooltip_text_width, tooltip_text_height;
-		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
+		fgui::dimension tooltip_text_size = fgui::render.get_text_size(fgui::element::get_font(), m_tooltip);
 
-		fgui::point cursor = { 0, 0 };
-		fgui::input.get_mouse_position(cursor.x, cursor.y);
+		// cursor position
+		fgui::point cursor = fgui::input_system::mouse_position();
 
-		if (fgui::input.is_mouse_in_region(area)) {
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(style.colorpicker.at(3)));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
+		if (fgui::input_system::mouse_in_area(area)) {
+			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_size.width + 10, 20, fgui::color(style.colorpicker.at(3)));
+			fgui::render.text(cursor.x + 10 + ((tooltip_text_size.width + 10) / 2) - (tooltip_text_size.width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_size.height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
 		}
 	}
 }
 
 //---------------------------------------------------------
-void fgui::colorpicker::save(const std::string& file_name, nlohmann::json& json_module) {
+void fgui::colorpicker::save(nlohmann::json& json_module) {
 
-	json_module[m_identificator]["red"] = m_color.m_red;
-	json_module[m_identificator]["green"] = m_color.m_green;
-	json_module[m_identificator]["blue"] = m_color.m_blue;
-	json_module[m_identificator]["alpha"] = m_color.m_alpha;
+	json_module[m_identificator.data()]["red"] = m_color.m_red;
+	json_module[m_identificator.data()]["green"] = m_color.m_green;
+	json_module[m_identificator.data()]["blue"] = m_color.m_blue;
+	json_module[m_identificator.data()]["alpha"] = m_color.m_alpha;
 }
 
 //---------------------------------------------------------
-void fgui::colorpicker::load(const std::string& file_name) {
+void fgui::colorpicker::load(const std::string_view file_name) {
 
 	nlohmann::json json_module;
 
 	// open the file
-	std::ifstream file_to_load(file_name, std::ifstream::binary);
+	std::ifstream file_to_load(file_name.data(), std::ifstream::binary);
 
-	if (!file_to_load.good())
+	if (file_to_load.fail()) // todo: make an exception handler
 		return;
 
 	// read config file
 	json_module = nlohmann::json::parse(file_to_load);
 
 	// change the element state to match the one stored on file
-	m_color.m_red = json_module[m_identificator]["red"];
-	m_color.m_green = json_module[m_identificator]["green"];
-	m_color.m_blue = json_module[m_identificator]["blue"];
-	m_color.m_alpha = json_module[m_identificator]["alpha"];
+	m_color.m_red = json_module[m_identificator.data()]["red"];
+	m_color.m_green = json_module[m_identificator.data()]["green"];
+	m_color.m_blue = json_module[m_identificator.data()]["blue"];
+	m_color.m_alpha = json_module[m_identificator.data()]["alpha"];
 }

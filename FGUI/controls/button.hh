@@ -21,8 +21,11 @@ namespace fgui {
 		// draw the element
 		void draw();
 
-		// sets a custom function for the button
-		void set_function(std::function<void()> callback);
+		// set the function that the button will call when clicked
+		inline void set_function(const std::function<void()> &callback) noexcept {
+
+			m_callback = callback; 
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -34,10 +37,10 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 		std::function<void()> m_callback;
 	};

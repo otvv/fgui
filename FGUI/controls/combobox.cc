@@ -6,7 +6,6 @@
 #include "combobox.hh"
 #include "../handler/handler.hh"
 #include "../dependencies/color.hh"
-#include "../dependencies/aliases.hh"
 
 fgui::combobox::combobox() {
 
@@ -19,8 +18,8 @@ fgui::combobox::combobox() {
 	fgui::combobox::m_title = "combobox";
 	fgui::combobox::m_font = fgui::element::m_font;
 	fgui::combobox::m_original_height = fgui::combobox::m_height;
-	fgui::combobox::m_family = fgui::element_family::COMBOBOX_FAMILY;
-	fgui::element::m_flags = fgui::element_flag::DRAWABLE | fgui::element_flag::FOCUSABLE | fgui::element_flag::CLICKABLE | fgui::element_flag::SAVABLE;
+	fgui::combobox::m_type =  static_cast<int>(fgui::detail::element_type::COMBOBOX);
+	fgui::element::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::FOCUSABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE) |  static_cast<int>(fgui::detail::element_flags::SAVABLE);
 }
 
 //---------------------------------------------------------
@@ -35,18 +34,18 @@ void fgui::combobox::draw() {
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_original_height };
 
-	int text_width, text_height;
-	fgui::render.get_text_size(fgui::combobox::get_font(), m_title, text_width, text_height);
+	// combobox title text size
+	fgui::dimension text_size = fgui::render.get_text_size(fgui::combobox::get_font(), m_title);
 
 	// combobox body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.combobox.at(0)));
 
-	if (fgui::input.is_mouse_in_region(area) || m_opened)
+	if (fgui::input_system::mouse_in_area(area) || m_opened)
 		fgui::render.outline(area.left + 2, area.top + 2, area.right - 4, area.bottom - 4, fgui::color(style.combobox.at(3)));
 	else
 		fgui::render.outline(area.left + 1, area.top + 1, area.right - 2, area.bottom - 2, fgui::color(style.combobox.at(2)));
 
-	fgui::render.colored_gradient(area.left + 3, area.top + 3, area.right - 6, area.bottom - 6, fgui::color(style.combobox.at(1)), fgui::color(style.combobox.at(2)), fgui::gradient_type::VERTICAL);
+	fgui::render.colored_gradient(area.left + 3, area.top + 3, area.right - 6, area.bottom - 6, fgui::color(style.combobox.at(1)), fgui::color(style.combobox.at(2)), false);
 
 	// dropdown arrow
 	fgui::render.rect((area.left + area.right - 10) - 5, (area.top + (area.bottom / 2) - 3) + 1, 5, 1, fgui::color(style.text.at(0)));
@@ -54,17 +53,16 @@ void fgui::combobox::draw() {
 	fgui::render.rect((area.left + area.right - 10) - 3, (area.top + (area.bottom / 2) - 3) + 3, 1, 1, fgui::color(style.text.at(0)));
 
 	// combobox label
-	fgui::render.text(area.left, (area.top - text_height) - 2, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_title);
+	fgui::render.text(area.left, (area.top - text_size.height) - 2, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_title);
 
 	if (m_info.empty())
 		return;
 
 	// current item text size
-	int item_text_width, item_text_height;
-	fgui::render.get_text_size(fgui::combobox::get_font(), m_info[m_index].m_item, item_text_width, item_text_height);
+	fgui::dimension current_item_text_size = fgui::render.get_text_size(fgui::combobox::get_font(), m_info[m_index].item);
 
 	// draw the current item
-	fgui::render.text(a.x + (area.right / 2) - (item_text_width / 2), a.y + (area.bottom / 2) - (item_text_height / 2), fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[m_index].m_item);
+	fgui::render.text(a.x + (area.right / 2) - (current_item_text_size.width / 2), a.y + (area.bottom / 2) - (current_item_text_size.height / 2), fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[m_index].item);
 
 	if (m_opened) {
 
@@ -86,22 +84,22 @@ void fgui::combobox::draw() {
 				fgui::rect item_area = {a.x, a.y + 23 + (m_item_height * item_displayed), (m_width - 8), m_item_height };
 
 				// if the user starts hovering a item or selects one
-				if (fgui::input.is_mouse_in_region(item_area) || m_index == i) {
+				if (fgui::input_system::mouse_in_area(item_area) || m_index == i) {
 
 					// this will check if the item text is too large for the combobox, if so the last three characters will be replaced with "..."
-					if (m_info[i].m_item.length() > 20)
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].m_item.replace(m_info[i].m_item.begin() + 20, m_info[i].m_item.end(), "..."));
+					if (m_info[i].item.length() > 20)
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].item.replace(m_info[i].item.begin() + 20, m_info[i].item.end(), "..."));
 					else
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].m_item);
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].item);
 				}
 
-				else if (!fgui::input.is_mouse_in_region(item_area)) {
+				else if (!fgui::input_system::mouse_in_area(item_area)) {
 
 					// this will check if the item text is too large for the combobox, if so the last three characters will be replaced with "..."
-					if (m_info[i].m_item.length() > 20)
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].m_item.replace(m_info[i].m_item.begin() + 20, m_info[i].m_item.end(), "..."));
+					if (m_info[i].item.length() > 20)
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].item.replace(m_info[i].item.begin() + 20, m_info[i].item.end(), "..."));
 					else
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].m_item);
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].item);
 				}
 
 				item_displayed++;
@@ -150,72 +148,24 @@ void fgui::combobox::draw() {
 				fgui::rect item_area = {a.x, a.y + 23 + (m_item_height * i), m_width, m_item_height};
 
 				// if the user starts hovering a item or selects one
-				if (fgui::input.is_mouse_in_region(item_area) || m_index == i) {
+				if (fgui::input_system::mouse_in_area(item_area) || m_index == i) {
 
-					if (m_info[i].m_item.length() > 20)
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].m_item.replace(m_info[i].m_item.begin() + 20, m_info[i].m_item.end(), "..."));
+					if (m_info[i].item.length() > 20)
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].item.replace(m_info[i].item.begin() + 20, m_info[i].item.end(), "..."));
 					else
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].m_item);
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.combobox.at(3)), fgui::combobox::get_font(), m_info[i].item);
 				}
 
-				else if (!fgui::input.is_mouse_in_region(item_area)) {
+				else if (!fgui::input_system::mouse_in_area(item_area)) {
 
-					if (m_info[i].m_item.length() > 20)
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].m_item.replace(m_info[i].m_item.begin() + 20, m_info[i].m_item.end(), "..."));
+					if (m_info[i].item.length() > 20)
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].item.replace(m_info[i].item.begin() + 20, m_info[i].item.end(), "..."));
 					else
-						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].m_item);
+						fgui::render.text(item_area.left + 5, item_area.top + 5, fgui::color(style.text.at(0)), fgui::combobox::get_font(), m_info[i].item);
 				}
 			}
 		}
 	}
-}
-
-//---------------------------------------------------------
-void fgui::combobox::add_item(std::string item, int value) {
-	
-	m_info.push_back(fgui::item_info(item, value));
-}
-
-//---------------------------------------------------------
-void fgui::combobox::clear_items() {
-
-	m_info.clear();
-}
-
-//---------------------------------------------------------
-void fgui::combobox::set_function(std::function<void()> callback) {
-
-	m_callback = callback;
-}
-
-//---------------------------------------------------------
-void fgui::combobox::set_index(int index) {
-
-	m_index = index;
-}
-
-//---------------------------------------------------------
-int fgui::combobox::get_index() {
-
-	return m_index;
-}
-
-//---------------------------------------------------------
-int fgui::combobox::get_value() {
-
-	return m_info[m_index].m_value;
-}
-
-//---------------------------------------------------------
-void fgui::combobox::set_state(fgui::state state) {
-
-	m_opened = state;
-}
-
-//---------------------------------------------------------
-fgui::state fgui::combobox::get_state() {
-
-	return m_opened;
 }
 
 //---------------------------------------------------------
@@ -228,7 +178,7 @@ void fgui::combobox::handle_input() {
 	fgui::rect area = { a.x, a.y, m_width, m_original_height };
 
 	// open the drop down list
-	if (fgui::input.is_mouse_in_region(area))
+	if (fgui::input_system::mouse_in_area(area))
 		m_opened = !m_opened;
 
 	if (m_opened) {
@@ -236,14 +186,14 @@ void fgui::combobox::handle_input() {
 		// scrollbar slider area
 		fgui::rect scrollbar_slider_area = { a.x + (m_width - 8), a.y + 23, 8, m_height };
 
-		if (fgui::input.is_mouse_in_region(scrollbar_slider_area)) {
+		if (fgui::input_system::mouse_in_area(scrollbar_slider_area)) {
 					
-			if (fgui::input.get_key_state(MOUSE_LEFT)) 
+			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) 
 				m_dragging = true;
 		}
 
 		// check if the cursor is on the right place
-		if (!fgui::input.is_mouse_in_region(area)) {
+		if (!fgui::input_system::mouse_in_area(area)) {
 			
 			if (m_info.size() > 15) {
 				
@@ -258,7 +208,7 @@ void fgui::combobox::handle_input() {
 					// get the item area on the drop down list
 					fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * items_displayed), (m_width - 8), m_item_height };
 
-					if (fgui::input.is_mouse_in_region(item_area)) {
+					if (fgui::input_system::mouse_in_area(item_area)) {
 
 						// select an item
 						m_index = i;
@@ -284,7 +234,7 @@ void fgui::combobox::handle_input() {
 					// get the item area on the drop down list
 					fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * i), (m_width - 8), m_item_height };
 
-					if (fgui::input.is_mouse_in_region(item_area)) {
+					if (fgui::input_system::mouse_in_area(item_area)) {
 
 						// select an item
 						m_index = i;
@@ -318,9 +268,9 @@ void fgui::combobox::update() {
 		else if (m_info.size() <= 15)
 			m_height = opened_area.top + (m_item_height * m_info.size());
 
-		if (!fgui::input.is_mouse_in_region(opened_area)) {
+		if (!fgui::input_system::mouse_in_area(opened_area)) {
 
-			if (fgui::input.get_key_press(MOUSE_LEFT))
+			if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT))
 				m_opened = false;
 		}
 	}
@@ -341,11 +291,10 @@ void fgui::combobox::update() {
 		
 		if (m_dragging) {
 
-			if (fgui::input.get_key_state(MOUSE_LEFT)) {
+			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 			
-				// get the cursor position
-				fgui::point cursor;
-				fgui::input.get_mouse_position(cursor.x, cursor.y);
+				// cursor position
+				fgui::point cursor = fgui::input_system::mouse_position();
 
 				// move the slider vertically
 				cursor.y -= (a.y + 23);
@@ -371,9 +320,9 @@ void fgui::combobox::update() {
 				m_dragging = false;
 		}
 
-		if (fgui::input.is_mouse_in_region(scrollbar_slider_area)) {
+		if (fgui::input_system::mouse_in_area(scrollbar_slider_area)) {
 
-			if (fgui::input.get_key_state(MOUSE_LEFT))
+			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT))
 				m_opened = true;
 		}
 	}
@@ -394,39 +343,38 @@ void fgui::combobox::tooltip() {
 	if (m_tooltip.length() > 0) {
 
 		// tooltip text size
-		int tooltip_text_width, tooltip_text_height;
-		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
+		fgui::dimension tooltip_text_size = fgui::render.get_text_size(fgui::element::get_font(), m_tooltip);
 
-		fgui::point cursor = { 0, 0 };
-		fgui::input.get_mouse_position(cursor.x, cursor.y);
+		// cursor position
+		fgui::point cursor = fgui::input_system::mouse_position();
 
-		if (fgui::input.is_mouse_in_region(area)) {
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(style.combobox.at(3)));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
+		if (fgui::input_system::mouse_in_area(area)) {
+			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_size.width + 10, 20, fgui::color(style.combobox.at(3)));
+			fgui::render.text(cursor.x + 10 + ((tooltip_text_size.width + 10) / 2) - (tooltip_text_size.width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_size.height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
 		}
 	}
 }
 
 //---------------------------------------------------------
-void fgui::combobox::save(const std::string& file_name, nlohmann::json& json_module) {
+void fgui::combobox::save(nlohmann::json& json_module) {
 
-	json_module[m_identificator] = m_index;
+	json_module[m_identificator.data()] = m_index;
 }
 
 //---------------------------------------------------------
-void fgui::combobox::load(const std::string& file_name) {
+void fgui::combobox::load(const std::string_view file_name) {
 
 	nlohmann::json json_module;
 
 	// open the file
-	std::ifstream file_to_load(file_name, std::ifstream::binary);
+	std::ifstream file_to_load(file_name.data(), std::ifstream::binary);
 
-	if (!file_to_load.good())
+	if (file_to_load.fail()) // todo: make an exception handler
 		return;
 
 	// read config file
 	json_module = nlohmann::json::parse(file_to_load);
 
 	// change the element value to match the one stored on file
-	m_index = json_module[m_identificator];
+	m_index = json_module[m_identificator.data()];
 }

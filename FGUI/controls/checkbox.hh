@@ -21,10 +21,16 @@ namespace fgui {
 		void draw();
 
 		// defines the state of the checkbox
-		void set_bool(bool onoff);
+		inline void set_bool(const bool &onoff) noexcept {
+			
+			m_checked = onoff;
+		}
 
 		// returns the checkbox state
-		bool get_bool();
+		inline bool get_bool() const noexcept {
+
+			return m_checked;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -36,10 +42,10 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 		bool m_checked;
 	};

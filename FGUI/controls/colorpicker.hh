@@ -18,17 +18,33 @@ namespace fgui {
 		void draw();
 
 		// set a custom color for the color picker
-		void set_color(int red, int green, int blue, int alpha = 255);
-		void set_color(fgui::color color);
+		inline void set_color(const int &red, const int &green, const int &blue, const int &alpha = 255) noexcept {
+
+			m_color = { red, green, blue, alpha };
+		}
+
+		inline void set_color(const fgui::color &color) noexcept {
+
+			m_color = color;
+		}
 
 		// returns the current selected color
-		fgui::color get_color();
+		inline fgui::color get_color() const noexcept {
+
+			return m_color;
+		}
 
 		// sets a custom state for the color picker (if the color pallet is opened or not)
-		void set_state(fgui::state state);
+		inline void set_state(const fgui::state &state) noexcept {
+
+			m_opened = state;
+		}
 
 		// returns the current state of the color picker (if the color pallet is opened or not)
-		fgui::state get_state();
+		inline fgui::state get_state() const noexcept {
+
+			return m_opened;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -40,12 +56,11 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
-
 		fgui::state m_opened;
 		fgui::color m_color = { 0, 0, 0 };
 	};

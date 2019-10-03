@@ -22,28 +22,52 @@ namespace fgui {
 		void draw();
 		
 		// add a new entry in the combobox
-		void add_item(std::string item, int value = 0);
+		inline void add_item(const std::string_view item, const int &value = 0) noexcept {
+
+			m_info.push_back({ item, value }); 
+		}
 
 		// clear all entries of the combobox
-		void clear_items();
+		inline void clear_items() noexcept {
 
-		// this will trigger a function whenever you select a new item 
-		void set_function(std::function<void()> callback);
+			m_info.clear();
+		}
+
+		// this will trigger a function when the user selects a new item
+		inline void set_function(const std::function<void()> &callback) noexcept {
+			
+			m_callback = callback;
+		}
 
 		// select a specific entry of the combobox
-		void set_index(int index);
+		inline void set_index(int index) noexcept {
+
+			m_index = index;
+		}
 
 		// get the index of the current selected entry
-		int get_index();
+		inline int get_index() const noexcept {
+
+			return m_index;
+		}
 
 		// get the value of the selected item
-		int get_value();
+		inline int get_value() const noexcept {
+
+			return m_info[m_index].value;
+		}
 
 		// sets a custom state for the combobox (if the dropdown list is opened or not)
-		void set_state(fgui::state state);
+		inline void set_state(fgui::state state) {
+
+			m_opened = state;
+		}
 
 		// returns the current state of the combobox (if the dropdown list is opened or not)
-		fgui::state get_state();
+		inline fgui::state get_state() const noexcept {
+			
+			return m_opened;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -55,10 +79,10 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
 		int m_index;
@@ -67,6 +91,6 @@ namespace fgui {
 		int m_item_height;
 		fgui::state m_opened;
 		std::function<void()> m_callback;
-		std::vector<fgui::item_info> m_info;
+		std::vector<fgui::detail::item_info> m_info;
 	};
 }

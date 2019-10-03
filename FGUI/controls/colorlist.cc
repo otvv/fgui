@@ -6,7 +6,6 @@
 #include "colorlist.hh"
 #include "../handler/handler.hh"
 #include "../dependencies/color.hh"
-#include "../dependencies/aliases.hh"
 
 fgui::colorlist::colorlist() {
 
@@ -17,8 +16,8 @@ fgui::colorlist::colorlist() {
 	fgui::colorlist::m_title = "colorlist";
 	fgui::colorlist::m_item_height = 20;
 	fgui::colorlist::m_font = fgui::element::m_font;
-	fgui::colorlist::m_family = fgui::element_family::COLORLIST_FAMILY;
-	fgui::element::m_flags = fgui::element_flag::DRAWABLE | fgui::element_flag::CLICKABLE | fgui::element_flag::SAVABLE;
+	fgui::colorlist::m_type =  static_cast<int>(fgui::detail::element_type::COLORLIST);
+	fgui::element::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE) |  static_cast<int>(fgui::detail::element_flags::SAVABLE);
 }
 
 //---------------------------------------------------------
@@ -42,7 +41,7 @@ void fgui::colorlist::draw() {
 	// color list body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.colorlist.at(0)));
 
-	if (fgui::input.is_mouse_in_region(area))
+	if (fgui::input_system::mouse_in_area(area))
 		fgui::render.outline(area.left + 2, area.top + 2, (area.right - 15) - 4, area.bottom - 4, fgui::color(style.colorlist.at(3)));
 	else
 		fgui::render.outline(area.left + 2, area.top + 2, area.right - 4, area.bottom - 4, fgui::color(style.colorlist.at(1)));
@@ -54,46 +53,46 @@ void fgui::colorlist::draw() {
 
 	for (std::size_t i = m_slider_top; (i < m_color_list.size() && items_displayed < calculated_items); i++) {
 
-		int item_text_width, item_text_height;
-		fgui::render.get_text_size(fgui::colorlist::get_font(), m_color_list[i].m_identificator, item_text_width, item_text_height);
+		// color identificator text size
+		fgui::dimension identificator_text_size = fgui::render.get_text_size(fgui::colorlist::get_font(), m_color_list[i].identificator);
 
 		// get the item area
 		fgui::rect item_area = { a.x, a.y + (m_item_height * static_cast<int>(items_displayed)), (m_width - 250) - 15, m_item_height };
 
 		// color identificator
-		if (m_color_list[i].m_identificator.length() > 30)
-			fgui::render.text(item_area.left + 5, item_area.top + (item_area.bottom / 2) - (item_text_height / 2), fgui::color(style.text.at(0)), fgui::colorlist::get_font(), m_color_list[i].m_identificator.replace(m_color_list[i].m_identificator.begin() + 30, m_color_list[i].m_identificator.end(), "..."));
+		if (m_color_list[i].identificator.length() > 30)
+			fgui::render.text(item_area.left + 5, item_area.top + (item_area.bottom / 2) - (identificator_text_size.height / 2), fgui::color(style.text.at(0)), fgui::colorlist::get_font(), m_color_list[i].identificator.replace(m_color_list[i].identificator.begin() + 30, m_color_list[i].identificator.end(), "..."));
 		else
-			fgui::render.text(item_area.left + 5, item_area.top + (item_area.bottom / 2) - (item_text_height / 2), fgui::color(style.text.at(0)), fgui::colorlist::get_font(), m_color_list[i].m_identificator);
+			fgui::render.text(item_area.left + 5, item_area.top + (item_area.bottom / 2) - (identificator_text_size.height / 2), fgui::color(style.text.at(0)), fgui::colorlist::get_font(), m_color_list[i].identificator);
 
 		// color button body
 		fgui::render.outline((item_area.left + 150), item_area.top + 4, 20, 16, fgui::color(style.colorlist.at(0)));
 		
-		if (fgui::input.is_mouse_in_region(item_area) || m_selected == i)
+		if (fgui::input_system::mouse_in_area(item_area) || m_selected == i)
 			fgui::render.outline((item_area.left + 150) + 2, (item_area.top + 2) + 4, 20 - 4, 16 - 4, fgui::color(style.colorlist.at(3)));
 		else
 			fgui::render.outline((item_area.left + 150) + 1, (item_area.top + 1) + 4, 20 - 2, 16 - 2, fgui::color(style.colorlist.at(2)));
 
 		fgui::render.rect((item_area.left + 150) + 3, (item_area.top + 3) + 4, 20 - 6, 16 - 6, fgui::color(style.colorlist.at(1)));
-		fgui::render.colored_gradient((item_area.left + 150) + 3, (item_area.top + 3) + 4, 20 - 6, 16 - 6, fgui::color(m_color_list[i].m_first_color), fgui::color(style.colorlist.at(2), m_color_list[i].m_first_color.m_alpha), fgui::gradient_type::VERTICAL);
+		fgui::render.colored_gradient((item_area.left + 150) + 3, (item_area.top + 3) + 4, 20 - 6, 16 - 6, fgui::color(m_color_list[i].first_color), fgui::color(style.colorlist.at(2), m_color_list[i].first_color.m_alpha), false);
 
 		// separator line
 		fgui::render.line(item_area.left, item_area.top + item_area.bottom + 2, item_area.left + (item_area.right - 15) - 5, item_area.top + item_area.bottom + 2, fgui::color(style.colorlist.at(0)));
 
-		if (m_color_list[i].m_second_color_added) {
+		if (m_color_list[i].second_color_added) {
 			
 			fgui::rect second_item_area = { a.x + 150, a.y + (m_item_height * static_cast<int>(items_displayed)), (m_width - 15) - 250, m_item_height };
 
 			// second color button body
 			fgui::render.outline((second_item_area.left + 25), second_item_area.top + 4, 20, 16, fgui::color(style.colorlist.at(0)));
 		
-			if (fgui::input.is_mouse_in_region(second_item_area) || m_selected == i)
+			if (fgui::input_system::mouse_in_area(second_item_area) || m_selected == i)
 				fgui::render.outline((second_item_area.left + 25) + 2, (second_item_area.top + 2) + 4, 20 - 4, 16 - 4, fgui::color(style.colorlist.at(3)));
 			else
 				fgui::render.outline((second_item_area.left + 25) + 1, (second_item_area.top + 1) + 4, 20 - 2, 16 - 2, fgui::color(style.colorlist.at(2)));
 
 			fgui::render.rect((second_item_area.left + 25) + 3, (second_item_area.top + 3) + 4, 20 - 6, 16 - 6, fgui::color(style.colorlist.at(1)));
-			fgui::render.colored_gradient((second_item_area.left + 25) + 3, (second_item_area.top + 3) + 4, 20 - 6, 16 - 6, fgui::color(m_color_list[i].m_second_color), fgui::color(style.colorlist.at(2), m_color_list[i].m_second_color.m_alpha), fgui::gradient_type::VERTICAL);
+			fgui::render.colored_gradient((second_item_area.left + 25) + 3, (second_item_area.top + 3) + 4, 20 - 6, 16 - 6, fgui::color(m_color_list[i].second_color), fgui::color(style.colorlist.at(2), m_color_list[i].second_color.m_alpha), false);
 		}
 
 		items_displayed++;
@@ -103,7 +102,7 @@ void fgui::colorlist::draw() {
 	fgui::rect picker_area = {a.x + (m_width - 240), a.y, 150, 150};
 
 	// color picker pixelation value
-	int pixelation = 3;
+	constexpr int pixelation = 3;
 
 	// alpha background
 	// NOTE: (If you are crashing here, you probably don't have the "alpha" function, just remove this line or replace with a rectangle)
@@ -120,7 +119,7 @@ void fgui::colorlist::draw() {
 		for (std::size_t j = 0; j < (static_cast<float>(picker_area.right)); j += pixelation) {
 
 			// color
-			fgui::color hsb_color = fgui::color::hsb_to_rgb(fgui::color::get_hue(m_color_list[m_selected].m_first_color), j / static_cast<float>(picker_area.right), i / static_cast<float>(picker_area.bottom), m_color_list[m_selected].m_first_color.m_alpha);
+			fgui::color hsb_color = fgui::color::hsb_to_rgb(fgui::color::get_hue(m_color_list[m_selected].first_color), j / static_cast<float>(picker_area.right), i / static_cast<float>(picker_area.bottom), m_color_list[m_selected].first_color.m_alpha);
 			
 			// hsb
 			fgui::render.rect(picker_area.left + j, picker_area.top + i, pixelation, pixelation, fgui::color(hsb_color));
@@ -132,27 +131,27 @@ void fgui::colorlist::draw() {
 
 	// hue bar body
 	fgui::render.outline(picker_area.left + (picker_area.right + 10) - 1, picker_area.top - 1, 15 + 2, picker_area.bottom + 2, fgui::color(style.colorlist.at(0)));
-	fgui::render.rect(picker_area.left + picker_area.right + 5, picker_area.top + picker_area.bottom * fgui::color::get_hue(m_color_list[m_selected].m_first_color), 3, 3, fgui::color(style.colorlist.at(3)));
+	fgui::render.rect(picker_area.left + picker_area.right + 5, picker_area.top + picker_area.bottom * fgui::color::get_hue(m_color_list[m_selected].first_color), 3, 3, fgui::color(style.colorlist.at(3)));
 
 	// alpha slider
-	m_color_list[m_selected].m_alpha_slider->set_position(picker_area.left, picker_area.top + (picker_area.bottom + 20));
-	m_color_list[m_selected].m_alpha_slider->draw();
-	m_color_list[m_selected].m_alpha_slider->tooltip();
+	m_color_list[m_selected].alpha_slider->set_position(picker_area.left, picker_area.top + (picker_area.bottom + 20));
+	m_color_list[m_selected].alpha_slider->draw();
+	m_color_list[m_selected].alpha_slider->tooltip();
 
 	// plus button
-	m_color_list[m_selected].m_plus_button->set_position(picker_area.left, picker_area.top + (picker_area.bottom) + 40);
-	m_color_list[m_selected].m_plus_button->draw();
-	m_color_list[m_selected].m_plus_button->tooltip();
+	m_color_list[m_selected].plus_button->set_position(picker_area.left, picker_area.top + (picker_area.bottom) + 40);
+	m_color_list[m_selected].plus_button->draw();
+	m_color_list[m_selected].plus_button->tooltip();
 
 	// minus button
-	m_color_list[m_selected].m_minus_button->set_position(picker_area.left + 20, picker_area.top + (picker_area.bottom) + 40);
-	m_color_list[m_selected].m_minus_button->draw();
-	m_color_list[m_selected].m_minus_button->tooltip();
+	m_color_list[m_selected].minus_button->set_position(picker_area.left + 20, picker_area.top + (picker_area.bottom) + 40);
+	m_color_list[m_selected].minus_button->draw();
+	m_color_list[m_selected].minus_button->tooltip();
 
 	// gradient checkbox
-	m_color_list[m_selected].m_gradient_checkbox->set_position(picker_area.left + 50, picker_area.top + (picker_area.bottom) + 40);
-	m_color_list[m_selected].m_gradient_checkbox->draw();
-	m_color_list[m_selected].m_gradient_checkbox->tooltip();
+	m_color_list[m_selected].gradient_checkbox->set_position(picker_area.left + 50, picker_area.top + (picker_area.bottom) + 40);
+	m_color_list[m_selected].gradient_checkbox->draw();
+	m_color_list[m_selected].gradient_checkbox->tooltip();
 
 	// calculate the slider position
 	float calculated_position = static_cast<float>(m_slider_top) / static_cast<float>(m_color_list.size());
@@ -179,9 +178,9 @@ void fgui::colorlist::draw() {
 	fgui::render.outline(scrollbar_area.left + 1, (scrollbar_area.top + calculated_position) + 1, scrollbar_area.right - 2, (calculated_size - 2) - 4, fgui::color(style.colorlist.at(3)));
 
 	if (m_color_list.size() > 50)
-		fgui::render.colored_gradient(scrollbar_area.left + 2, (scrollbar_area.top + calculated_position) + 2, scrollbar_area.right - 4, (calculated_size - 4) - 4, fgui::color(style.colorlist.at(1)), fgui::color(style.colorlist.at(2)), fgui::gradient_type::VERTICAL);
+		fgui::render.colored_gradient(scrollbar_area.left + 2, (scrollbar_area.top + calculated_position) + 2, scrollbar_area.right - 4, (calculated_size - 4) - 4, fgui::color(style.colorlist.at(1)), fgui::color(style.colorlist.at(2)), false);
 	else
-		fgui::render.colored_gradient(scrollbar_area.left + 2, (scrollbar_area.top + calculated_position) + 2, scrollbar_area.right - 4, (calculated_size - 4) - 4, fgui::color(style.colorlist.at(1)), fgui::color(style.colorlist.at(2)), fgui::gradient_type::VERTICAL);
+		fgui::render.colored_gradient(scrollbar_area.left + 2, (scrollbar_area.top + calculated_position) + 2, scrollbar_area.right - 4, (calculated_size - 4) - 4, fgui::color(style.colorlist.at(1)), fgui::color(style.colorlist.at(2)), false);
 
 	// dots
 	if (m_dragging) {
@@ -200,15 +199,9 @@ void fgui::colorlist::draw() {
 }
 
 //---------------------------------------------------------
-void fgui::colorlist::add_color(std::string identificator, fgui::color color, fgui::state gradient_state) {
-
-	m_color_list.push_back(fgui::color_info(identificator, color, gradient_state));
-}
-
-//---------------------------------------------------------
 fgui::color fgui::colorlist::get_color(int index) {
 
-	if (m_color_list[index].m_gradient_checkbox->get_bool()) {
+	if (m_color_list[index].gradient_checkbox->get_bool()) {
 
 		static float ttt1 = 0.f;
 
@@ -226,28 +219,13 @@ fgui::color fgui::colorlist::get_color(int index) {
 				ttt1 = 0.f;
 			}
 
-			return fgui::color::interpolate(m_color_list[index].m_second_color, m_color_list[index].m_first_color, ttt2);
+			return fgui::color::interpolate(m_color_list[index].second_color, m_color_list[index].first_color, ttt2);
 		}
 
-		return fgui::color::interpolate(m_color_list[index].m_first_color, m_color_list[index].m_second_color, ttt1);
+		return fgui::color::interpolate(m_color_list[index].first_color, m_color_list[index].second_color, ttt1);
 	}
 
-	return m_color_list[index].m_first_color;
-}
-
-//---------------------------------------------------------
-void fgui::colorlist::set_color(int index, fgui::color color) {
-
-	m_color_list[index].m_first_color.m_red = color.m_red;
-	m_color_list[index].m_first_color.m_green = color.m_green;
-	m_color_list[index].m_first_color.m_blue = color.m_blue;
-	m_color_list[index].m_first_color.m_alpha = color.m_alpha;
-}
-
-//---------------------------------------------------------
-void fgui::colorlist::set_gradient(int index, fgui::state gradient_state) {
-
-	m_color_list[index].m_gradient_checkbox->set_bool(gradient_state);
+	return m_color_list[index].first_color;
 }
 
 //---------------------------------------------------------
@@ -262,9 +240,9 @@ void fgui::colorlist::handle_input() {
 	// scrollbar slider area
 	fgui::rect scrollbar_area = { (area.left + 2) + (area.right - 15), area.top + 2, 15 - 4, area.bottom - 4 };
 
-		if (fgui::input.is_mouse_in_region(scrollbar_area)) {
+		if (fgui::input_system::mouse_in_area(scrollbar_area)) {
 					
-			if (fgui::input.get_key_state(MOUSE_LEFT)) 
+			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) 
 				m_dragging = true;
 	}
 
@@ -274,41 +252,41 @@ void fgui::colorlist::handle_input() {
 		fgui::rect picker_area = { a.x + (m_width - 240), a.y, 150, 150 };
 
 		// gradient checkbox area
-		fgui::rect gradient_checkbox_area = { picker_area.left + 50, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].m_gradient_checkbox->get_size().width, m_color_list[m_selected].m_gradient_checkbox->get_size().height };
+		fgui::rect gradient_checkbox_area = { picker_area.left + 50, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].gradient_checkbox->get_size().width, m_color_list[m_selected].gradient_checkbox->get_size().height };
 		
 		// handle input
-		m_color_list[m_selected].m_gradient_checkbox->handle_input();
-		m_color_list[m_selected].m_alpha_slider->handle_input();
+		m_color_list[m_selected].gradient_checkbox->handle_input();
+		m_color_list[m_selected].alpha_slider->handle_input();
 		
 		// plus button area
-		fgui::rect plus_button_area = { picker_area.left, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].m_plus_button->get_size().width, m_color_list[m_selected].m_plus_button->get_size().height };
+		fgui::rect plus_button_area = { picker_area.left, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].plus_button->get_size().width, m_color_list[m_selected].plus_button->get_size().height };
 
-		if (fgui::input.is_mouse_in_region(plus_button_area)) {
+		if (fgui::input_system::mouse_in_area(plus_button_area)) {
 
 			// check if we don't have a second color added
-			if (!m_color_list[m_selected].m_second_color_added) {
+			if (!m_color_list[m_selected].second_color_added) {
 
-				m_color_list[m_selected].m_second_color_added = true;
+				m_color_list[m_selected].second_color_added = true;
 
-				m_color_list[m_selected].m_backup_color = m_color_list[m_selected].m_first_color; 
-				m_color_list[m_selected].m_second_color = m_color_list[m_selected].m_first_color;
+				m_color_list[m_selected].backup_color = m_color_list[m_selected].first_color; 
+				m_color_list[m_selected].second_color = m_color_list[m_selected].first_color;
 			}
 		}
 
 		// minus button area
-		fgui::rect minus_button_area = { picker_area.left + 20, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].m_minus_button->get_size().width, m_color_list[m_selected].m_minus_button->get_size().height };
+		fgui::rect minus_button_area = { picker_area.left + 20, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].minus_button->get_size().width, m_color_list[m_selected].minus_button->get_size().height };
 
-		if (fgui::input.is_mouse_in_region(minus_button_area)) {
+		if (fgui::input_system::mouse_in_area(minus_button_area)) {
 
 			// check if we have something to remove
-			if (m_color_list[m_selected].m_second_color_added) {
+			if (m_color_list[m_selected].second_color_added) {
 
-				m_color_list[m_selected].m_second_color_added = false;
+				m_color_list[m_selected].second_color_added = false;
 
-				m_color_list[m_selected].m_first_color = m_color_list[m_selected].m_backup_color;
-				m_color_list[m_selected].m_second_color = fgui::color(0, 0, 0);
+				m_color_list[m_selected].first_color = m_color_list[m_selected].backup_color;
+				m_color_list[m_selected].second_color = fgui::color(0, 0, 0);
 
-				m_color_list[m_selected].m_gradient_checkbox->set_bool(false);
+				m_color_list[m_selected].gradient_checkbox->set_bool(false);
 			}
 		}
 
@@ -320,13 +298,10 @@ void fgui::colorlist::handle_input() {
 
 		for (std::size_t i = m_slider_top; (i < m_color_list.size() && item_displayed < calculated_items); i++) {
 
-			int text_width, text_height;
-			fgui::render.get_text_size(fgui::colorlist::get_font(), m_color_list[i].m_identificator, text_width, text_height);
-
 			// get the item area of the colorlist
 			fgui::rect item_area = { a.x, a.y + (m_item_height * item_displayed), (m_width - 250) - 15, m_item_height };
 
-			if (fgui::input.is_mouse_in_region(item_area)) {
+			if (fgui::input_system::mouse_in_area(item_area)) {
 
 				// select a color picker
 				m_selected = i;
@@ -351,11 +326,10 @@ void fgui::colorlist::update() {
 
 	if (m_dragging) {
 
-		if (fgui::input.get_key_state(MOUSE_LEFT)) {
+		if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 
 			// get the cursor position
-			fgui::point cursor;
-			fgui::input.get_mouse_position(cursor.x, cursor.y);
+			fgui::point cursor = fgui::input_system::mouse_position();
 
 			// move the scrollbar UP and DOWN according to the cursors position
 			cursor.y -= a.y + 2;
@@ -382,11 +356,12 @@ void fgui::colorlist::update() {
 	}
 
 	if (m_color_list.size() > 0) {
-
-		m_color_list[m_selected].m_alpha_slider->update();
-		m_color_list[m_selected].m_minus_button->update();
-		m_color_list[m_selected].m_plus_button->update();
-		m_color_list[m_selected].m_gradient_checkbox->update();
+		
+		// update elements
+		m_color_list[m_selected].alpha_slider->update();
+		m_color_list[m_selected].minus_button->update();
+		m_color_list[m_selected].plus_button->update();
+		m_color_list[m_selected].gradient_checkbox->update();
 
 		for (std::size_t i = m_slider_top; (i < m_color_list.size() && item_displayed < calculated_items); i++) {
 
@@ -402,16 +377,15 @@ void fgui::colorlist::update() {
 				static bool hsb_selected = false;
 
 				// get the cursor position
-				fgui::point cursor;
-				fgui::input.get_mouse_position(cursor.x, cursor.y);
+				fgui::point cursor = fgui::input_system::mouse_position();
 
-				if (fgui::input.get_key_press(MOUSE_LEFT)) {
+				if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT)) {
 
-					hue_selected = fgui::input.is_mouse_in_region(hue_area);
-					hsb_selected = fgui::input.is_mouse_in_region(hsb_area);
+					hue_selected = fgui::input_system::mouse_in_area(hue_area);
+					hsb_selected = fgui::input_system::mouse_in_area(hsb_area);
 				}
 
-				else if (!fgui::input.get_key_state(MOUSE_LEFT)) {
+				else if (!fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 
 					hue_selected = false;
 					hsb_selected = false;
@@ -420,18 +394,18 @@ void fgui::colorlist::update() {
 				if (hsb_selected) {
 
 					fgui::precision_point relative_pos = { cursor.x - static_cast<float>(hsb_area.left), cursor.y - static_cast<float>(hsb_area.top) };
-					m_color_list[i].m_first_color = fgui::color::hsb_to_rgb(fgui::color::get_hue(m_color_list[i].m_first_color), relative_pos.x / picker_area.right, relative_pos.y / picker_area.bottom, m_color_list[i].m_first_color.m_alpha);
+					m_color_list[i].first_color = fgui::color::hsb_to_rgb(fgui::color::get_hue(m_color_list[i].first_color), relative_pos.x / picker_area.right, relative_pos.y / picker_area.bottom, m_color_list[i].first_color.m_alpha);
 				}
 
 				if (hue_selected) {
 
 					float hue = (cursor.y - hue_area.top) / 150.f;
 					
-					m_color_list[i].m_first_color = fgui::color::hsb_to_rgb(std::clamp(hue, 0.f, 1.f), 1, 1);
+					m_color_list[i].first_color = fgui::color::hsb_to_rgb(std::clamp(hue, 0.f, 1.f), 1, 1);
 				}
 
 				// color alpha
-				m_color_list[i].m_first_color.m_alpha = (m_color_list[i].m_alpha_slider->get_value() * 2.55f);
+				m_color_list[i].first_color.m_alpha = (m_color_list[i].alpha_slider->get_value() * 2.55f);
 			}
 		}
 	}
@@ -441,39 +415,39 @@ void fgui::colorlist::update() {
 void fgui::colorlist::tooltip() {}
 
 //---------------------------------------------------------
-void fgui::colorlist::save(const std::string& file_name, nlohmann::json& json_module) {
+void fgui::colorlist::save(nlohmann::json& json_module) {
 
 	for (std::size_t i = 0; i < m_color_list.size(); i++) {
 
 		// main color
-		json_module[m_identificator][m_color_list[i].m_identificator]["primary_red"] = m_color_list[i].m_first_color.m_red;
-		json_module[m_identificator][m_color_list[i].m_identificator]["primary_green"] = m_color_list[i].m_first_color.m_green;
-		json_module[m_identificator][m_color_list[i].m_identificator]["primary_blue"] = m_color_list[i].m_first_color.m_blue;
-		json_module[m_identificator][m_color_list[i].m_identificator]["primary_alpha"] = m_color_list[i].m_first_color.m_alpha;
+		json_module[m_identificator.data()][m_color_list[i].identificator]["primary_red"] = m_color_list[i].first_color.m_red;
+		json_module[m_identificator.data()][m_color_list[i].identificator]["primary_green"] = m_color_list[i].first_color.m_green;
+		json_module[m_identificator.data()][m_color_list[i].identificator]["primary_blue"] = m_color_list[i].first_color.m_blue;
+		json_module[m_identificator.data()][m_color_list[i].identificator]["primary_alpha"] = m_color_list[i].first_color.m_alpha;
 
-		if (m_color_list[i].m_second_color_added) {
+		if (m_color_list[i].second_color_added) {
 
 			// secondary color
-			json_module[m_identificator][m_color_list[i].m_identificator]["secondary_red"] = m_color_list[i].m_second_color.m_red;
-			json_module[m_identificator][m_color_list[i].m_identificator]["secondary_green"] = m_color_list[i].m_second_color.m_green;
-			json_module[m_identificator][m_color_list[i].m_identificator]["secondary_blue"] = m_color_list[i].m_second_color.m_blue;
-			json_module[m_identificator][m_color_list[i].m_identificator]["secondary_alpha"] = m_color_list[i].m_second_color.m_alpha;
+			json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_red"] = m_color_list[i].second_color.m_red;
+			json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_green"] = m_color_list[i].second_color.m_green;
+			json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_blue"] = m_color_list[i].second_color.m_blue;
+			json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_alpha"] = m_color_list[i].second_color.m_alpha;
 		}
 
 		// gradient
-		json_module[m_identificator][m_color_list[i].m_identificator]["color_interpolation"] = m_color_list[i].m_gradient_checkbox->get_bool();
+		json_module[m_identificator.data()][m_color_list[i].identificator]["color_interpolation"] = m_color_list[i].gradient_checkbox->get_bool();
 	}
 }
 
 //---------------------------------------------------------
-void fgui::colorlist::load(const std::string& file_name) {
+void fgui::colorlist::load(const std::string_view file_name) {
 
 	nlohmann::json json_module;
 
 	// open the file
-	std::ifstream file_to_load(file_name, std::ifstream::binary);
+	std::ifstream file_to_load(file_name.data(), std::ifstream::binary);
 
-	if (!file_to_load.good())
+	if (file_to_load.fail()) // todo: make an exception handler
 		return;
 
 	// read config file
@@ -483,21 +457,21 @@ void fgui::colorlist::load(const std::string& file_name) {
 	for (std::size_t i = 0; i < m_color_list.size(); i++) {
 
 		// primary color
-		m_color_list[i].m_first_color.m_red = json_module[m_identificator][m_color_list[i].m_identificator]["primary_red"];
-		m_color_list[i].m_first_color.m_green = json_module[m_identificator][m_color_list[i].m_identificator]["primary_green"];
-		m_color_list[i].m_first_color.m_blue = json_module[m_identificator][m_color_list[i].m_identificator]["primary_blue"];
-		m_color_list[i].m_first_color.m_alpha = json_module[m_identificator][m_color_list[i].m_identificator]["primary_alpha"];
+		m_color_list[i].first_color.m_red = json_module[m_identificator.data()][m_color_list[i].identificator]["primary_red"];
+		m_color_list[i].first_color.m_green = json_module[m_identificator.data()][m_color_list[i].identificator]["primary_green"];
+		m_color_list[i].first_color.m_blue = json_module[m_identificator.data()][m_color_list[i].identificator]["primary_blue"];
+		m_color_list[i].first_color.m_alpha = json_module[m_identificator.data()][m_color_list[i].identificator]["primary_alpha"];
 
-		if (m_color_list[i].m_second_color_added) {
+		if (m_color_list[i].second_color_added) {
 
 			// secondary color
-			m_color_list[i].m_second_color.m_red = json_module[m_identificator][m_color_list[i].m_identificator]["secondary_red"];
-			m_color_list[i].m_second_color.m_green = json_module[m_identificator][m_color_list[i].m_identificator]["secondary_green"];
-			m_color_list[i].m_second_color.m_blue = json_module[m_identificator][m_color_list[i].m_identificator]["secondary_blue"];
-			m_color_list[i].m_second_color.m_alpha = json_module[m_identificator][m_color_list[i].m_identificator]["secondary_alpha"];
+			m_color_list[i].second_color.m_red = json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_red"];
+			m_color_list[i].second_color.m_green = json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_green"];
+			m_color_list[i].second_color.m_blue = json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_blue"];
+			m_color_list[i].second_color.m_alpha = json_module[m_identificator.data()][m_color_list[i].identificator]["secondary_alpha"];
 		}
 
 		// gradient
-		m_color_list[i].m_gradient_checkbox->set_bool(json_module[m_identificator][m_color_list[i].m_identificator]["color_interpolation"]);
+		m_color_list[i].gradient_checkbox->set_bool(json_module[m_identificator.data()][m_color_list[i].identificator]["color_interpolation"]);
 	}
 }

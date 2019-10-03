@@ -21,19 +21,34 @@ namespace fgui {
 		void draw();
 
 		// add a new item in the element
-		void add_item(std::string item, bool state);
+		inline void add_item(const std::string_view item, const fgui::state &state) noexcept {
+
+			m_info.push_back( { item, state } );
+		}
 
 		// select a specific item at a given position
-		void set_selected(int index, bool state);
+		inline void set_selected(const int &index, const bool &onoff) noexcept {
+
+			m_info[index].checked = onoff;
+		}
 
 		// get the item selected at a given position
-		bool get_selected(int index);
+		inline bool get_selected(int index) const noexcept {
+
+			return m_info[index].checked;
+		}
 
 		// sets a custom state for the multibox (if the dropdown list is opened or not)
-		void set_state(fgui::state state);
+		inline void set_state(const fgui::state &state) noexcept {
+
+			m_opened = state;
+		}
 
 		// returns the current state of the multibox (if the dropdown list is opened or not)
-		fgui::state get_state();
+		inline fgui::state get_state() const noexcept {
+
+			return m_opened;
+		}
 
 		// handle keyboard and mouse input
 		void handle_input();
@@ -45,14 +60,14 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
 		int m_item_height;
 		fgui::state m_opened;
-		std::vector<fgui::item_info> m_info;
+		std::vector<fgui::detail::item_info> m_info;
 	};
 }

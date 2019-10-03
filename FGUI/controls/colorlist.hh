@@ -19,48 +19,48 @@
 namespace fgui {
 
 	struct color_info {
-		color_info(std::string identificator, fgui::color color, bool gradient = false) {
+		color_info(const std::string_view _identificator, const fgui::color &_color, bool _gradient = false) {
 			
-			m_alpha_slider = std::make_shared<fgui::slider>();
-			m_alpha_slider->set_title("alpha");
-			m_alpha_slider->set_value(m_first_color.m_alpha / 2.55f);
-			m_alpha_slider->set_boundaries(0, (255 / 2.55f));
-			m_alpha_slider->set_tooltip("Change the color alpha percentage");
-			m_alpha_slider->set_font("Tahoma", 12, fgui::font_flags::ANTIALIAS, false);
-			m_alpha_slider->set_boundaries_text("transparent", "opaque");
+			alpha_slider = std::make_shared<fgui::slider>();
+			alpha_slider->set_title("alpha");
+			alpha_slider->set_value(first_color.m_alpha / 2.55f);
+			alpha_slider->set_boundaries(0, (255 / 2.55f));
+			alpha_slider->set_tooltip("Change the color alpha percentage");
+			alpha_slider->set_font("Tahoma", 12, 0x0 /* NONE */, false);
+			alpha_slider->set_boundaries_text("transparent", "opaque");
 
-			m_plus_button = std::make_shared<fgui::button>();
-			m_plus_button->set_title("+");
-			m_plus_button->set_size(16, 16);
-			m_plus_button->set_tooltip("Add a new color into the sequence");
-			m_plus_button->set_font("Tahoma", 11, fgui::font_flags::ANTIALIAS, true);
+			plus_button = std::make_shared<fgui::button>();
+			plus_button->set_title("+");
+			plus_button->set_size(16, 16);
+			plus_button->set_tooltip("Add a new color into the sequence");
+			plus_button->set_font("Tahoma", 11, 0x0 /* NONE */, true);
 
-			m_minus_button = std::make_shared<fgui::button>();
-			m_minus_button->set_title("-");
-			m_minus_button->set_size(16, 16);
-			m_minus_button->set_tooltip("Remove the last added color of the sequence");
-			m_minus_button->set_font("Tahoma", 11, fgui::font_flags::ANTIALIAS, true);
+			minus_button = std::make_shared<fgui::button>();
+			minus_button->set_title("-");
+			minus_button->set_size(16, 16);
+			minus_button->set_tooltip("Remove the last added color of the sequence");
+			minus_button->set_font("Tahoma", 11, 0x0 /* NONE */, true);
 
-			m_gradient_checkbox = std::make_shared<fgui::checkbox>();
-			m_gradient_checkbox->set_title("Gradient");
-			m_gradient_checkbox->set_tooltip("Enable the color interpolation");
-			m_gradient_checkbox->set_font("Tahoma", 12, fgui::font_flags::ANTIALIAS, false);
+			gradient_checkbox = std::make_shared<fgui::checkbox>();
+			gradient_checkbox->set_title("Gradient");
+			gradient_checkbox->set_tooltip("Enable color interpolation");
+			gradient_checkbox->set_font("Tahoma", 12, 0x0 /* NONE */, false);
 
-			m_second_color_added = false;
-			m_identificator = identificator;
-			m_first_color = color;
-			m_backup_color = m_first_color;
-			m_gradient_checkbox->set_bool(gradient);
+			second_color_added = false;
+			identificator = _identificator;
+			first_color = _color;
+			backup_color = first_color;
+			gradient_checkbox->set_bool(_gradient);
 		}
 
-		std::string m_identificator;
-		fgui::color	m_first_color = { 0, 0, 0 };
-		fgui::color	m_second_color = { 0, 0, 0 };
-		fgui::color	m_backup_color = { 0, 0, 0 };
-		std::shared_ptr<fgui::slider> m_alpha_slider;
-		std::shared_ptr<fgui::button> m_plus_button, m_minus_button;
-		std::shared_ptr<fgui::checkbox> m_gradient_checkbox;
-		bool m_second_color_added = false;
+		std::string identificator;
+		fgui::color	first_color = { 0, 0, 0 };
+		fgui::color	second_color = { 0, 0, 0 };
+		fgui::color	backup_color = { 0, 0, 0 };
+		std::shared_ptr<fgui::slider> alpha_slider;
+		std::shared_ptr<fgui::button> plus_button, minus_button;
+		std::shared_ptr<fgui::checkbox> gradient_checkbox;
+		bool second_color_added = false;
 	};
 
 	class colorlist : public fgui::element {
@@ -71,13 +71,18 @@ namespace fgui {
 		void draw();
 
 		// add a new color to the list
-		void add_color(std::string identificator, fgui::color color, fgui::state gradient_state = false);
+		inline void add_color(const std::string_view identificator, const fgui::color &color, bool gradient_state = false) noexcept {
+			
+			m_color_list.push_back( {identificator, color, gradient_state});
+		}
 
-		// set the color of a specific element on the list
-		void set_color(int index, fgui::color color);
+		// set the color and the gradient state of a specific color on the list
+		inline void set_color(const int &index, const fgui::color &color, bool gradient_state = false) noexcept {
 
-		// set the gradient state for a specific color on the list
-		void set_gradient(int index, fgui::state gradient_state);
+			m_color_list[index].first_color = color;
+
+			m_color_list[index].gradient_checkbox->set_bool(gradient_state);
+		}
 
 		// get info the color of a specified color picker index
 		fgui::color get_color(int index);
@@ -92,10 +97,10 @@ namespace fgui {
 		void tooltip();
 
 		// save the element state
-		void save(const std::string& file_name, nlohmann::json& json_module);
+		void save(nlohmann::json& json_module);
 
 		// load the element state
-		void load(const std::string& file_name);
+		void load(const std::string_view file_name);
 	private:
 
 		int m_selected;

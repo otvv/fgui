@@ -14,7 +14,9 @@
 #include "../controls/element.hh"
 #include "../controls/container.hh"
 #include "../dependencies/color.hh"
+#include "../dependencies/input.hh"
 #include "../dependencies/definitions.hh"
+#include "../notifications/notifications.hh"
 
 namespace fgui {
 
@@ -52,6 +54,7 @@ namespace fgui {
 		// general
 		std::array<fgui::color, 5> text = { fgui::color(181, 181, 181), fgui::color(215, 215, 100), fgui::color(65, 135, 255), fgui::color(245, 245, 245), fgui::color(137, 162, 204) };
 		std::array<fgui::color, 2> cursor = { fgui::color(255, 255, 255), fgui::color(0, 0, 0) };
+		std::array<fgui::color, 4> notifications = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255) };
 
 		// elements
 		std::array<fgui::color, 4> button = { fgui::color(85, 85, 85), fgui::color(45, 45, 45), fgui::color(25, 25, 25), fgui::color(61, 158, 255) };
@@ -71,34 +74,67 @@ namespace fgui {
 		std::array<fgui::color, 5> window = { fgui::color(25, 25, 25), fgui::color(40, 40, 40), fgui::color(61, 200, 255), fgui::color(61, 158, 255), fgui::color(46, 119, 191) };
 	};
 
-	namespace handler {
-
-		// register a new window
-		void register_window(std::shared_ptr<fgui::container> window);
-
-		// render window
-		void render_window();
-
-		// set a toggle key for the window
-		void set_key(fgui::key key, std::shared_ptr<fgui::container> window);
-
-		// sets the cursor type that will be displayed on the window
-		void set_cursor(fgui::cursor_type type);
-
-		// handle the cursors
-		void draw_cursors();
-
-		// enable/disable the keyboard and mouse input
-		void set_input_state(fgui::input_state state);
-
-		// get the window style
-		fgui::style get_style();
-	}
-
+	// Man that's nasty. I should probably re-do this as soon as possible.
 	inline fgui::style m_window_style;
 	inline fgui::input_state m_input_state;
 	inline fgui::cursor_type m_cursor_type;
 	inline std::shared_ptr<fgui::element> m_focused_element;
 	inline std::vector<std::shared_ptr<fgui::container>> m_windows;
 	inline std::map<int, std::shared_ptr<fgui::container>> m_binds;
+	inline std::shared_ptr<fgui::notification> m_notifications;
+
+	namespace handler {
+
+		// register a new window
+		inline const void register_window(const std::shared_ptr<fgui::container> &window) noexcept {
+			
+			m_windows.push_back(window);
+		}
+
+		// register the notifications
+		inline const void register_notifications(const fgui::element_font &notification_font) noexcept {
+
+			m_notifications = std::make_shared<fgui::notification>();
+			m_notifications->set_font(notification_font);
+		}
+
+		// render window
+		void render_window();
+
+		// set a toggle key for the window
+		inline const void set_key(const fgui::key &key, const std::shared_ptr<fgui::container> &window) noexcept {
+
+			if (window)
+				m_binds[key] = window;
+			else
+				m_binds.erase(key);
+		}
+
+		// sets the cursor type that will be displayed on the window
+		inline const void set_cursor(const fgui::cursor_type &cursor_type) noexcept {
+
+			m_cursor_type = cursor_type;
+		}
+
+		// handle the cursors
+		void draw_cursors();
+
+		// enable/disable the keyboard and mouse input
+		inline const void set_input_state(const fgui::input_state &input_state) noexcept {
+
+			m_input_state = input_state;
+		}
+
+		// get the window style
+		inline const fgui::style get_style() noexcept {
+
+			return m_window_style;
+		}
+
+		// call a notification
+		inline const void call_notification(const std::string_view notification_text, const fgui::animation_type &animation_type) noexcept {	
+			
+			fgui::m_notifications->add_notification(notification_text, animation_type);
+		}
+	}
 }

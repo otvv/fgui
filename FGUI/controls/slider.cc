@@ -18,8 +18,8 @@ fgui::slider::slider() {
 	fgui::slider::m_max_text = "";
 	fgui::slider::m_title = "slider";
 	fgui::slider::m_font = fgui::element::m_font;
-	fgui::slider::m_family = fgui::element_family::SLIDER_FAMILY;
-	fgui::element::m_flags = fgui::element_flag::DRAWABLE | fgui::element_flag::CLICKABLE | fgui::element_flag::SAVABLE;
+	fgui::slider::m_type =  static_cast<int>(fgui::detail::element_type::SLIDER);
+	fgui::element::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE) |  static_cast<int>(fgui::detail::element_flags::SAVABLE);
 }
 
 //---------------------------------------------------------
@@ -39,29 +39,27 @@ void fgui::slider::draw() {
 	float location = ratio * m_width;
 
 	// custom value
-	static std::string custom_value = "";
+	static std::string_view custom_value = "";
 
-	// slider label text size
-	int title_width, title_height;
-	fgui::render.get_text_size(fgui::slider::get_font(), m_min_text, title_width, title_height);
+	// slider title text size
+	fgui::dimension text_size = fgui::render.get_text_size(fgui::slider::get_font(), m_min_text);
 
 	// slider body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.slider.at(0)));
-	fgui::render.colored_gradient(area.left + 1, area.top + 1, area.right - 2, area.bottom - 2, fgui::color(style.slider.at(1)), fgui::color(style.slider.at(2)), fgui::gradient_type::VERTICAL);
+	fgui::render.colored_gradient(area.left + 1, area.top + 1, area.right - 2, area.bottom - 2, fgui::color(style.slider.at(1)), fgui::color(style.slider.at(2)), false);
 
-	if (fgui::input.is_mouse_in_region(area) || m_dragging)
+	if (fgui::input_system::mouse_in_area(area) || m_dragging)
 		fgui::render.outline(area.left + 1, area.top + 1, location - 2, area.bottom - 2, fgui::color(style.slider.at(3)));
 	else
 		fgui::render.outline(area.left + 1, area.top + 1, area.right - 2, area.bottom - 2, fgui::color(style.slider.at(2), 150));
 
-	fgui::render.colored_gradient(area.left + 2, area.top + 2, location - 4, area.bottom - 4, fgui::color(style.slider.at(3)), fgui::color(style.slider.at(4)), fgui::gradient_type::VERTICAL);
+	fgui::render.colored_gradient(area.left + 2, area.top + 2, location - 4, area.bottom - 4, fgui::color(style.slider.at(3)), fgui::color(style.slider.at(4)), false);
 	
 	// slider label
-	fgui::render.text(area.left, (area.top - title_height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), m_title);
+	fgui::render.text(area.left, (area.top - text_size.height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), m_title);
 
-	// value text size
-	int value_width, value_height;
-	fgui::render.get_text_size(fgui::slider::get_font(), custom_value, value_width, value_height);
+	// slider value text size
+	fgui::dimension slider_value_text_size = fgui::render.get_text_size(fgui::slider::get_font(), custom_value);
 
 	// slider custom value
 	if (!m_min_text.empty()) {
@@ -86,33 +84,7 @@ void fgui::slider::draw() {
 		custom_value = std::to_string(static_cast<int>(m_value));
 	
 	// slider value
-	fgui::render.text((area.left + area.right) - value_width, (area.top - title_height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), custom_value);
-}
-
-//---------------------------------------------------------
-void fgui::slider::set_value(float value) {
-
-	m_value = value;
-}
-
-//---------------------------------------------------------
-float fgui::slider::get_value() {
-
-	return m_value;
-}
-
-//---------------------------------------------------------
-void fgui::slider::set_boundaries(float min, float max) {
-
-	m_min = min;
-	m_max = max;
-}
-
-//---------------------------------------------------------
-void fgui::slider::set_boundaries_text(std::string min_text, std::string max_text) {
-
-	m_min_text = min_text;
-	m_max_text = max_text;
+	fgui::render.text((area.left + area.right) - slider_value_text_size.width, (area.top - text_size.height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), custom_value);
 }
 
 //---------------------------------------------------------
@@ -125,7 +97,7 @@ void fgui::slider::handle_input() {
 	fgui::rect area = { a.x, a.y, m_width, m_height };
 
 	// enable the drag state if the user is clicking inside the scrollbar area
-	if (fgui::input.is_mouse_in_region(area))
+	if (fgui::input_system::mouse_in_area(area))
 		m_dragging = true;
 }
 
@@ -140,11 +112,10 @@ void fgui::slider::update() {
 
 	if (m_dragging) {
 
-		if (fgui::input.get_key_state(MOUSE_LEFT)) {
+		if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 
-			// get the cursor position
-			fgui::point cursor;
-			fgui::input.get_mouse_position(cursor.x, cursor.y);
+			// cursor position
+			fgui::point cursor = fgui::input_system::mouse_position();
 
 			float new_x = 0.f;
 			float ratio = 0.f;
@@ -167,10 +138,10 @@ void fgui::slider::update() {
 	}
 
 	// check if the mouse is on the control area
-	if (fgui::input.is_mouse_in_region(area)) {
+	if (fgui::input_system::mouse_in_area(area)) {
 
 		// now check if we are holding one of these keys
-		if (fgui::input.get_key_state(KEY_RIGHT) || fgui::input.get_key_state(KEY_UP)) {
+		if (fgui::input_system::key_held(fgui::external::KEY_RIGHT) || fgui::input_system::key_held(fgui::external::KEY_UP)) {
 			m_value += 1.f;
 
 			if (m_value >= m_max) {
@@ -184,7 +155,7 @@ void fgui::slider::update() {
 			}
 		}
 
-		else if (fgui::input.get_key_state(KEY_LEFT) || fgui::input.get_key_state(KEY_DOWN)) {
+		else if (fgui::input_system::key_held(fgui::external::KEY_LEFT) || fgui::input_system::key_held(fgui::external::KEY_DOWN)) {
 			m_value -= 1.f;
 			
 			if (m_value >= m_max) {
@@ -216,39 +187,38 @@ void fgui::slider::tooltip() {
 	if (m_tooltip.length() > 0) {
 
 		// tooltip text size
-		int tooltip_text_width, tooltip_text_height;
-		fgui::render.get_text_size(fgui::element::get_font(), m_tooltip, tooltip_text_width, tooltip_text_height);
+		fgui::dimension tooltip_text_size = fgui::render.get_text_size(fgui::element::get_font(), m_tooltip);
 
-		fgui::point cursor = { 0, 0 };
-		fgui::input.get_mouse_position(cursor.x, cursor.y);
+		// cursor position
+		fgui::point cursor = fgui::input_system::mouse_position();
 
-		if (fgui::input.is_mouse_in_region(area)) {
-			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_width + 10, 20, fgui::color(style.slider.at(3)));
-			fgui::render.text(cursor.x + 10 + ((tooltip_text_width + 10) / 2) - (tooltip_text_width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
+		if (fgui::input_system::mouse_in_area(area)) {
+			fgui::render.rect(cursor.x + 10, cursor.y + 20, tooltip_text_size.width + 10, 20, fgui::color(style.slider.at(3)));
+			fgui::render.text(cursor.x + 10 + ((tooltip_text_size.width + 10) / 2) - (tooltip_text_size.width / 2), cursor.y + 20 + (20 / 2) - (tooltip_text_size.height / 2), fgui::color(style.text.at(3)), fgui::element::get_font(), m_tooltip);
 		}
 	}
 }
 
 //---------------------------------------------------------
-void fgui::slider::save(const std::string& file_name, nlohmann::json& json_module) {
+void fgui::slider::save(nlohmann::json& json_module) {
 
-	json_module[m_identificator] = m_value;
+	json_module[m_identificator.data()] = m_value;
 }
 
 //---------------------------------------------------------
-void fgui::slider::load(const std::string& file_name) {
+void fgui::slider::load(const std::string_view file_name) {
 
 	nlohmann::json json_module;
 
 	// open the file
-	std::ifstream file_to_load(file_name, std::ifstream::binary);
+	std::ifstream file_to_load(file_name.data(), std::ifstream::binary);
 
-	if (!file_to_load.good())
+	if (file_to_load.fail()) // todo: make an exception handler
 		return;
 
 	// read config file
 	json_module = nlohmann::json::parse(file_to_load);
 
 	// change the element state to match the one stored on file
-	m_value = json_module[m_identificator];
+	m_value = json_module[m_identificator.data()];
 }

@@ -6,23 +6,14 @@
 #include "container.hh"
 #include "../handler/handler.hh"
 #include "../dependencies/color.hh"
-#include "../dependencies/aliases.hh"
-
-/*
- * TODO:
- *  
- * 1 - Create a "add_function" method for the container, so users can add their own stuff into a specific window 
- * (example: Draw a specific text, textures/images, etc)
- *
- */
 
 fgui::container::container() {
 
 	fgui::container::m_title = "container";
 	fgui::container::m_opened = false;
 	fgui::container::m_scroll_offset = 0;
-	fgui::container::m_width = 235;
-	fgui::container::m_height = 275;
+	fgui::container::m_width = 50;
+	fgui::container::m_height = 50;
 	fgui::container::m_original_width = fgui::container::m_width;
 	fgui::container::m_original_height = fgui::container::m_height;
 	fgui::container::m_resizeable = false;
@@ -33,8 +24,8 @@ fgui::container::container() {
 	fgui::container::m_hideable = false;
 	fgui::container::m_dragging_container = false;
 	fgui::container::m_font = fgui::element::m_font;
-	fgui::container::m_family = fgui::element_family::CONTAINER_FAMILY;
-	fgui::element::m_flags = fgui::element_flag::DRAWABLE;
+	fgui::container::m_type =  static_cast<int>(fgui::detail::element_type::CONTAINER);
+	fgui::element::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE);
 }
 
 //---------------------------------------------------------
@@ -46,8 +37,8 @@ void fgui::container::draw() {
 	// get the window style
 	auto style = handler::get_style();
 
-	int text_width, text_height;
-	fgui::render.get_text_size(fgui::container::get_font(), m_title, text_width, text_height);
+	// container title text size
+	fgui::dimension text_size = fgui::render.get_text_size(fgui::container::get_font(), m_title);
 
 	// if the container is not bound to another element it will behave like a window
 	if (!m_parent_element) {
@@ -55,13 +46,23 @@ void fgui::container::draw() {
 		// container window header
 		fgui::render.outline(a.x, a.y, m_width, m_height, fgui::color(style.window.at(0), 150));
 		fgui::render.outline(a.x + 1, a.y + 1, m_width - 2, m_height - 2, fgui::color(style.window.at(2)));
-		fgui::render.colored_gradient(a.x + 2, a.y + 2, m_width - 4, 25, fgui::color(style.window.at(3), 150), fgui::color(style.window.at(4), 150), fgui::gradient_type::VERTICAL);
+		fgui::render.colored_gradient(a.x + 2, a.y + 2, m_width - 4, 25, fgui::color(style.window.at(3), 150), fgui::color(style.window.at(4), 150), false);
 		fgui::render.rect(a.x + 2, (a.y + 2) + 25, m_width - 4, (m_height - 25) - 4, fgui::color(style.window.at(4), 235));
-		fgui::render.text(a.x + 10, a.y + (text_height / 2), fgui::color(style.text.at(3)), fgui::container::get_font(), m_title);
+		fgui::render.text(a.x + 10, a.y + (text_size.height / 2), fgui::color(style.text.at(3)), fgui::container::get_font(), m_title);
 
 		// container window background
 		fgui::render.outline(a.x + 5, a.y + 25, m_width - 10, (m_height - 25) - 5, fgui::color(style.window.at(2), 150));
 		fgui::render.rect((a.x + 5) + 1, (a.y + 25) + 1, (m_width - 10) - 2, (m_height - 25 - 5) - 2, fgui::color(style.window.at(1)));
+
+		// if the window has a function
+		if (m_callback) {
+		
+			// disable cursor
+			handler::set_cursor(fgui::cursor_type::NONE);
+
+			// invoke function
+			m_callback();
+		}
 	}
 
 	// if the container is bound to a parent element it will behave like a groupbox
@@ -77,7 +78,7 @@ void fgui::container::draw() {
 
 		// container body
 		fgui::render.line(a.x - 1, a.y, a.x + 5, a.y, fgui::color(conditional_color));
-		fgui::render.line(a.x + 5 + (text_width + 10), a.y, a.x + m_width, a.y, fgui::color(conditional_color));
+		fgui::render.line(a.x + 5 + (text_size.width + 10), a.y, a.x + m_width, a.y, fgui::color(conditional_color));
 		fgui::render.line(a.x + m_width, a.y, a.x + m_width, a.y + m_height, fgui::color(conditional_color));
 		fgui::render.line(a.x, a.y + m_height, a.x + m_width, a.y + m_height, fgui::color(conditional_color)); 
 		fgui::render.line(a.x - 1, a.y, a.x - 1, a.y + m_height, fgui::color(conditional_color));
@@ -86,7 +87,7 @@ void fgui::container::draw() {
 		fgui::render.rect(a.x, a.y + 1, m_width, m_height - 1, fgui::color(style.container.at(1)));
 
 		// container label
-		fgui::render.text(a.x + 10, a.y - (text_height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), m_title);
+		fgui::render.text(a.x + 10, a.y - (text_size.height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), m_title);
 
 		// if the groupbox is resizeable
 		if (m_resizeable) {
@@ -112,7 +113,7 @@ void fgui::container::draw() {
 	for (auto element : m_elements) {
 
 		// check if the element can be drawned
-		if (element && element->unlocked() && element->get_flag(fgui::element_flag::DRAWABLE)) {
+		if (element && element->unlocked() && element->get_flag(fgui::detail::element_flags::DRAWABLE)) {
 
 			// lets not draw the focused element here
 			if (element == m_focused_element)
@@ -174,8 +175,8 @@ void fgui::container::draw() {
 		fgui::render.clip_rect(0, 0, screen_width, screen_height);
 	}
 
-	// draw the skipped element (focused) after all other elements
-	if (get_window() == shared_from_this() && m_focused_element && m_focused_element->unlocked() && m_focused_element->get_flag(fgui::element_flag::DRAWABLE)) {
+	// draw the skipped (focused) element after all other elements
+	if (get_window() == shared_from_this() && m_focused_element && m_focused_element->unlocked() && m_focused_element->get_flag(fgui::detail::element_flags::DRAWABLE)) {
 
 		// get the current position of the window
 		fgui::point a = m_focused_element->get_absolute_position();
@@ -239,15 +240,13 @@ void fgui::container::draw() {
 
 	if (m_parent_element && m_hideable) {
 
-
 		// 'hidden' text size
-		int hidden_text_width, hidden_text_height;
-		fgui::render.get_text_size(fgui::container::get_font(), "Hidden", hidden_text_width, hidden_text_height);
+		fgui::dimension hidden_text_size = fgui::render.get_text_size(fgui::container::get_font(), "Hidden");
 
 		// container area
 		fgui::rect container_area = {a.x, a.y, m_width, m_height};
 
-		if (!fgui::input.is_mouse_in_region(container_area)) {
+		if (!fgui::input_system::mouse_in_area(container_area)) {
 			
 			// don't draw the skipped element
 			if (m_focused_element)
@@ -259,25 +258,13 @@ void fgui::container::draw() {
 			fgui::render.rect(a.x + 3, a.y + 3, m_width - 6, m_height - 6, fgui::color(style.container.at(1)));
 
 			// 'hidden' label
-			fgui::render.text(a.x + (m_width / 2) - (hidden_text_width / 2), a.y + (m_height / 2) - (hidden_text_height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), "Hidden");
+			fgui::render.text(a.x + (m_width / 2) - (hidden_text_size.width / 2), a.y + (m_height / 2) - (hidden_text_size.height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), "Hidden");
 		}
 	}
 }
 
 //---------------------------------------------------------
-void fgui::container::set_state(fgui::state state) {
-
-	m_opened = state;
-}
-
-//---------------------------------------------------------
-fgui::state fgui::container::get_state() {
-
-	return m_opened;
-}
-
-//---------------------------------------------------------
-void fgui::container::save_config(const std::string& file_name) {
+void fgui::container::save_config(const std::string_view file_name) {
 
 	static nlohmann::json json_module;
 
@@ -288,17 +275,20 @@ void fgui::container::save_config(const std::string& file_name) {
 	for (auto element : m_elements) {
 
 		// save the element state
-		element->save(file_name, json_module);
+		element->save(json_module);
 	}
 	
-	std::ofstream file_to_save(file_name);
+	std::ofstream file_to_save(file_name.data());
+
+	if (file_to_save.fail()) // todo: make an exception handler 
+		return;
 	
 	// write the file
 	file_to_save << std::setw(4) << json_module << std::endl;
 }
 
 //---------------------------------------------------------
-void fgui::container::add_control(std::shared_ptr<fgui::element> control, int page_index, bool manual_size) {
+void fgui::container::add_control(const std::shared_ptr<fgui::element> &control, int page_index, bool manual_size) {
 
 	control->m_parent_element = shared_from_this();
 	control->m_page_index = page_index;
@@ -306,7 +296,7 @@ void fgui::container::add_control(std::shared_ptr<fgui::element> control, int pa
 	// padding
 	if (!manual_size) {
 
-		static int scrollbar_width = 8;
+		constexpr int scrollbar_width = 8;
 		
 		if (m_scrollable)
 			control->set_size(m_width - (control->get_position().x * 2) - scrollbar_width, control->get_size().height);
@@ -315,14 +305,14 @@ void fgui::container::add_control(std::shared_ptr<fgui::element> control, int pa
 	}
 
 	// this might look a bit off due to the fact that pixels are counted from the top
-	if (m_bottom_element_pos < control->m_y + control->m_height)
-		m_bottom_element_pos = control->m_y + control->m_height;
+	if (m_bottom_element_pos < control->get_position().y + control->get_size().height)
+		m_bottom_element_pos = control->get_position().y + control->get_size().height;
 
 	m_elements.push_back(control);
 }
 
 //---------------------------------------------------------
-bool fgui::container::hovering() {
+bool fgui::container::hovered() {
 
     if (shared_from_this() == get_window()) {
 
@@ -333,14 +323,14 @@ bool fgui::container::hovering() {
 			// focused element region
 			fgui::rect focused_control_region = { a.x, a.y, m_focused_element->m_width, m_focused_element->m_height };
             
-			if (fgui::input.is_mouse_in_region(focused_control_region))
+			if (fgui::input_system::mouse_in_area(focused_control_region))
                 return true;
         }
 
 		// container region
 		fgui::rect container_region = { m_x, m_y, m_width, m_height };
 
-        return fgui::input.is_mouse_in_region(container_region);
+        return fgui::input_system::mouse_in_area(container_region);
     }
 	
     fgui::point a = m_focused_element->get_absolute_position();
@@ -348,37 +338,7 @@ bool fgui::container::hovering() {
 	// focused window region
 	fgui::rect focused_window_region = { a.x, a.y, m_width, m_height };
 
-    return fgui::input.is_mouse_in_region(focused_window_region);
-}
-
-//---------------------------------------------------------
-void fgui::container::set_scrollbar_state(fgui::state state) {
-
-	m_scrollable = state;
-}
-
-//---------------------------------------------------------
-void fgui::container::set_resize_state(fgui::state state) {
-
-	m_resizeable = state;
-}
-
-//---------------------------------------------------------
-void fgui::container::set_hidden_state(fgui::state state) {
-
-	m_hideable = state;
-}
-
-//---------------------------------------------------------
-fgui::state fgui::container::get_scrollbar_state() {
-
-	return m_scrollable;
-}
-
-//---------------------------------------------------------
-int fgui::container::get_scroll_offset() {
-
-	return m_scroll_offset;
+    return fgui::input_system::mouse_in_area(focused_window_region);
 }
 
 //---------------------------------------------------------
@@ -401,10 +361,13 @@ void fgui::container::update() {
 		// container draggable area
 		fgui::rect draggable_area = { m_x, m_y, m_width, 25 };
 
-		if (fgui::input.get_key_press(MOUSE_LEFT) && fgui::input.is_mouse_in_region(draggable_area))
-			m_dragging_container = true;
+		if (fgui::input_system::mouse_in_area(draggable_area)) {
+		
+			if  (fgui::input_system::key_press(fgui::external::MOUSE_LEFT))
+				m_dragging_container = true;
+		}
 
-		if (!fgui::input.get_key_state(MOUSE_LEFT)) {
+		if (!fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 			m_dragging_container = false;
 
 			// set cursor
@@ -416,12 +379,12 @@ void fgui::container::update() {
 			// change cursor
 			handler::set_cursor(fgui::cursor_type::MOVE);
 
-			int drag_x = fgui::input.get_mouse_delta().x;
-			int drag_y = fgui::input.get_mouse_delta().y;
+			// mouse position delta
+			fgui::point position_delta = fgui::input_system::mouse_position_delta();
 
 			// move container
-			m_x += drag_x;
-			m_y += drag_y;
+			m_x += position_delta.x;
+			m_y += position_delta.y;
 
 			// loose focus 
 			if (m_focused_element)
@@ -445,7 +408,7 @@ void fgui::container::update() {
 		m_focused_element->update();
 
 		// if the element can receive input
-		if (m_focused_element->get_flag(fgui::element_flag::CLICKABLE) && fgui::input.is_mouse_in_region(focused_control_area) && fgui::input.get_key_press(MOUSE_LEFT)) {
+		if (m_focused_element->get_flag(fgui::detail::element_flags::CLICKABLE) && fgui::input_system::mouse_in_area(focused_control_area) && fgui::input_system::key_press(fgui::external::MOUSE_LEFT)) {
 
 			if (m_scrollable) {
 
@@ -470,7 +433,7 @@ void fgui::container::update() {
 		}
 
 		// update the cursor if the element is clickable
-		if (m_focused_element && m_focused_element->get_flag(fgui::element_flag::CLICKABLE) && fgui::input.is_mouse_in_region(focused_control_area))
+		if (m_focused_element && m_focused_element->get_flag(fgui::detail::element_flags::CLICKABLE) && fgui::input_system::mouse_in_area(focused_control_area))
 			handler::set_cursor(fgui::cursor_type::HAND);
 		//else
 		//	handler::set_cursor(fgui::cursor_type::ARROW);
@@ -491,7 +454,7 @@ void fgui::container::update() {
 			element->update();
 
 			// if the element can receive input
-			if (element->get_flag(fgui::element_flag::CLICKABLE) && fgui::input.is_mouse_in_region(control_area) && fgui::input.get_key_press(MOUSE_LEFT) && !focused_element_clicked) {
+			if (element->get_flag(fgui::detail::element_flags::CLICKABLE) && fgui::input_system::mouse_in_area(control_area) && fgui::input_system::key_press(fgui::external::MOUSE_LEFT) && !focused_element_clicked) {
 
 				if (m_scrollable) {
 
@@ -500,7 +463,7 @@ void fgui::container::update() {
 						// handle input
 						element->handle_input();
 
-						if (element->get_flag(fgui::element_flag::FOCUSABLE))
+						if (element->get_flag(fgui::detail::element_flags::FOCUSABLE))
 							m_focused_element = element;
 						else
 							m_focused_element.reset();
@@ -512,7 +475,7 @@ void fgui::container::update() {
 					// handle input
 					element->handle_input();
 
-					if (element->get_flag(fgui::element_flag::FOCUSABLE))
+					if (element->get_flag(fgui::detail::element_flags::FOCUSABLE))
 						m_focused_element = element;
 					else
 						m_focused_element.reset();
@@ -523,7 +486,7 @@ void fgui::container::update() {
 			}
 
 			// update the cursor if the element is clickable
-			if (element && element->get_flag(fgui::element_flag::CLICKABLE) && fgui::input.is_mouse_in_region(control_area))
+			if (element && element->get_flag(fgui::detail::element_flags::CLICKABLE) && fgui::input_system::mouse_in_area(control_area))
 				handler::set_cursor(fgui::cursor_type::HAND);
 			//else
 			//	handler::set_cursor(fgui::cursor_type::ARROW);
@@ -542,31 +505,37 @@ void fgui::container::update() {
 		// container area
 		fgui::rect container_area = {a.x, a.y, m_width, m_height};
 
-		if (fgui::input.is_mouse_in_region(container_area)) {
+		if (fgui::input_system::mouse_in_area(container_area)) {
+
+			// lines to scroll
+			constexpr int lines_to_scroll = 4;
 			
-			if (!fgui::input.get_key_state(MOUSE_LEFT))	{
+			if (!fgui::input_system::key_held(fgui::external::MOUSE_LEFT))	{
 
 				// scroll wheel movement
-				m_scroll_offset -= fgui::input.get_scroll_delta() * 5.f;
+				m_scroll_offset -= fgui::input_system::scroll_delta() * lines_to_scroll;
 
 				// block clicks on the scrollbar slider
 				m_dragging_scrollbar = false;
 			}
 		}
 
-		if (fgui::input.is_mouse_in_region(scrollbar_area)) {
+		if (fgui::input_system::mouse_in_area(scrollbar_area)) {
 
 			// change cursor
 			handler::set_cursor(fgui::cursor_type::HAND);
 
-			if (fgui::input.get_key_press(MOUSE_LEFT))
+			if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT))
 				m_dragging_scrollbar = true;
 		}
 
 		if (m_dragging_scrollbar) {
 
-			if (fgui::input.get_key_state(MOUSE_LEFT))
-				m_scroll_offset += fgui::input.get_mouse_delta().y;
+			// mouse position delta
+			fgui::point position_delta = fgui::input_system::mouse_position_delta();
+
+			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT))
+				m_scroll_offset += position_delta.y;
 			else
 				m_dragging_scrollbar = false;
 
@@ -590,10 +559,13 @@ void fgui::container::update() {
 		// container resizeable area
 		fgui::rect resizeable_area = { a.x + m_width - 10, a.y + m_height - 10, 15, 15 };
 
-		if (fgui::input.get_key_press(MOUSE_LEFT) && fgui::input.is_mouse_in_region(resizeable_area))
-			m_size_changing = true;
+		if (fgui::input_system::mouse_in_area(resizeable_area)) {
+		
+			if  (fgui::input_system::key_press(fgui::external::MOUSE_LEFT))
+				m_size_changing = true;
+		}
 
-		if (!fgui::input.get_key_state(MOUSE_LEFT)) {
+		if (!fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) {
 			m_size_changing = false;
 
 			// change cursor
@@ -601,16 +573,16 @@ void fgui::container::update() {
 		}
 
 		// change cursor
-		if (fgui::input.is_mouse_in_region(resizeable_area))
+		if (fgui::input_system::mouse_in_area(resizeable_area))
 			handler::set_cursor(fgui::cursor_type::RESIZE);
 		
 		if (m_size_changing) {
 
-			int drag_x = fgui::input.get_mouse_delta().x;
-			int drag_y = fgui::input.get_mouse_delta().y;
+			// mouse position delta
+			fgui::point position_delta = fgui::input_system::mouse_position_delta();
 
-			m_width += drag_x;
-			m_height += drag_y;
+			m_width += position_delta.x;
+			m_height += position_delta.y;
 
 			if (m_width < old_w) {
 				m_width = old_w;
@@ -632,7 +604,7 @@ void fgui::container::update() {
 void fgui::container::tooltip() {}
 
 //---------------------------------------------------------
-void fgui::container::save(const std::string &file_name, nlohmann::json &json_module) {
+void fgui::container::save(nlohmann::json &json_module) {
 
 	// check if the container have elements first
 	if (m_elements.empty())
@@ -640,17 +612,17 @@ void fgui::container::save(const std::string &file_name, nlohmann::json &json_mo
 
 	for (auto element : m_elements) {
 
-		if (element->m_family == fgui::element_family::CONTAINER_FAMILY)
-			element->save(file_name, json_module);
+		if (element->get_family(fgui::detail::element_type::CONTAINER))
+			element->save(json_module);
 
 		// check if the element can be saved
-		else if (element->get_flag(fgui::element_flag::SAVABLE))
-			element->save(file_name, json_module);
+		else if (element->get_flag(fgui::detail::element_flags::SAVABLE))
+			element->save(json_module);
 	}
 }
 
 //---------------------------------------------------------
-void fgui::container::load(const std::string& file_name) {
+void fgui::container::load(const std::string_view file_name) {
 
 	// check if the container have elements first
 	if (m_elements.empty())
@@ -659,9 +631,9 @@ void fgui::container::load(const std::string& file_name) {
 	nlohmann::json json_module;
 
 	// open the file
-	std::ifstream file_to_load(file_name, std::ifstream::binary);
+	std::ifstream file_to_load(file_name.data(), std::ifstream::binary);
 
-	if (!file_to_load.good() || file_name.empty())
+	if (file_to_load.fail()) // todo: make an exception handler 
 		return;
 
 	// read config file
@@ -669,11 +641,11 @@ void fgui::container::load(const std::string& file_name) {
 
 	for (auto element : m_elements) {
 
-		if (element->get_family(fgui::element_family::CONTAINER_FAMILY))
+		if (element->get_family(fgui::detail::element_type::CONTAINER))
 			element->load(file_name);
 
 		// check if the element can be loaded
-		else if (element->get_flag(fgui::element_flag::SAVABLE))
+		else if (element->get_flag(fgui::detail::element_flags::SAVABLE))
 			element->load(file_name);
 	}
 }
