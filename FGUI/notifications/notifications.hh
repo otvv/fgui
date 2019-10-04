@@ -21,7 +21,7 @@ namespace fgui {
         notification_info(const std::string_view _text, const fgui::animation_type &_animation_type) : text(_text), animation_type(_animation_type), animation_progress(0.f), state(true), tick(0) {}
         
         int tick;
-        float animation_progress;
+        int animation_progress;
         std::string text;
         fgui::state state;
         fgui::animation_type animation_type;

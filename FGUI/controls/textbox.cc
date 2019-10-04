@@ -119,7 +119,7 @@ void fgui::textbox::update() {
 			// input 
 			// NOTE: If your keys are wrong, you might want to check this.
 			// m_win_api_text = winapi
-			// m_iinput_system_text = valve's iinputsystem
+			// m_iinput_system_text = valve's inputsystem
 			std::string input = m_iinput_system_text[i].data();
 
 			// clear text if the user types something while the text is selected

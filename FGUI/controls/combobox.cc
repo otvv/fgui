@@ -73,10 +73,10 @@ void fgui::combobox::draw() {
 			fgui::render.rect(area.left, area.top + 23, area.right, (m_item_height * 10), fgui::color(style.combobox.at(1)));
 
 			// get the number of displayed items
-			unsigned int item_displayed = 0;
+			static int item_displayed = 0;
 
 			// calculate the amount of items to be displayed
-			int calculated_items = (m_height - m_item_height) / m_item_height;
+			static int calculated_items = (m_height - m_item_height) / m_item_height;
 
 			for (std::size_t i = m_slider_top; (i < m_info.size() && item_displayed < calculated_items); i++) {
 
@@ -145,7 +145,7 @@ void fgui::combobox::draw() {
 			for (std::size_t i = 0; i < m_info.size(); i++) {
 
 				// get the item area on the drop down list
-				fgui::rect item_area = {a.x, a.y + 23 + (m_item_height * i), m_width, m_item_height};
+				fgui::rect item_area = {a.x, a.y + 23 + (m_item_height * static_cast<int>(i)), m_width, m_item_height};
 
 				// if the user starts hovering a item or selects one
 				if (fgui::input_system::mouse_in_area(item_area) || m_index == i) {
@@ -198,10 +198,10 @@ void fgui::combobox::handle_input() {
 			if (m_info.size() > 15) {
 				
 				// get the number of displayed items
-				unsigned int items_displayed = 0;
+				static int items_displayed = 0;
 
 				// calculate the amount of items to be drawned
-				int calculated_items = m_height / m_item_height;
+				static int calculated_items = m_height / m_item_height;
 
 				for (std::size_t i = m_slider_top; (i < m_info.size() && items_displayed < calculated_items); i++) {
 
@@ -232,7 +232,7 @@ void fgui::combobox::handle_input() {
 				for (std::size_t i = 0; (i < m_info.size()); i++) {
 
 					// get the item area on the drop down list
-					fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * i), (m_width - 8), m_item_height };
+					fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * static_cast<int>(i)), (m_width - 8), m_item_height };
 
 					if (fgui::input_system::mouse_in_area(item_area)) {
 

@@ -32,10 +32,10 @@ void fgui::listbox::draw() {
 	fgui::rect area = { a.x, a.y, m_width, m_height };
 
 	// get the number of displayed items
-	unsigned int item_displayed = 0;
+	static int item_displayed = 0;
 
 	// calculate the quantity of entries that will be drawned on the listbox
-	int calculated_items = m_height / m_item_height;
+	static int calculated_items = m_height / m_item_height;
 
 	// listbox body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.listbox.at(0)));
@@ -148,11 +148,11 @@ void fgui::listbox::handle_input() {
 				m_dragging = true;
 		}
 
-		// calculate the amount of items to be drawned
-		int calculated_items = m_height / m_item_height;
-
 		// get the number of displayed items
-		unsigned int item_displayed = 0;
+		static int item_displayed = 0;
+
+		// calculate the amount of items to be drawned
+		static int calculated_items = m_height / m_item_height;
 
 		for (std::size_t i = m_slider_top; (i < m_info.size() && item_displayed < calculated_items); i++) {
 
@@ -177,7 +177,7 @@ void fgui::listbox::update() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// calculate the amount of items to be drawned
-	int calculated_items = m_height / m_item_height;
+	static int calculated_items = m_height / m_item_height;
 
 	if (m_dragging) {
 

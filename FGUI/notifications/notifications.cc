@@ -38,7 +38,7 @@ void fgui::notification::draw() {
 
         if (m_info[i].animation_type ==  fgui::animation_type::LINEAR) {
             
-            area = { m_x + (screen_width - m_info[i].animation_progress), m_y + (m_height * i), m_width + 30, m_height };
+            area = { m_x + (screen_width - m_info[i].animation_progress), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
             
             // notification body
 		    fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.notifications.at(0), 235));
@@ -54,7 +54,7 @@ void fgui::notification::draw() {
 
         else if (m_info[i].animation_type == fgui::animation_type::FADE) {
             
-            area = { m_x + (screen_width - m_width), m_y + (m_height * i), m_width + 30, m_height };
+            area = { m_x + (screen_width - m_width), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
 
 		    // notification body
 		    fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.notifications.at(0), m_info[i].animation_progress));
@@ -141,7 +141,7 @@ void fgui::notification::handle_input() {
     for (std::size_t i = 0; i < m_info.size(); i++) {
 
 		// notification area
-		fgui::rect area = { m_x + (screen_width - m_width), m_y + (m_height * i), m_width + 30, m_height };
+		fgui::rect area = { m_x + (screen_width - m_width), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
 
         // check if the user is hovering the notification area
         if (fgui::input_system::mouse_in_area(area)) {

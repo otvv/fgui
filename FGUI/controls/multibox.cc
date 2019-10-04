@@ -95,7 +95,7 @@ void fgui::multibox::draw() {
 		for (std::size_t i = 0; i < m_info.size(); i++) {
 
 			// get the item area on the drop down list
-			fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * i), m_width, m_item_height };
+			fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * static_cast<int>(i)), m_width, m_item_height };
 
 			// if the user starts hovering a item or selects one
 			if (fgui::input_system::mouse_in_area(item_area) || m_info[i].checked) {
@@ -140,7 +140,7 @@ void fgui::multibox::handle_input() {
 				for (std::size_t i = 0; i < m_info.size(); i++) {
 
 					// item area
-					fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * i), m_width, m_item_height };
+					fgui::rect item_area = { a.x, a.y + 23 + (m_item_height * static_cast<int>(i)), m_width, m_item_height };
 
 					// select an item
 					if (fgui::input_system::mouse_in_area(item_area))
