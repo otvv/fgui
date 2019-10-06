@@ -35,7 +35,7 @@ void fgui::container::draw() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// container title text size
 	fgui::dimension text_size = fgui::render.get_text_size(fgui::container::get_font(), m_title);
@@ -110,7 +110,7 @@ void fgui::container::draw() {
 		}
 	}
 
-	for (auto element : m_elements) {
+	for (std::shared_ptr<fgui::element> element : m_elements) {
 
 		// check if the element can be drawned
 		if (element && element->unlocked() && element->get_flag(fgui::detail::element_flags::DRAWABLE)) {
@@ -272,7 +272,7 @@ void fgui::container::save_config(const std::string_view file_name) {
 	if (m_elements.empty())
 		return;
 
-	for (auto element : m_elements) {
+	for (std::shared_ptr<fgui::element> element : m_elements) {
 
 		// save the element state
 		element->save(json_module);
@@ -312,36 +312,6 @@ void fgui::container::add_control(const std::shared_ptr<fgui::element> &control,
 }
 
 //---------------------------------------------------------
-bool fgui::container::hovered() {
-
-    if (shared_from_this() == get_window()) {
-
-        if (m_focused_element) {
-
-            fgui::point a = m_focused_element->get_absolute_position();
-
-			// focused element region
-			fgui::rect focused_control_region = { a.x, a.y, m_focused_element->m_width, m_focused_element->m_height };
-            
-			if (fgui::input_system::mouse_in_area(focused_control_region))
-                return true;
-        }
-
-		// container region
-		fgui::rect container_region = { m_x, m_y, m_width, m_height };
-
-        return fgui::input_system::mouse_in_area(container_region);
-    }
-	
-    fgui::point a = m_focused_element->get_absolute_position();
-
-	// focused window region
-	fgui::rect focused_window_region = { a.x, a.y, m_width, m_height };
-
-    return fgui::input_system::mouse_in_area(focused_window_region);
-}
-
-//---------------------------------------------------------
 void fgui::container::handle_input() {}
 
 //---------------------------------------------------------
@@ -359,7 +329,7 @@ void fgui::container::update() {
 		 */
 		
 		// container draggable area
-		fgui::rect draggable_area = { m_x, m_y, m_width, 25 };
+		fgui::rect draggable_area = { m_x, m_y, m_width, 25 }; // 25 being the height in pixels of the draggable area
 
 		if (fgui::input_system::mouse_in_area(draggable_area)) {
 		
@@ -440,7 +410,7 @@ void fgui::container::update() {
 	}
 
 	// iterate over the rest of the elements
-	for (auto element : m_elements) {
+	for (std::shared_ptr<fgui::element> element : m_elements) {
 		
 		if (element->unlocked()) {
 
@@ -610,7 +580,7 @@ void fgui::container::save(nlohmann::json &json_module) {
 	if (m_elements.empty())
 		return;
 
-	for (auto element : m_elements) {
+	for (std::shared_ptr<fgui::element> element : m_elements) {
 
 		if (element->get_family(fgui::detail::element_type::CONTAINER))
 			element->save(json_module);
@@ -639,7 +609,7 @@ void fgui::container::load(const std::string_view file_name) {
 	// read config file
 	json_module = nlohmann::json::parse(file_to_load);
 
-	for (auto element : m_elements) {
+	for (std::shared_ptr<fgui::element> element : m_elements) {
 
 		if (element->get_family(fgui::detail::element_type::CONTAINER))
 			element->load(file_name);

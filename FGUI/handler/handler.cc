@@ -8,8 +8,6 @@
 
 void fgui::handler::render_window() {
 
-	static bool overlaying_window_clicked = false;
-
 	if (m_input_state == fgui::input_state::UNLOCKED) {
 		
 		// listen for input
@@ -17,7 +15,7 @@ void fgui::handler::render_window() {
 	}
 
 	// bindings
-	for (auto &binded_key : m_binds) {
+	for (std::pair<const int, std::shared_ptr<fgui::container>> &binded_key : m_binds) {
 
 		// toggle the window on and off
 		if (fgui::input_system::key_press(binded_key.first))
@@ -33,44 +31,27 @@ void fgui::handler::render_window() {
 		m_notifications->handle_input();
 	}
 
-	for (std::size_t i = 0; i < m_windows.size(); i++) {
-
-		// main window 
-        std::shared_ptr<fgui::container> main_window = m_windows.at(i);
-
-		if (main_window->get_state()) {
+	for (std::shared_ptr<fgui::container> window : m_windows) {
+		
+		if (window->get_state()) {
 
 			// draw and update
-        	main_window->update();
-       		main_window->draw();
+        	window->update();
+       		window->draw();
 
 			// draw cursors
 			draw_cursors();
 		}
-
-		// other window
-        auto other_window = m_windows.at(m_windows.size() - 1 - i);
-
-        if (other_window && other_window->hovered()) {
-
-            if (!overlaying_window_clicked && fgui::input_system::key_press(fgui::external::MOUSE_LEFT)) {
-
-                overlaying_window_clicked = true;
-                
-				m_windows.erase(m_windows.end() - i - 1);    
-				m_windows.push_back(other_window);
-            }
-        }
     }
 }
 
 //---------------------------------------------------------
-void fgui::handler::draw_cursors() {
+static void fgui::handler::draw_cursors() {
 
 	static fgui::point cursor = {0, 0};
 
 	// get the window style
-	auto style = get_style();
+	fgui::style style = get_style();
 
 	if (m_input_state == fgui::input_state::UNLOCKED) {
 
@@ -246,12 +227,11 @@ void fgui::handler::draw_cursors() {
 		fgui::render.rect(cursor.x - 4 + 8, cursor.y + 12 - 7, 1, 3, fgui::color(style.cursor.at(0)));
 		fgui::render.rect(cursor.x - 3 + 8, cursor.y + 13 - 7, 1, 1, fgui::color(style.cursor.at(0)));
 
-		// break
+		break;
 	}
 
-	case fgui::cursor_type::NONE: {
+	case fgui::cursor_type::NONE:
 		return;
-	}
 	
 	}
 }

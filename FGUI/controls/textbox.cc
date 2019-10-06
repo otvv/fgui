@@ -32,7 +32,7 @@ void fgui::textbox::draw() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_height };
@@ -120,7 +120,7 @@ void fgui::textbox::update() {
 			// NOTE: If your keys are wrong, you might want to check this.
 			// m_win_api_text = winapi
 			// m_iinput_system_text = valve's inputsystem
-			std::string input = m_iinput_system_text[i].data();
+			std::string input = detail::m_iinput_system_text[i].data();
 
 			// clear text if the user types something while the text is selected
 			if (m_text_selected) {
@@ -206,7 +206,7 @@ void fgui::textbox::tooltip() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_height };

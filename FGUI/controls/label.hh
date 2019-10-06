@@ -47,7 +47,7 @@ namespace fgui {
 		void load(const std::string_view file_name);
 	private:
 
-		std::string m_text;
+		std::string_view m_text;
 		fgui::label_type m_type;
 	};
 }

@@ -27,7 +27,7 @@ void fgui::checkbox::draw() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// checkbox area
 	fgui::rect area = { a.x, a.y, m_original_width, m_height };
@@ -76,7 +76,7 @@ void fgui::checkbox::tooltip() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_height };

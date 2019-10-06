@@ -37,7 +37,7 @@ void fgui::tabs::draw() {
 		tab_button_size = m_width / m_info.size();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	for (std::size_t i = 0; i < m_info.size(); i++) {
 
@@ -46,9 +46,6 @@ void fgui::tabs::draw() {
 
 		// tab area
 		fgui::rect area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, (tab_button_size + 1), m_height };
-
-		// get the window style
-		auto style = handler::get_style();
 
 		// tab button body
 		fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.tabs.at(1)));

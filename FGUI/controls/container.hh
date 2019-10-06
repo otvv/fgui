@@ -41,9 +41,6 @@ namespace fgui {
 		// add a new control in the container
 		void add_control(const std::shared_ptr<fgui::element> &control, int page_index = -1, bool manual_size = false);
 
-		// checks if a container window is being hovered
-		bool hovered();
-
 		// set whether or not the scrollbar should be used
 		inline void set_scrollbar_state(const fgui::state &state) noexcept {
 

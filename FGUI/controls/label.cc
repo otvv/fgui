@@ -25,21 +25,21 @@ void fgui::label::draw() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// label size
-	fgui::dimension text_size = fgui::render.get_text_size(fgui::label::get_font(), fgui::label::m_text);
+	fgui::dimension text_size = fgui::render.get_text_size(fgui::label::get_font(), m_text.data());
 
 	// label types
 	switch (m_type) {
 
 	case fgui::label_type::TEXT: {
-		fgui::render.text(a.x, a.y, fgui::color(style.label.at(3)), fgui::label::get_font(), m_text);
+		fgui::render.text(a.x, a.y, fgui::color(style.label.at(3)), fgui::label::get_font(), m_text.data());
 		break;
 	}
 
 	case fgui::label_type::LINK: {
-		fgui::render.text(a.x, a.y, fgui::color(style.label.at(5)), fgui::label::get_font(), m_text);
+		fgui::render.text(a.x, a.y, fgui::color(style.label.at(5)), fgui::label::get_font(), m_text.data());
 		fgui::render.rect(a.x, a.y + text_size.height, text_size.width, 1, fgui::color(style.label.at(5)));
 		break;
 	}
@@ -61,15 +61,15 @@ void fgui::label::draw() {
 
 		// banner label
 		if (m_parent_element)
-			fgui::render.text(banner_area.left + (banner_area.right / 2) - (text_size.width / 2), banner_area.top + (banner_area.bottom / 2) - (text_size.height / 2), fgui::color(style.label.at(3)), fgui::label::get_font(), m_text);
+			fgui::render.text(banner_area.left + (banner_area.right / 2) - (text_size.width / 2), banner_area.top + (banner_area.bottom / 2) - (text_size.height / 2), fgui::color(style.label.at(3)), fgui::label::get_font(), m_text.data());
 		else
-			fgui::render.text(banner_area.left + 10, banner_area.top + (banner_area.bottom / 2) - (text_size.height / 2), fgui::color(style.label.at(3)), fgui::label::get_font(), m_text);
+			fgui::render.text(banner_area.left + 10, banner_area.top + (banner_area.bottom / 2) - (text_size.height / 2), fgui::color(style.label.at(3)), fgui::label::get_font(), m_text.data());
 
 		break;
 	}
 
 	case fgui::label_type::COLORED: {
-		fgui::render.text(a.x, a.y, fgui::color(style.label.at(4)), fgui::label::get_font(), m_text);
+		fgui::render.text(a.x, a.y, fgui::color(style.label.at(4)), fgui::label::get_font(), m_text.data());
 		break;
 	}
 
@@ -85,7 +85,7 @@ void fgui::label::handle_input() {
 		fgui::point a = fgui::element::get_absolute_position();
 
 		// label size
-		fgui::dimension text_size = fgui::render.get_text_size(fgui::label::get_font(), m_text);
+		fgui::dimension text_size = fgui::render.get_text_size(fgui::label::get_font(), m_text.data());
 
 		// get the label area
 		fgui::rect area = { a.x, a.y, text_size.width, text_size.height };
@@ -118,7 +118,7 @@ void fgui::label::tooltip() {
 	fgui::point a = fgui::element::get_absolute_position();
 
 	// get the window style
-	auto style = handler::get_style();
+	fgui::style style = handler::get_style();
 
 	// get the control area
 	fgui::rect area = { a.x, a.y, m_width, m_height };

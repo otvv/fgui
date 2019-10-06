@@ -25,7 +25,7 @@ namespace fgui {
 
     namespace input_system {
 
-        inline void listen() noexcept {
+        inline void listen() {
 
             static fgui::point last_known_position = {0, 0};
 
