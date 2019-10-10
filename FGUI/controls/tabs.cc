@@ -45,7 +45,7 @@ void fgui::tabs::draw() {
 		fgui::dimension text_size = fgui::render.get_text_size(fgui::tabs::get_font(), m_info[i].item);
 
 		// tab area
-		fgui::rect area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, (tab_button_size + 1), m_height };
+		fgui::rect area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, tab_button_size, m_height };
 
 		// tab button body
 		fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.tabs.at(1)));
