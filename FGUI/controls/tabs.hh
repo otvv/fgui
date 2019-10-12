@@ -30,7 +30,10 @@ namespace fgui {
 		inline int get_index() const noexcept {
 
 			return m_index;
-		} 
+		}
+
+		// set tab layout
+		fgui::tabs_layout set_layout = fgui::tabs_layout::HORIZONTAL;
 
 		// handle keyboard and mouse input	
 		void handle_input();

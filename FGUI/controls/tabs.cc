@@ -14,6 +14,7 @@ fgui::tabs::tabs() {
 	fgui::tabs::m_height = 30;
 	fgui::tabs::m_title = "tab";
 	fgui::tabs::m_index = 0;
+	fgui::tabs::set_style = fgui::tabs_layout::HORIZONTAL;
 	fgui::tabs::m_font = fgui::element::m_font;
 	fgui::tabs::m_type =  static_cast<int>(fgui::detail::element_type::TAB);
 	fgui::tabs::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE);
@@ -30,9 +31,17 @@ void fgui::tabs::draw() {
 	
 	// calculate the size of the tab buttons
 	static int tab_button_size = 0;
+	static int tab_button_height = 0;
 	
+	// get correct values for drawing depending on tabs_layout
 	if (m_parent_element)
-	 	tab_button_size = (m_parent_element->get_size().width - 12) / m_info.size();
+	{
+		if (fgui::tabs::set_layout == fgui::tabs_layout::VERTICAL)
+			tab_button_size = (m_parent_element->get_size().width - 12) / 6; //CHANGE DENOMINATOR DEPENDING ON YOUR MENU WIDTH TO FIT ACCORDINGLY 
+		else
+			tab_button_size = (m_parent_element->get_size().width - 12) / m_info.size();
+		tab_button_height = (m_parent_element->get_size().height - 32) / m_info.size();
+	}
 	else
 		tab_button_size = m_width / m_info.size();
 
@@ -45,7 +54,12 @@ void fgui::tabs::draw() {
 		fgui::dimension text_size = fgui::render.get_text_size(fgui::tabs::get_font(), m_info[i].item);
 
 		// tab area
-		fgui::rect area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, tab_button_size, m_height };
+		fgui::rect area = { 0, 0, 0, 0 };
+
+		if (fgui::tabs::set_layout == fgui::tabs_layout::HORIZONTAL)
+			area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, tab_button_size, m_height };
+		else if (fgui::tabs::set_layout == fgui::tabs_layout::VERTICAL)
+			area = { a.x, a.y + (tab_button_height * static_cast<int>(i)), tab_button_size, tab_button_height };
 
 		// tab button body
 		fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.tabs.at(1)));
@@ -72,16 +86,29 @@ void fgui::tabs::update() {
 
 	// calculate the size of the tab buttons
 	int tab_button_size = 0;
+int tab_button_height = 0;
 
+	// get correct values for input depending on tabs_layout
 	if (m_parent_element)
-	 	tab_button_size = (m_parent_element->get_size().width - 10) / m_info.size();
+	{
+		if (fgui::tabs::set_layout == fgui::tabs_layout::VERTICAL)
+			tab_button_size = (m_parent_element->get_size().width - 12) / 6; //CHANGE DENOMINATOR DEPENDING ON YOUR MENU WIDTH TO FIT ACCORDINGLY
+		else
+			tab_button_size = (m_parent_element->get_size().width - 12) / m_info.size();
+		tab_button_height = (m_parent_element->get_size().height - 32) / m_info.size();
+	}
 	else
 		tab_button_size = m_width / m_info.size();
 
 	for (std::size_t i = 0; i < m_info.size(); i++) {
 
 		// tab area
-		fgui::rect area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, tab_button_size, m_height };
+		fgui::rect area = { 0, 0, 0, 0 };
+
+		if (fgui::tabs::set_layout == fgui::tabs_layout::HORIZONTAL)
+			area = { a.x + (static_cast<int>(i)* tab_button_size), a.y, tab_button_size, m_height };
+		else if (fgui::tabs::set_layout == fgui::tabs_layout::VERTICAL)
+			area = { a.x, a.y + (tab_button_height * static_cast<int>(i)), tab_button_size, tab_button_height };
 
 		// select the tab
 		if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT)) {
