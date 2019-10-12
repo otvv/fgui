@@ -14,7 +14,7 @@ fgui::tabs::tabs() {
 	fgui::tabs::m_height = 30;
 	fgui::tabs::m_title = "tab";
 	fgui::tabs::m_index = 0;
-	fgui::tabs::set_style = fgui::tabs_layout::HORIZONTAL;
+	fgui::tabs::set_layout = fgui::tabs_layout::HORIZONTAL;
 	fgui::tabs::m_font = fgui::element::m_font;
 	fgui::tabs::m_type =  static_cast<int>(fgui::detail::element_type::TAB);
 	fgui::tabs::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE);
