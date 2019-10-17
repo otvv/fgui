@@ -32,6 +32,12 @@ namespace fgui {
 			return m_index;
 		} 
 
+		// set the tab layout
+		inline void set_layout(const fgui::tab_layout tab_layout) {
+			
+			m_tab_layout = tab_layout;
+		}
+
 		// handle keyboard and mouse input	
 		void handle_input();
 		
@@ -49,6 +55,7 @@ namespace fgui {
 	private:
 
 		int m_index;
+		fgui::tab_layout m_tab_layout;
 		std::vector<fgui::detail::item_info> m_info;
 	};
 }

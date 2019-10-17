@@ -51,6 +51,17 @@ namespace fgui {
 			fgui::render.create_font(m_font, element_font.family, element_font.size, element_font.flags, element_font.bold);
 		}
 
+        // set default notification position of the screen
+        inline void set_position(const int &x, const int &y) noexcept {
+            m_x = x;
+            m_y = y;
+        }
+
+        inline void set_position(const fgui::point& position) noexcept {
+            m_x = position.x;
+            m_y = position.y;
+        }
+
 		// returns the font that the notification is currently using
 		inline fgui::font get_font() const noexcept {
 

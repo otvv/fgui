@@ -39,10 +39,10 @@ void fgui::slider::draw() {
 	float location = ratio * m_width;
 
 	// custom value
-	static std::string_view custom_value = "";
+	static std::string_view custom_value;
 
 	// slider title text size
-	fgui::dimension text_size = fgui::render.get_text_size(fgui::slider::get_font(), m_min_text);
+	fgui::dimension text_size = fgui::render.get_text_size(fgui::slider::get_font(), m_title);
 
 	// slider body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.slider.at(0)));
@@ -57,9 +57,6 @@ void fgui::slider::draw() {
 	
 	// slider label
 	fgui::render.text(area.left, (area.top - text_size.height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), m_title);
-
-	// slider value text size
-	fgui::dimension slider_value_text_size = fgui::render.get_text_size(fgui::slider::get_font(), custom_value);
 
 	// slider custom value
 	if (!m_min_text.empty()) {
@@ -82,9 +79,12 @@ void fgui::slider::draw() {
 
 	if (m_value != m_min && m_value != m_max)
 		custom_value = std::to_string(static_cast<int>(m_value));
+
+	// slider value text size
+	fgui::dimension slider_value_text_size = fgui::render.get_text_size(fgui::slider::get_font(), custom_value);
 	
 	// slider value
-	fgui::render.text((area.left + area.right) - slider_value_text_size.width, (area.top - text_size.height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), custom_value);
+	fgui::render.text((area.left + area.right) - slider_value_text_size.width, (area.top - text_size.height) - 2, fgui::color(style.text.at(0)), fgui::slider::get_font(), custom_value.data());
 }
 
 //---------------------------------------------------------
@@ -128,7 +128,7 @@ void fgui::slider::update() {
 			else if (new_x >= m_width)
 				new_x = m_width;
 
-			ratio = new_x / float(m_width);
+			ratio = new_x / static_cast<float>(m_width);
 
 			m_value = m_min + (m_max - m_min) * ratio;
 		}

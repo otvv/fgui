@@ -16,7 +16,7 @@ fgui::spinner::spinner() {
     fgui::spinner::m_value = 0;
     fgui::spinner::m_min = 0;
     fgui::spinner::m_max = 0;
-    fgui::spinner::m_holding_ticks = 00;
+    fgui::spinner::m_holding_ticks = 0;
     fgui::spinner::m_normal_click = false;
     fgui::spinner::m_holding_click = false;
 	fgui::spinner::m_font = fgui::element::m_font;

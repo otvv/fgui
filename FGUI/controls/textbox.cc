@@ -63,7 +63,7 @@ void fgui::textbox::draw() {
 	if (m_text_flag & static_cast<int>(fgui::text_flags::SECRET))
 		fgui::render.text(area.left + 5, area.top + (area.bottom / 2) - (typed_text_size.height / 2) - 1, fgui::color(style.text.at(0)), fgui::textbox::get_font(), std::string(m_text.length(), '*'));
 	
-	else if (m_text_flag &  static_cast<int>(fgui::text_flags::UPPERCASE)) {
+	else if (m_text_flag & static_cast<int>(fgui::text_flags::UPPERCASE)) {
 		
 		// transform the text into uppercase
 		std::string upper_case_display = m_text;

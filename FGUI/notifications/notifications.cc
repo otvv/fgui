@@ -21,10 +21,6 @@ void fgui::notification::draw() {
     // get the window style
 	fgui::style style = handler::get_style();
 
-	// screen size
-	int screen_width, screen_height;
-	fgui::render.get_screen_size(screen_width, screen_height);
-
     if (m_info.empty())
         return;
 
@@ -38,7 +34,7 @@ void fgui::notification::draw() {
 
         if (m_info[i].animation_type ==  fgui::animation_type::LINEAR) {
             
-            area = { m_x + (screen_width - m_info[i].animation_progress), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
+            area = { (m_x - m_info[i].animation_progress), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
             
             // notification body
 		    fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.notifications.at(0), 235));
@@ -54,7 +50,7 @@ void fgui::notification::draw() {
 
         else if (m_info[i].animation_type == fgui::animation_type::FADE) {
             
-            area = { m_x + (screen_width - m_width), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
+            area = { (m_x - m_width), m_y + (m_height * static_cast<int>(i)), m_width + 30, m_height };
 
 		    // notification body
 		    fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.notifications.at(0), m_info[i].animation_progress));

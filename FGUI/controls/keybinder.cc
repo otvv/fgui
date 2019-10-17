@@ -89,10 +89,7 @@ void fgui::keybinder::update() {
 				if (i == fgui::external::KEY_ESCAPE) {
 
 					// select the key
-					m_key = -1 /* KEY_INVALID */;
-
-					// change key binder status
-					m_status = "Not Bound";
+					m_key = -1; /* KEY_INVALID */
 
 					// block the keybinder from receiving input
 					m_is_getting_key = false;

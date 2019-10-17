@@ -74,7 +74,7 @@ namespace fgui {
 		std::array<fgui::color, 5> window = { fgui::color(25, 25, 25), fgui::color(40, 40, 40), fgui::color(61, 200, 255), fgui::color(61, 158, 255), fgui::color(46, 119, 191) };
 	};
 
-	// Man that's nasty. I should probably re-do this as soon as possible.
+	// Man that's nasty. I should probably remake this as soon as possible.
 	inline fgui::style m_window_style;
 	inline fgui::input_state m_input_state;
 	inline fgui::cursor_type m_cursor_type;
@@ -92,9 +92,10 @@ namespace fgui {
 		}
 
 		// register the notifications
-		inline const void register_notifications(const fgui::element_font &notification_font) noexcept {
+		inline const void register_notifications(const int& x, const int&y, const fgui::element_font &notification_font) noexcept {
 
 			m_notifications = std::make_shared<fgui::notification>();
+			m_notifications->set_position(x, y);
 			m_notifications->set_font(notification_font);
 		}
 

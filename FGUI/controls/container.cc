@@ -86,9 +86,6 @@ void fgui::container::draw() {
 		// container background
 		fgui::render.rect(a.x, a.y + 1, m_width, m_height - 1, fgui::color(style.container.at(1)));
 
-		// container label
-		fgui::render.text(a.x + 10, a.y - (text_size.height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), m_title);
-
 		// if the groupbox is resizeable
 		if (m_resizeable) {
 			render.rect(a.x + m_width - 5, a.y + m_height - 1, 5, 1, fgui::color(conditional_color));
@@ -261,6 +258,12 @@ void fgui::container::draw() {
 			fgui::render.text(a.x + (m_width / 2) - (hidden_text_size.width / 2), a.y + (m_height / 2) - (hidden_text_size.height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), "Hidden");
 		}
 	}
+
+	if (m_parent_element) {
+
+    	// container label
+    	fgui::render.text(a.x + 10, a.y - (text_size.height / 2), fgui::color(style.text.at(0)), fgui::container::get_font(), m_title);
+  	}
 }
 
 //---------------------------------------------------------

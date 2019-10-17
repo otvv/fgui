@@ -231,6 +231,11 @@ namespace fgui {
         FADE
     };
 
+	enum struct tab_layout : int {
+		HORIZONTAL = 1,
+		VERTICAL = 2
+	};
+
 	// public structs
 	typedef struct element_area {
 		int left;
