@@ -21,7 +21,7 @@ namespace fgui {
 		container();
 
 		// draw the element
-		void draw();
+		void draw() override final;
 
 		// set the container state (this will be used for windows)
 		inline void set_state(const fgui::state &state) noexcept {
@@ -78,19 +78,19 @@ namespace fgui {
 		}
 
 		// handle keyboard and mouse input	
-		void handle_input();
+		void handle_input() override final;
 		
 		// handle the element updates
-		void update();
+		void update() override final;
 
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
 	private:
 
 		int m_scroll_offset, m_bottom_element_pos;
