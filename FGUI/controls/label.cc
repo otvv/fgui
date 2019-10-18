@@ -73,6 +73,11 @@ void fgui::label::draw() {
 		break;
 	}
 
+	case fgui::label_type::SEPARATOR: {
+		// TODO: Handle this case.
+		break;
+	}
+
 	}
 }
 
