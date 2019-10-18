@@ -36,7 +36,7 @@ void fgui::colorlist::draw() {
 	unsigned int items_displayed = 0;
 
 	// calculate the amount of items to be displayed
-	int calculated_items = (m_height - 20) / m_item_height;
+	unsigned int calculated_items = (m_height - 20) / m_item_height;
 
 	// color list body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.colorlist.at(0)));

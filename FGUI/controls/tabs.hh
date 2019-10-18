@@ -27,7 +27,7 @@ namespace fgui {
 		}
 
 		// get the current tab selected
-		inline int get_index() const noexcept {
+		inline std::size_t get_index() const noexcept {
 
 			return m_index;
 		} 
@@ -54,7 +54,7 @@ namespace fgui {
 		void load(const std::string_view file_name);
 	private:
 
-		int m_index;
+		std::size_t m_index;
 		fgui::tab_layout m_tab_layout;
 		std::vector<fgui::detail::item_info> m_info;
 	};

@@ -103,7 +103,7 @@ namespace fgui {
 		void load(const std::string_view file_name);
 	private:
 
-		int m_selected;
+		std::size_t m_selected;
 		bool m_dragging;
 		int m_slider_top;
 		int m_item_height;

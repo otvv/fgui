@@ -130,10 +130,10 @@ namespace fgui {
 	private:
 
 		int m_text_flag;
-		int m_text_length;
+		std::string::size_type m_text_length;
 		std::string m_text;
 		int m_holding_ticks;
-		int m_text_input_pos;
+		std::string::size_type m_text_input_pos;
 		bool m_text_selected;
 		fgui::state m_is_getting_key;
 	};
