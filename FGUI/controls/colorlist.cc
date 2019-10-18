@@ -251,9 +251,6 @@ void fgui::colorlist::handle_input() {
 		// color picker area
 		fgui::rect picker_area = { a.x + (m_width - 240), a.y, 150, 150 };
 
-		// gradient checkbox area
-		fgui::rect gradient_checkbox_area = { picker_area.left + 50, (picker_area.top + picker_area.bottom) + 40, m_color_list[m_selected].gradient_checkbox->get_size().width, m_color_list[m_selected].gradient_checkbox->get_size().height };
-		
 		// handle input
 		m_color_list[m_selected].gradient_checkbox->handle_input();
 		m_color_list[m_selected].alpha_slider->handle_input();
