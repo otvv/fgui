@@ -63,7 +63,7 @@ namespace fgui {
 		bool second_color_added = false;
 	};
 
-	class colorlist : public fgui::element {
+	class colorlist final : public fgui::element {
 	public:
 		colorlist();
 

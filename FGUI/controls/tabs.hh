@@ -13,7 +13,7 @@
 
 namespace fgui {
 
-	class tabs : public fgui::element {
+	class tabs final : public fgui::element {
 	public:
 		tabs();
 

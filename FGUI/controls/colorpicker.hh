@@ -10,7 +10,7 @@
 
 namespace fgui {
 
-	class colorpicker : public fgui::element {
+	class colorpicker final : public fgui::element {
 	public:
 		colorpicker();
 

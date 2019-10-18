@@ -63,7 +63,7 @@ namespace fgui {
 				"MOUSE1", "MOUSE2", "MOUSE3", "MOUSE4", "MOUSE5", "", ""
 	};
 
-	class keybinder : public fgui::element {
+	class keybinder final : public fgui::element {
 	public:
 		keybinder();
 

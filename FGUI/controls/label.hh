@@ -12,7 +12,7 @@
 
 namespace fgui {
 
-	class label : public fgui::element {
+	class label final : public fgui::element {
 	public:
 		label();
 

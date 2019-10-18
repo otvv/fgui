@@ -13,7 +13,7 @@
 
 namespace fgui {
 
-	class checkbox : public fgui::element {
+	class checkbox final : public fgui::element {
 	public:
 		checkbox();
 

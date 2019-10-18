@@ -67,7 +67,7 @@ namespace fgui {
 		};
 	}
 
-	class textbox : public fgui::element {
+	class textbox final : public fgui::element {
 	public:
 		textbox();
 

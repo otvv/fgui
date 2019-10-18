@@ -13,7 +13,7 @@
 
 namespace fgui {
 
-	class listbox : public fgui::element {
+	class listbox final : public fgui::element {
 	public:
 		listbox();
 

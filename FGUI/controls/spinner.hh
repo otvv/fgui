@@ -12,7 +12,7 @@
 
 namespace fgui {
 
-    class spinner : public fgui::element {
+    class spinner final : public fgui::element {
     public:
         spinner();
 

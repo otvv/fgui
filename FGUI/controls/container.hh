@@ -16,7 +16,7 @@
 
 namespace fgui {
 
-	class container : public fgui::element {
+	class container final : public fgui::element {
 	public:
 		container();
 

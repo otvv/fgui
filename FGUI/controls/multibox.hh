@@ -13,7 +13,7 @@
 
 namespace fgui {
 
-	class multibox : public fgui::element {
+	class multibox final : public fgui::element {
 	public:
 		multibox();
 

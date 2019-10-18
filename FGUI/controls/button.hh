@@ -14,7 +14,7 @@
 
 namespace fgui {
 
-	class button : public fgui::element {
+	class button final : public fgui::element {
 	public:
 		button();
 

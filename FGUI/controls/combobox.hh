@@ -14,7 +14,7 @@
 
 namespace fgui {
 
-	class combobox : public fgui::element {
+	class combobox final : public fgui::element {
 	public:
 		combobox();
 

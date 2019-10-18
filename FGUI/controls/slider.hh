@@ -13,7 +13,7 @@
 
 namespace fgui {
 
-	class slider : public fgui::element {
+	class slider final : public fgui::element {
 	public:
 		slider();
 
