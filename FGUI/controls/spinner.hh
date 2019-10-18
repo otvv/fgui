@@ -12,12 +12,12 @@
 
 namespace fgui {
 
-    class spinner : public fgui::element {
+    class spinner final : public fgui::element {
     public:
         spinner();
 
         // draw the element
-        void draw();
+        void draw() override final;
 
         // set a custom value for the element
 		inline void set_value(const int &value) noexcept {
@@ -39,19 +39,19 @@ namespace fgui {
         }
 
         // handle keyboard and mouse input
-		void handle_input();
+		void handle_input() override final;
 
 		// handle the element updates
-		void update();
+		void update() override final;
 
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
     private:
         int m_value;
         int m_min, m_max;

@@ -13,12 +13,12 @@
 
 namespace fgui {
 
-	class checkbox : public fgui::element {
+	class checkbox final : public fgui::element {
 	public:
 		checkbox();
 
 		// draw the element
-		void draw();
+		void draw() override final;
 
 		// defines the state of the checkbox
 		inline void set_bool(const bool &onoff) noexcept {
@@ -33,19 +33,19 @@ namespace fgui {
 		}
 
 		// handle keyboard and mouse input
-		void handle_input();
+		void handle_input() override final;
 
 		// handle the element updates
-		void update();
+		void update() override final;
 
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
 	private:
 		bool m_checked;
 	};

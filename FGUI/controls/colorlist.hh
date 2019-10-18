@@ -63,12 +63,12 @@ namespace fgui {
 		bool second_color_added = false;
 	};
 
-	class colorlist : public fgui::element {
+	class colorlist final : public fgui::element {
 	public:
 		colorlist();
 
 		// draw the element
-		void draw();
+		void draw() override final;
 
 		// add a new color to the list
 		inline void add_color(const std::string_view identificator, const fgui::color &color, bool gradient_state = false) noexcept {
@@ -88,19 +88,19 @@ namespace fgui {
 		fgui::color get_color(int index);
 
 		// handle keyboard and mouse input
-		void handle_input();
+		void handle_input() override final;
 
 		// handle the element updates
-		void update();
+		void update() override final;
 
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
 	private:
 
 		std::size_t m_selected;

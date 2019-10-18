@@ -13,12 +13,12 @@
 
 namespace fgui {
 
-	class listbox : public fgui::element {
+	class listbox final : public fgui::element {
 	public:
 		listbox();
 
 		// draw the element
-		void draw();
+		void draw() override final;
 
 		// add a new item in the element
 		inline void add_item(const std::string_view item, const int &value = 0) noexcept {
@@ -51,19 +51,19 @@ namespace fgui {
 		}
 
 		// handle keyboard and mouse input
-		void handle_input();
+		void handle_input() override final;
 
 		// handle the element updates
-		void update();
+		void update() override final;
 
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
 	private:
 
 		std::size_t m_index;

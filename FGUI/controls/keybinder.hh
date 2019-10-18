@@ -63,12 +63,12 @@ namespace fgui {
 				"MOUSE1", "MOUSE2", "MOUSE3", "MOUSE4", "MOUSE5", "", ""
 	};
 
-	class keybinder : public fgui::element {
+	class keybinder final : public fgui::element {
 	public:
 		keybinder();
 
 		// draw the element
-		void draw();
+		void draw() override final;
 
 		// set a custom key
 		inline void set_key(const fgui::key &key) noexcept {
@@ -83,19 +83,19 @@ namespace fgui {
 		}
 
 		// handle keyboard and mouse input
-		void handle_input();
+		void handle_input() override final;
 
 		// handle the element updates
-		void update();
+		void update() override final;
 
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
 	private:
 
 		fgui::key m_key;

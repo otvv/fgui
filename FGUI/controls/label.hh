@@ -12,12 +12,12 @@
 
 namespace fgui {
 
-	class label : public fgui::element {
+	class label final : public fgui::element {
 	public:
 		label();
 
 		// draw the element
-		void draw();
+		void draw() override final;
 
 		// sets a custom text in the label
 		inline void set_text(const std::string_view text) noexcept {
@@ -32,19 +32,19 @@ namespace fgui {
 		}
 
 		// handle keyboard and mouse input
-		void handle_input();
+		void handle_input() override final;
 
 		// handle the element updates
-		void update();
+		void update() override final;
 		
 		// element tooltip
-		void tooltip();
+		void tooltip() override final;
 
 		// save the element state
-		void save(nlohmann::json& json_module);
+		void save(nlohmann::json& json_module) override final;
 
 		// load the element state
-		void load(const std::string_view file_name);
+		void load(const std::string_view file_name) override final;
 	private:
 
 		std::string_view m_text;
