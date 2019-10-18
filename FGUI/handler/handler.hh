@@ -92,7 +92,7 @@ namespace fgui {
 		}
 
 		// register the notifications
-		inline const void register_notifications(const int& x, const int&y, const fgui::element_font &notification_font) noexcept {
+		inline const void register_notifications(const int &x, const int &y, const fgui::element_font &notification_font) noexcept {
 
 			m_notifications = std::make_shared<fgui::notification>();
 			m_notifications->set_position(x, y);

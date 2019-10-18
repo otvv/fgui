@@ -55,10 +55,10 @@ void fgui::tabs::draw() {
 		fgui::rect area = { 0, 0, 0, 0 };
 		
 		if (m_tab_layout == fgui::tab_layout::HORIZONTAL) 
-			area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, (tab_button_size + 1), m_height };
+			area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, tab_button_size, m_height };
 		
 		else if (m_tab_layout == fgui::tab_layout::VERTICAL)
-			area = { a.x, a.y + static_cast<int>(i) * tab_button_size, m_width, (tab_button_size + 1) };
+			area = { a.x, a.y + static_cast<int>(i) * tab_button_size, m_width, tab_button_size };
 
 		// tab button body
 		fgui::render.outline(area.left - 1, area.top - 1, area.right + 2, area.bottom + 2, fgui::color(style.tabs.at(1)));
@@ -103,10 +103,10 @@ void fgui::tabs::update() {
 		fgui::rect area = { 0, 0, 0, 0 };
 		
 		if (m_tab_layout == fgui::tab_layout::HORIZONTAL) 
-			area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, (tab_button_size + 1), m_height };
+			area = { a.x + (static_cast<int>(i) * tab_button_size), a.y, tab_button_size, m_height };
 		
 		else if (m_tab_layout == fgui::tab_layout::VERTICAL)
-			area = { a.x, a.y + static_cast<int>(i) * tab_button_size, m_width, (tab_button_size + 1) };
+			area = { a.x, a.y + static_cast<int>(i) * tab_button_size, m_width, tab_button_size };
 
 		// select the tab
 		if (fgui::input_system::key_press(fgui::external::MOUSE_LEFT)) {
