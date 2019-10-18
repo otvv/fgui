@@ -11,6 +11,18 @@
 #include "multibox.hh"
 #include "container.hh"
 
+#if __cpp_lib_shared_ptr_arrays < 201611
+namespace std {
+
+	template <class T, class U>
+	static std::shared_ptr<T> reinterpret_pointer_cast(const std::shared_ptr<U> &r) noexcept {
+
+		auto p = reinterpret_cast<typename std::shared_ptr<T>::element_type *>(r.get());
+		return std::shared_ptr<T>(r, p);
+	}
+}
+#endif
+
 //---------------------------------------------------------
 bool fgui::element::unlocked() {
 
