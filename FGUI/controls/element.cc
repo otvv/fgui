@@ -32,7 +32,7 @@ bool fgui::element::unlocked() {
 			return std::reinterpret_pointer_cast<fgui::multibox>(m_controller)->get_selected(m_page_index);
 		
 		case  static_cast<int>(fgui::detail::element_type::TAB):
-			return std::reinterpret_pointer_cast<fgui::tabs>(m_controller)->get_index() == m_page_index;
+			return std::reinterpret_pointer_cast<fgui::tabs>(m_controller)->get_index() == static_cast<std::size_t>(m_page_index);
 	}
 	
 	return false;

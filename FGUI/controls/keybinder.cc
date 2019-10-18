@@ -71,12 +71,6 @@ void fgui::keybinder::handle_input() {
 //---------------------------------------------------------
 void fgui::keybinder::update() {
 
-	// get the current position of the window
-	fgui::point a = fgui::element::get_absolute_position();
-
-	// get the control area
-	fgui::rect area = { a.x, a.y, m_width, m_height };
-
 	// if the key binder is unlocked
 	if (m_is_getting_key) {
 

@@ -161,9 +161,6 @@ void fgui::container::draw() {
 	}
 
 	else if (!m_parent_element) {
-		
-		// get the current position of the window
-		fgui::point a = get_window()->get_absolute_position();
 
 		// screen size
 		int screen_width, screen_height;
