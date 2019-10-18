@@ -21,8 +21,8 @@ void fgui::notification::draw() {
     // get the window style
 	fgui::style style = handler::get_style();
 
-    if (m_info.empty())
-        return;
+	if (m_info.empty())
+		return;
 
 	for (std::size_t i = 0; i < m_info.size(); i++) {
 
