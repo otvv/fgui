@@ -18,7 +18,7 @@ namespace fgui {
 
     struct notification_info {
         
-        notification_info(const std::string_view _text, const fgui::animation_type &_animation_type) : text(_text), animation_type(_animation_type), animation_progress(0.f), state(true), tick(0) {}
+        notification_info(const std::string_view _text, const fgui::animation_type &_animation_type) : tick(0), animation_progress(0.f), text(_text), state(true), animation_type(_animation_type) {}
         
         int tick;
         int animation_progress;
