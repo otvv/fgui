@@ -408,6 +408,10 @@ void fgui::container::update() {
 		//else
 		//	handler::set_cursor(fgui::cursor_type::ARROW);
 	}
+	else if (element->get_flag(fgui::detail::element_flags::CLICKABLE) && !fgui::input_system::mouse_in_area(control_area) && fgui::input_system::key_press(fgui::external::MOUSE_LEFT) && !focused_element_clicked)
+	{
+		element->handle_input();
+	}
 
 	// iterate over the rest of the elements
 	for (std::shared_ptr<fgui::element> element : m_elements) {

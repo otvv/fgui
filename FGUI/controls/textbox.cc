@@ -42,7 +42,7 @@ void fgui::textbox::draw() {
 
 	// textbox body
 	fgui::render.outline(area.left, area.top, area.right, area.bottom, fgui::color(style.textbox.at(0)));
-	
+
 	if (fgui::input_system::mouse_in_area(area) || m_is_getting_key)
 		fgui::render.outline(area.left + 2, area.top + 2, area.right - 4, area.bottom - 4, fgui::color(style.textbox.at(3)));
 	else
@@ -59,27 +59,63 @@ void fgui::textbox::draw() {
 	// typed text size
 	fgui::dimension typed_text_size = fgui::render.get_text_size(fgui::textbox::get_font(), m_text);
 
+	//The text won't fit in the box
+	int number_errased = 0;
+	std::string to_write = m_text;
+
+	while (typed_text_size.width + 7 > m_width)
+	{
+		if (m_text_input_pos >= number_errased && m_text_input_pos > 1)
+		{
+			to_write.erase(to_write.begin());
+			number_errased++;
+		}
+		else
+		{
+			to_write.pop_back();
+		}
+		typed_text_size = fgui::render.get_text_size(fgui::textbox::get_font(), to_write);
+
+	}
+
 	// draw custom text
 	if (m_text_flag & static_cast<int>(fgui::text_flags::SECRET))
-		fgui::render.text(area.left + 5, area.top + (area.bottom / 2) - (typed_text_size.height / 2) - 1, fgui::color(style.text.at(0)), fgui::textbox::get_font(), std::string(m_text.length(), '*'));
-	
-	else if (m_text_flag & static_cast<int>(fgui::text_flags::UPPERCASE)) {
-		
+	{
+		fgui::render.text(area.left + 5, area.top + (area.bottom / 2) - (typed_text_size.height / 2) - 1, fgui::color(style.text.at(0)), fgui::textbox::get_font(), std::string(to_write.length(), '*'));
+	}
+
+	else if (m_text_flag & static_cast<int>(fgui::text_flags::UPPERCASE))
+	{
+
 		// transform the text into uppercase
-		std::string upper_case_display = m_text;
-		std::transform(upper_case_display.begin(), upper_case_display.end(),upper_case_display.begin(), ::toupper);
+		std::string upper_case_display = to_write;
+		std::transform(upper_case_display.begin(), upper_case_display.end(), upper_case_display.begin(), ::toupper);
 
 		fgui::render.text(area.left + 5, area.top + (area.bottom / 2) - (typed_text_size.height / 2) - 1, fgui::color(style.text.at(0)), fgui::textbox::get_font(), upper_case_display);
 	}
 	else
-		fgui::render.text(area.left + 5, area.top + (area.bottom / 2) - (typed_text_size.height / 2) - 1, fgui::color(style.text.at(0)), fgui::textbox::get_font(), m_text);
+	{
+		fgui::render.text(area.left + 5, area.top + (area.bottom / 2) - (typed_text_size.height / 2) - 1, fgui::color(style.text.at(0)), fgui::textbox::get_font(), to_write);
+	}
 
 	// if the textbox is ready to receive text
 	if (m_is_getting_key) {
 
 		// caret
-		std::string caret = m_text;
-		caret.erase(m_text_input_pos, caret.size());
+		std::string caret = to_write;
+
+		if (m_text_input_pos - number_errased <= 0)
+		{
+			number_errased = 0;
+			m_text_input_pos = 1;
+		}
+		if (m_text_input_pos - number_errased > caret.size())
+		{
+			m_text_input_pos = caret.size();
+			number_errased = 0;
+		}
+
+		caret.erase(m_text_input_pos - number_errased, caret.size());
 
 		// caret size
 		fgui::dimension caret_text_size = fgui::render.get_text_size(fgui::textbox::get_font(), caret);
