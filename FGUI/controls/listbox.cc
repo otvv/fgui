@@ -15,8 +15,8 @@ fgui::listbox::listbox() {
 	fgui::listbox::m_slider_top = 0;
 	fgui::listbox::m_item_height = 20;
 	fgui::listbox::m_font = fgui::element::m_font;
-	fgui::listbox::m_type =  static_cast<int>(fgui::detail::element_type::LISTBOX);
-	fgui::element::m_flags =  static_cast<int>(fgui::detail::element_flags::DRAWABLE) |  static_cast<int>(fgui::detail::element_flags::CLICKABLE) |  static_cast<int>(fgui::detail::element_flags::SAVABLE);
+	fgui::listbox::m_type = static_cast<int>(fgui::detail::element_type::LISTBOX);
+	fgui::element::m_flags = static_cast<int>(fgui::detail::element_flags::DRAWABLE) | static_cast<int>(fgui::detail::element_flags::CLICKABLE) | static_cast<int>(fgui::detail::element_flags::SAVABLE);
 }
 
 //---------------------------------------------------------
@@ -32,7 +32,7 @@ void fgui::listbox::draw() {
 	fgui::rect area = { a.x, a.y, m_width, m_height };
 
 	// get the number of displayed items
-	static int item_displayed = 0;
+	int item_displayed = 0;
 
 	// calculate the quantity of entries that will be drawned on the listbox
 	static int calculated_items = m_height / m_item_height;
@@ -98,7 +98,7 @@ void fgui::listbox::draw() {
 		calculated_size = 1.f;
 
 	calculated_size *= m_height;
-	
+
 	// scrollbar area
 	fgui::rect scrollbar_area = { (area.left + 2) + (area.right - 15), area.top + 2, 15 - 4, area.bottom - 4 };
 
@@ -114,14 +114,14 @@ void fgui::listbox::draw() {
 
 	// dots
 	if (m_dragging) {
-		
+
 		fgui::render.rect(scrollbar_area.left + 5, (scrollbar_area.top + calculated_position) + 2 + (calculated_size / 2) - 1, 1, 1, fgui::color(style.listbox.at(3)));
 		fgui::render.rect(scrollbar_area.left + 5, (scrollbar_area.top + calculated_position) + 2 + (calculated_size / 2) - 3, 1, 1, fgui::color(style.listbox.at(3)));
 		fgui::render.rect(scrollbar_area.left + 5, (scrollbar_area.top + calculated_position) + 2 + (calculated_size / 2) - 5, 1, 1, fgui::color(style.listbox.at(3)));
 	}
 
 	else if (!m_dragging) {
-		
+
 		fgui::render.rect(scrollbar_area.left + 5, (scrollbar_area.top + calculated_position) + 2 + (calculated_size / 2) - 1, 1, 1, fgui::color(style.text.at(0)));
 		fgui::render.rect(scrollbar_area.left + 5, (scrollbar_area.top + calculated_position) + 2 + (calculated_size / 2) - 3, 1, 1, fgui::color(style.text.at(0)));
 		fgui::render.rect(scrollbar_area.left + 5, (scrollbar_area.top + calculated_position) + 2 + (calculated_size / 2) - 5, 1, 1, fgui::color(style.text.at(0)));
@@ -143,13 +143,13 @@ void fgui::listbox::handle_input() {
 		fgui::rect scrollbar_area = { (area.left + 2) + (area.right - 15), area.top + 2, 15 - 4, area.bottom - 4 };
 
 		if (fgui::input_system::mouse_in_area(scrollbar_area)) {
-					
-			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT)) 
+
+			if (fgui::input_system::key_held(fgui::external::MOUSE_LEFT))
 				m_dragging = true;
 		}
 
 		// get the number of displayed items
-		static int item_displayed = 0;
+		int item_displayed = 0;
 
 		// calculate the amount of items to be drawned
 		static int calculated_items = m_height / m_item_height;
@@ -246,7 +246,7 @@ void fgui::listbox::save(nlohmann::json& json_module) {
 
 //---------------------------------------------------------
 void fgui::listbox::load(const std::string_view file_name) {
-	
+
 	nlohmann::json json_module;
 
 	// open the file
