@@ -32,7 +32,7 @@ void fgui::listbox::draw() {
 	fgui::rect area = { a.x, a.y, m_width, m_height };
 
 	// get the number of displayed items
-	static int item_displayed = 0;
+	unsigned int item_displayed = 0;
 
 	// calculate the quantity of entries that will be drawned on the listbox
 	static int calculated_items = m_height / m_item_height;
