@@ -149,7 +149,7 @@ void fgui::listbox::handle_input() {
 		}
 
 		// get the number of displayed items
-		static int item_displayed = 0;
+		unsigned int item_displayed = 0;
 
 		// calculate the amount of items to be drawned
 		static int calculated_items = m_height / m_item_height;
