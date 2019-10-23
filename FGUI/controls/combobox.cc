@@ -73,7 +73,7 @@ void fgui::combobox::draw() {
 			fgui::render.rect(area.left, area.top + 23, area.right, (m_item_height * 10), fgui::color(style.combobox.at(1)));
 
 			// get the number of displayed items
-			static int item_displayed = 0;
+			unsigned int item_displayed = 0;
 
 			// calculate the amount of items to be displayed
 			static int calculated_items = (m_height - m_item_height) / m_item_height;
@@ -198,7 +198,7 @@ void fgui::combobox::handle_input() {
 			if (m_info.size() > 15) {
 				
 				// get the number of displayed items
-				static int items_displayed = 0;
+				unsigned int items_displayed = 0;
 
 				// calculate the amount of items to be drawned
 				static int calculated_items = m_height / m_item_height;
@@ -287,7 +287,7 @@ void fgui::combobox::update() {
 		fgui::rect scrollbar_slider_area = { a.x + (m_width - 8), a.y + 23, 8, m_height };
 
 		// calculate the amount of items to be drawned
-		int calculated_items = (m_height - m_item_height) / m_item_height;
+		static int calculated_items = (m_height - m_item_height) / m_item_height;
 		
 		if (m_dragging) {
 
