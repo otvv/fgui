@@ -4,7 +4,7 @@
 
 <p align="center">
     <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img src="https://img.shields.io/badge/language-C++-red?style=for-the-badge" alt="c++"></a>
-      <a href="https://github.com/iFloody/fgui/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge" alt="mit"></a>
+      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge" alt="mit"></a>
 </p>
 
 <p align="center"> 
@@ -20,20 +20,20 @@ A multiplatform object-oriented gui framework written in **C++**. This framework
 * It comes with a built-in config system. (The framework is using [json](https://github.com/nlohmann/json) as a file parser.)
 * Can handle multiple windows at the same time.
 
-_You can visit the [wiki (currently under construction)](https://github.com/iFloody/fgui/wiki) page for elements documentation and a how to setup guide._
+_You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for elements documentation and a how to setup guide._
 
 ***
 
 Here is a preview of the default window design:
-![img](https://raw.githubusercontent.com/iFloody/fgui/master/resources/menu_example_1.png)
+![img](https://raw.githubusercontent.com/otvv/fgui/master/resources/menu_example_1.png)
 
-The framework is very customizable. You can click [here](https://github.com/iFloody/fgui/tree/master/resources) for more examples.
+The framework is very customizable. You can click [here](https://github.com/otvv/fgui/tree/master/resources) for more examples.
 
 If you find any bugs, glitches or if you have a feature request or you just want to give feedback, you can go on the issues tab. 
 If you want to contribute, feel free to make a pull request.
 
 <h4>Acknowledgments:</h4>
 
- [@Vulgar1s](https://github.com/Vulgar1s): Helped with some [elements](); [Containers](), [TextBoxes](), and [ColorPickers](). He also helped with bug fixing and feedback.
+ [@Vulgar1s](https://github.com/Vulgar1s): Helped with some [elements](). ([Containers](), [TextBoxes](), and [ColorPickers]()).
  
  [@daanSayajin](https://github.com/daanSayajin): Bug fixing and feedback.
