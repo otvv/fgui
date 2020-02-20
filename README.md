@@ -27,7 +27,7 @@ _You can visit the [wiki (currently under construction)](https://github.com/iFlo
 Here is a preview of the default window design:
 ![img](https://raw.githubusercontent.com/iFloody/fgui/master/resources/menu_example_1.png)
 
-And as I said, the framework is very customizable. You can click [here](https://github.com/iFloody/fgui/tree/master/resources) for more examples.
+The framework is very customizable. You can click [here](https://github.com/iFloody/fgui/tree/master/resources) for more examples.
 
 If you find any bugs, glitches or if you have a feature request or you just want to give feedback, you can go on the issues tab. 
 If you want to contribute, feel free to make a pull request.
