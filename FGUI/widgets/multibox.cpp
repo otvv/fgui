@@ -134,7 +134,7 @@ void CMultiBox::Geometry()
 
     if (m_bIsOpened)
     {
-      // drodpwn list body
+      // dropdown list body
       FGUI::RENDER.Outline(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 25), arWidgetRegion.m_iRight, (m_prgpNormalEntries.first.size() * m_iEntrySpacing) + 1, {120, 155, 210});
       FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + 1), (arWidgetRegion.m_iTop + 25) + 1, (arWidgetRegion.m_iRight - 2), (m_prgpNormalEntries.first.size() * m_iEntrySpacing) - 2, {255, 255, 255});
 
@@ -200,7 +200,7 @@ void CMultiBox::Geometry()
 
     if (m_bIsOpened)
     {
-      // drodpwn list body
+      // dropdown list body
       FGUI::RENDER.Outline(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 25), arWidgetRegion.m_iRight, (m_prgpMultiEntries.first.size() * m_iEntrySpacing) + 1, {120, 155, 210});
       FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + 1), (arWidgetRegion.m_iTop + 25) + 1, (arWidgetRegion.m_iRight - 2), (m_prgpMultiEntries.first.size() * m_iEntrySpacing) - 2, {255, 255, 255});
 
@@ -238,7 +238,7 @@ void CMultiBox::Update()
   {
     if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::NORMAL))
     {
-      // close drodpwn list if we click on something else
+      // close dropdown list if the user clicks on something else
       if (GetParentForm()->GetFocusedWidget() != shared_from_this())
       {
         m_bIsOpened = false;
@@ -249,7 +249,7 @@ void CMultiBox::Update()
 
     else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
     {
-      // close drodpwn list if we click on something else
+      // close dropdown list if the user clicks on something else
       if (GetParentForm()->GetFocusedWidget() != shared_from_this())
       {
         GetParentForm()->SetFocusedWidget(shared_from_this());

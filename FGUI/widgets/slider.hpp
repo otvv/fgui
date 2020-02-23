@@ -44,7 +44,7 @@ private:
  bool m_bIsDragging;
  std::string m_strPrefix;
  FGUI::RANGE m_rngBoundaries;
- FGUI::DIMENSION m_dmPickerSize;
+ FGUI::DIMENSION m_dmSliderThumbSize;
 };
 
 } // namespace FGUI

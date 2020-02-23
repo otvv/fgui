@@ -14,7 +14,7 @@ CSlider::CSlider()
   m_strTitle = "Slider";
   m_strPrefix = "";
   m_dmSize = {100, 2};
-  m_dmPickerSize = {8, 6};
+  m_dmSliderThumbSize = {8, 6};
   m_flValue = 0.f;
   m_rngBoundaries = {0.f, 0.f};
   m_ulFont = 0;
@@ -70,7 +70,7 @@ void CSlider::Geometry()
   FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop, m_dmSize.m_iWidth, m_dmSize.m_iHeight, {20, 50, 70});
 
   // slider thumb
-  FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + flLocation), (arWidgetRegion.m_iTop - 2), m_dmPickerSize.m_iWidth, m_dmPickerSize.m_iHeight, {180, 25, 25});
+  FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + flLocation), (arWidgetRegion.m_iTop - 2), m_dmSliderThumbSize.m_iWidth, m_dmSliderThumbSize.m_iHeight, {180, 25, 25});
 
   // slider label & value
   FGUI::RENDER.Text(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop - dmTitleTextSize.m_iHeight) - 2, m_ulFont, {0, 0, 0}, m_strTitle);
