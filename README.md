@@ -17,14 +17,15 @@ A multiplatform object-oriented gui framework written in **C++**. This framework
 
 * Easy to use and to customize.
 * Works on multiple graphics libraries. (DirectX, OpenGL, Vulkan, etc)
+* It comes with a built-in config system. (The framework is using [tinyxml2](https://github.com/leethomason/tinyxml2/) as a file parser.)
 
-_You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for elements documentation and a how to setup guide._
+_You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets documentation and a how to setup guide._
 
 ***
 
-Here is a preview of the default window design:
+Here is a preview of the default window design: _(PENDING)_
 
 The framework is very customizable. You can click [here](https://github.com/otvv/fgui/tree/master/resources) for more examples.
 
-If you find any bugs, glitches or if you have a feature request or you just want to give feedback, you can go on the issues tab. 
-If you want to contribute, feel free to make a pull request.
+If you find any bugs, glitches or if you have a feature request feel free to visit the issues tab. 
+If you want to contribute, you can always make a pull request.
