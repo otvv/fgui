@@ -21,6 +21,7 @@
 // NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
 
 // dependencies
+#include "dependencies/builder.hpp"
 #include "dependencies/aliases.hpp"
 #include "dependencies/definitions.hpp"
 

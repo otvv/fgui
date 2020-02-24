@@ -28,7 +28,7 @@ CColorList::CColorList()
   m_bIsDragging = false;
   m_ulFont = 0;
   m_nType = static_cast<int>(WIDGET_TYPE::COLORLIST);
-  m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE) | static_cast<int>(WIDGET_FLAG::DRAW_FIRST);
+  m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE);
 }
 
 // ----------------------------------------------- //
@@ -49,27 +49,27 @@ const FGUI::COLOR CColorList::GetColor(std::size_t index)
 {
   if (m_prgpColorInfo[index].m_bGradient)
   {
-    static float flTTT1 = 0.f;
+    static float flFirstTimeFraction = 0.f;
 
-    flTTT1 = std::fminf(flTTT1 + 0.0005f, 1.f);
+    flFirstTimeFraction = std::fminf(flFirstTimeFraction + 0.0005f, 1.f);
 
-    if (flTTT1 >= 1.f)
+    if (flFirstTimeFraction >= 1.f)
     {
-      static float flTTT2 = 0.f;
+      static float flSecondTimeFraction = 0.f;
 
       // ghetto way to return back to the first color
-      flTTT2 = std::fminf(flTTT2 + 0.0005f, 1.f);
+      flSecondTimeFraction = std::fminf(flSecondTimeFraction + 0.0005f, 1.f);
 
-      if (flTTT2 >= 1.f)
+      if (flSecondTimeFraction >= 1.f)
       {
-        flTTT2 = 0.f;
-        flTTT2 = 0.f;
+        flSecondTimeFraction = 0.f;
+        flFirstTimeFraction = 0.f;
       }
 
-      return FGUI::COLOR::Interpolate(m_prgpColorInfo[index].m_clrSecond, m_prgpColorInfo[index].m_clrFirst, flTTT2);
+      return FGUI::COLOR::Interpolate(m_prgpColorInfo[index].m_clrSecond, m_prgpColorInfo[index].m_clrFirst, flSecondTimeFraction);
     }
 
-    return FGUI::COLOR::Interpolate(m_prgpColorInfo[index].m_clrFirst, m_prgpColorInfo[index].m_clrSecond, flTTT1);
+    return FGUI::COLOR::Interpolate(m_prgpColorInfo[index].m_clrFirst, m_prgpColorInfo[index].m_clrSecond, flFirstTimeFraction);
   }
 
   return m_prgpColorInfo[index].m_clrFirst;
@@ -308,7 +308,7 @@ void CColorList::Geometry()
   }
 
    // slider value text size
-  const FGUI::DIMENSION &dmSliderValueTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
+  const FGUI::DIMENSION &dmSliderValueTextSize = FGUI::RENDER.GetTextSize(m_ulFont, strCustomValue);
 
   // slider value
   FGUI::RENDER.Text((arSliderRegion.m_iLeft + arSliderRegion.m_iRight) - dmSliderValueTextSize.m_iWidth, (arSliderRegion.m_iTop - dmSliderTextSize.m_iHeight) - 2, m_ulFont, {0, 0, 0}, strCustomValue);

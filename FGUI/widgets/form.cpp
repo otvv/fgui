@@ -67,35 +67,6 @@ void CForm::AddTab(const std::shared_ptr<FGUI::CTabs> &tab)
 }
 
 // ----------------------------------------------- //
-void CForm::SortWidgets()
-{
-  for (std::shared_ptr<FGUI::CTabs> tabs : m_prgpTabs)
-  {
-    // if the form doesn't have any tabs, don't do anything
-    if (!tabs)
-    {
-      continue;
-    }
-
-    for (std::shared_ptr<FGUI::CWidgets> widgets : tabs->m_prgpWidgets)
-    {
-      // if the tab doesn't have any widgets, don't do anything
-      if (!widgets)
-      {
-        continue;
-      }
-
-      // elements that have the render first flag, will be rendered before all the other elements
-      if (widgets->GetFlag(FGUI::WIDGET_FLAG::DRAW_FIRST))
-      {
-        tabs->m_prgpWidgets.erase(std::remove(tabs->m_prgpWidgets.begin(), tabs->m_prgpWidgets.end(), widgets), tabs->m_prgpWidgets.end());
-        tabs->m_prgpWidgets.insert(tabs->m_prgpWidgets.begin(), widgets);
-      }
-    }
-  }
-}
-
-// ----------------------------------------------- //
 void CForm::SetKey(unsigned int key_code)
 {
   m_iKey = key_code;

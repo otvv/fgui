@@ -14,7 +14,7 @@ CGroupBox::CGroupBox()
   m_strTitle = "GroupBox";
   m_ulFont = 0;
   m_nType = static_cast<int>(WIDGET_TYPE::GROUPBOX);
-  m_nFlags = static_cast<int>(WIDGET_FLAG::DRAW_FIRST) | static_cast<int>(WIDGET_FLAG::DRAWABLE);
+  m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE);
 }
 
 // ----------------------------------------------- //

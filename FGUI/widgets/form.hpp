@@ -42,9 +42,6 @@ public:
   // @params: std::shared_ptr<FGUI::CTabs> tab = tab instance (pointer)
   void AddTab(const std::shared_ptr<FGUI::CTabs> &tab);
 
-  // @brief: resort all widgets inside the form, making the ones with the 'DRAW_FIRST' flag be drawned first
-  void SortWidgets();
-
   // @brief: set the key that will toggle the form on and off
   // @params: unsigned int key_code = virtual key code
   void SetKey(unsigned int key_code);

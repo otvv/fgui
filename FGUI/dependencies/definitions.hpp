@@ -7,6 +7,7 @@
 
 // includes
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
 #endif
@@ -253,7 +254,6 @@ using WIDGET_FLAG = enum struct ESWidgetFlag_t : int {
   DRAWABLE = 0x1,
   CLICKABLE = 0x2,
   FOCUSABLE = 0x4,
-  DRAW_FIRST = 0x8,
 };
 
 } // namespace FGUI
