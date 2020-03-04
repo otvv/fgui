@@ -99,35 +99,35 @@ void CColorList::Geometry()
   // colorlist body
   FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop - 5), arWidgetRegion.m_iRight, 1, {220, 220, 220});
   FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 17), arWidgetRegion.m_iRight, 1, {220, 220, 220});
-  FGUI::RENDER.Outline(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 20), arWidgetRegion.m_iRight, (arWidgetRegion.m_iBottom - 20), {220, 220, 220});
+  FGUI::RENDER.Outline(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 20) - 1, (arWidgetRegion.m_iRight + 1), (arWidgetRegion.m_iBottom - 20) + 1, {220, 220, 220});
   FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + 1), (arWidgetRegion.m_iTop + 20) + 1, arWidgetRegion.m_iRight - 2, (arWidgetRegion.m_iBottom - 20) - 2, {255, 255, 255});
 
   // colorlist entries
   for (std::size_t i = m_iScrollThumbPosition; (i < m_prgpColorInfo.size()) && (iEntriesDisplayed < iCalculatedEntries); i++)
   {
     // entry area
-    const FGUI::AREA &arEntryRegion = {arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop + (m_iEntrySpacing * iEntriesDisplayed) + 20, (arWidgetRegion.m_iRight - arScrollBarRegion.m_iRight) - iColorPickerGap, m_iEntrySpacing};
+    const FGUI::AREA &arEntryRegion = {arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop + (m_iEntrySpacing * iEntriesDisplayed) + 20, (arWidgetRegion.m_iRight - arScrollBarRegion.m_iRight), m_iEntrySpacing};
 
     // check if the user is hovers or selects something on the colorlist
     if (FGUI::INPUT.IsCursorInArea(arEntryRegion) || m_uiSelectedEntry == i)
     {
-      FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft, arEntryRegion.m_iTop, arWidgetRegion.m_iRight, arEntryRegion.m_iBottom, {235, 235, 255});
+      FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 1), arEntryRegion.m_iTop, (arWidgetRegion.m_iRight - 2), arEntryRegion.m_iBottom, {235, 235, 255});
     }
 
     // color button size
     static constexpr FGUI::DIMENSION dmColorButtonSize = {20, 16};
 
     // color button body
-    FGUI::RENDER.Outline(arEntryRegion.m_iLeft + (iColorPickerGap - 75), (arEntryRegion.m_iTop + 1), dmColorButtonSize.m_iWidth, dmColorButtonSize.m_iHeight, {220, 220, 220});
-    FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + (iColorPickerGap - 75) + 1, (arEntryRegion.m_iTop + 2), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 2), {195, 195, 195});
-    FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + (iColorPickerGap - 75) + 1, (arEntryRegion.m_iTop + 2), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 2), m_prgpColorInfo[i].m_clrFirst);
+    FGUI::RENDER.Outline((arEntryRegion.m_iLeft + 75), (arEntryRegion.m_iTop + 2), dmColorButtonSize.m_iWidth, (dmColorButtonSize.m_iHeight - 2), {220, 220, 220});
+    FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 75) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), {195, 195, 195});
+    FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 75) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), m_prgpColorInfo[i].m_clrFirst);
 
     // if the user adds a second color sequence
     if (m_prgpColorInfo[i].m_bIsSecondColorAdded)
     {
-      FGUI::RENDER.Outline(arEntryRegion.m_iLeft + (iColorPickerGap - 75) + 25, (arEntryRegion.m_iTop + 1), dmColorButtonSize.m_iWidth, dmColorButtonSize.m_iHeight, {220, 220, 220});
-      FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + (iColorPickerGap - 75) + 25, (arEntryRegion.m_iTop + 2), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 2), {195, 195, 195});
-      FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + (iColorPickerGap - 75) + 25, (arEntryRegion.m_iTop + 2), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 2), m_prgpColorInfo[i].m_clrSecond);
+      FGUI::RENDER.Outline((arEntryRegion.m_iLeft + 75) + 25, (arEntryRegion.m_iTop + 2), dmColorButtonSize.m_iWidth, (dmColorButtonSize.m_iHeight - 2), {220, 220, 220});
+      FGUI::RENDER.Rectangle(((arEntryRegion.m_iLeft + 75) + 25) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), {195, 195, 195});
+      FGUI::RENDER.Rectangle(((arEntryRegion.m_iLeft + 75) + 25) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), m_prgpColorInfo[i].m_clrSecond);
     }
 
     // color separator
@@ -320,7 +320,6 @@ void CColorList::Geometry()
   // slider thumb
   FGUI::RENDER.Rectangle((arSliderRegion.m_iLeft + flLocation), (arSliderRegion.m_iTop - 2), dmSliderThumbSize.m_iWidth, dmSliderThumbSize.m_iHeight, {180, 25, 25});
 
-
   // thumb properties
   static constexpr FGUI::DIMENSION dmScrollBarThumbWidth = {8, 5};
 
@@ -349,11 +348,11 @@ void CColorList::Geometry()
 
   if (m_prgpColorInfo.size() > 50)
   {
-    FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 3), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumbWidth.m_iWidth, dmScrollBarThumbWidth.m_iHeight, {175, 175, 210});
+    FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 4), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumbWidth.m_iWidth, dmScrollBarThumbWidth.m_iHeight, {220, 223, 231});
   }
   else
   {
-    FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 3), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumbWidth.m_iWidth, flCalculatedSize, {175, 175, 210});
+    FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 4), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumbWidth.m_iWidth, flCalculatedSize, {220, 223, 231});
   }
 }
 

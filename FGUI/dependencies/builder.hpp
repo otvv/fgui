@@ -310,29 +310,36 @@ public:
 
   CBuilder &Callback(const std::function<void()> &callback)
   {
-    if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::MULTIBOX))
+    if (!m_pTemporaryForm && m_pTemporaryWidget)
     {
-      std::reinterpret_pointer_cast<FGUI::CMultiBox>(m_pTemporaryWidget)->AddCallback(callback);
-    }
+      if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::MULTIBOX))
+      {
+        std::reinterpret_pointer_cast<FGUI::CMultiBox>(m_pTemporaryWidget)->AddCallback(callback);
+      }
 
-    else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
-    {
-      std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->AddCallback(callback);
-    }
+      else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
+      {
+        std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->AddCallback(callback);
+      }
 
-    else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::CHECKBOX))
-    {
-      std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pTemporaryWidget)->AddCallback(callback);
-    }
+      else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::CHECKBOX))
+      {
+        std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pTemporaryWidget)->AddCallback(callback);
+      }
 
-    else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::BUTTON))
-    {
-      std::reinterpret_pointer_cast<FGUI::CButton>(m_pTemporaryWidget)->AddCallback(callback);
-    }
+      else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::BUTTON))
+      {
+        std::reinterpret_pointer_cast<FGUI::CButton>(m_pTemporaryWidget)->AddCallback(callback);
+      }
 
-    else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LISTBOX))
+      else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LISTBOX))
+      {
+        std::reinterpret_pointer_cast<FGUI::CListBox>(m_pTemporaryWidget)->AddCallback(callback);
+      }
+    }
+    else
     {
-      std::reinterpret_pointer_cast<FGUI::CListBox>(m_pTemporaryWidget)->AddCallback(callback);
+      m_pTemporaryForm->AddCallback(callback);
     }
 
     return const_cast<FGUI::CBuilder &>(*this);
@@ -369,10 +376,17 @@ public:
     return const_cast<FGUI::CBuilder &>(*this);
   }
 
+  CBuilder &Spawn(const std::shared_ptr<FGUI::CForm> &parent_form, const std::shared_ptr<FGUI::CForm> &child_form)
+  {
+    parent_form->AddForm(child_form);
+
+    return const_cast<FGUI::CBuilder &>(*this);
+  }
+
 private:
-  std::shared_ptr<FGUI::CWidgets> m_pTemporaryWidget;
-  std::shared_ptr<FGUI::CTabs> m_pTemporaryTab;
-  std::shared_ptr<FGUI::CForm> m_pTemporaryForm;
+  std::shared_ptr<FGUI::CWidgets> m_pTemporaryWidget = nullptr;
+  std::shared_ptr<FGUI::CTabs> m_pTemporaryTab = nullptr;
+  std::shared_ptr<FGUI::CForm> m_pTemporaryForm = nullptr;
 };
 
 } // namespace FGUI

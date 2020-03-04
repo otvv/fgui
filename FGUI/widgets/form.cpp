@@ -7,6 +7,56 @@
 
 namespace FGUI
 {
+
+// ----------------------------------------------- //
+void CForm::Render()
+{
+  // initialize input system
+  FGUI::INPUT.PullInput();
+
+  if (FGUI::INPUT.GetKeyPress(GetKey()))
+  {
+    // toggle main form on and off
+    SetState(!GetState());
+  }
+
+  // if the user toggles the main form
+  if (GetState())
+  {
+    // update main form
+    Update();
+
+    // handle main form movement
+    Movement();
+
+    // populate main form geometry
+    Geometry();
+  }
+
+  // iterate over child forms
+  for (std::shared_ptr<FGUI::CForm> childs : m_prgpForms)
+  {
+    if (FGUI::INPUT.GetKeyPress(childs->GetKey()))
+    {
+      // toggle child forms on and off
+      childs->SetState(!childs->GetState());
+    }
+
+    // if the user toggles a child form
+    if (childs->GetState())
+    {
+      // update child forms
+      childs->Update();
+
+      // handle child forms movement
+      childs->Movement();
+
+      // populate child forms geometry
+      childs->Geometry();
+    }
+  }
+}
+
 // ----------------------------------------------- //
 void CForm::SetState(bool onoff)
 {
@@ -19,29 +69,16 @@ bool CForm::GetState()
 }
 
 // ----------------------------------------------- //
-void CForm::Render()
+void CForm::AddForm(const std::shared_ptr<FGUI::CForm> &form)
 {
-  // initialize input system
-  FGUI::INPUT.PullInput();
-
-  // toggle form on and off
-  if (FGUI::INPUT.GetKeyPress(m_iKey))
+  // if the form instance is null don't do anything
+  if (!form)
   {
-    m_bIsOpened = !m_bIsOpened;
+    return;
   }
 
-  // if the user toggles the form
-  if (m_bIsOpened)
-  {
-    // update form
-    Update();
-
-    // handle form movement
-    Movement();
-
-    // populate geometry
-    Geometry();
-  }
+  // populate the form container
+  m_prgpForms.emplace_back(std::move(form));
 }
 
 // ----------------------------------------------- //
@@ -64,6 +101,12 @@ void CForm::AddTab(const std::shared_ptr<FGUI::CTabs> &tab)
 
   // populate the tab container
   m_prgpTabs.emplace_back(std::move(tab));
+}
+
+// ----------------------------------------------- //
+void CForm::AddCallback(const std::function<void()> &callback)
+{
+  m_fnctCallback = callback;
 }
 
 // ----------------------------------------------- //
@@ -90,6 +133,12 @@ void CForm::SetSize(unsigned int width, unsigned int height)
 void CForm::SetTitle(const std::string &title)
 {
   m_strTitle = title;
+}
+
+// ----------------------------------------------- //
+int CForm::GetKey()
+{
+  return m_iKey;
 }
 
 // ----------------------------------------------- //
@@ -155,6 +204,13 @@ void CForm::Geometry()
 
   // widget area
   FGUI::RENDER.Outline(m_ptPosition.m_iX + 10, (m_ptPosition.m_iY + 31) + 20 + 25, m_dmSize.m_iWidth - 20, (m_dmSize.m_iHeight - 31) - 60, {195, 195, 195});
+
+  	// if the window has a function
+		if (m_fnctCallback) {
+
+			// invoke function
+			m_fnctCallback();
+		}
 
   // don't proceed if the form doesn't have any tabs
   if (m_prgpTabs.empty())

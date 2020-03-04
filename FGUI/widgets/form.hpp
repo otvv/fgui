@@ -26,8 +26,10 @@ class CWidgets;
 class CForm : public std::enable_shared_from_this<FGUI::CForm>
 {
   friend class FGUI::CWidgets;
-
 public:
+  // @brief: handles rendering of forms and widgets
+  void Render();
+
   // @brief: set the form state (toggle on/off)
   // @params: bool onoff = form state
   void SetState(bool onoff);
@@ -35,12 +37,17 @@ public:
   // @brief: get the form state (toggled or not)
   bool GetState();
 
-  // @brief: handles rendering of forms and widgets
-  void Render();
+  // @brief: add a new form into the container
+  // @params: std::shared_ptr<FGUI::CForm> form = form instance (pointer)
+  void AddForm(const std::shared_ptr<FGUI::CForm> &form);
 
   // @brief: add a new tab into the form
   // @params: std::shared_ptr<FGUI::CTabs> tab = tab instance (pointer)
   void AddTab(const std::shared_ptr<FGUI::CTabs> &tab);
+  
+  // @brief: adds a function callback for the form (it will call the function whenever the opens the form)
+  // @params: std::function<void()> callback = function instance
+  void AddCallback(const std::function<void()> &callback);
 
   // @brief: set the key that will toggle the form on and off
   // @params: unsigned int key_code = virtual key code
@@ -57,6 +64,9 @@ public:
   // @brief: set the default title of the form
   // @params: std::string title = default title of the form
   void SetTitle(const std::string &title);
+
+  // @brief: return the font toggle key
+  int GetKey();
 
   // @brief: get the form's default title
   const std::string &GetTitle();
@@ -97,9 +107,11 @@ private:
   bool m_bIsDragging;
   bool m_bIsFocusingOnWidget;
   int m_iKey;
+ std::function<void()> m_fnctCallback;
   std::shared_ptr<FGUI::CTabs> m_pSelectedTab;
   std::shared_ptr<FGUI::CWidgets> m_pFocusedWidget;
   std::vector<std::shared_ptr<FGUI::CTabs>> m_prgpTabs;
+  std::vector<std::shared_ptr<FGUI::CForm>> m_prgpForms;
   std::string m_strTitle;
   FGUI::POINT m_ptPosition;
   FGUI::DIMENSION m_dmSize;
