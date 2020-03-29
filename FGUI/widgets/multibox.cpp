@@ -51,7 +51,21 @@ std::size_t CMultiBox::GetIndex()
 }
 
 // ----------------------------------------------- //
-int CMultiBox::GetValue(int index)
+void CMultiBox::SetValue(std::size_t index, unsigned int value)
+{
+  if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::NORMAL))
+  {
+    m_prgpNormalEntries.second[index] = value;
+  }
+
+  else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
+  {
+    m_prgpMultiEntries.second[index] = value;
+  }
+}
+
+// ----------------------------------------------- //
+std::size_t CMultiBox::GetValue(std::size_t index)
 {
   if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::NORMAL))
   {
@@ -64,6 +78,12 @@ int CMultiBox::GetValue(int index)
   }
 
   return {};
+}
+
+// ----------------------------------------------- //
+std::pair<std::vector<std::string>, std::vector<bool>> CMultiBox::GetMultiEntryInfo()
+{
+  return m_prgpMultiEntries;
 }
 
 // ----------------------------------------------- //

@@ -247,7 +247,8 @@ using WIDGET_TYPE = enum struct ESWidgetType_t : int {
   LISTBOX,
   LABEL,
   TEXTBOX,
-  COLORLIST
+  COLORLIST,
+  COLORPICKER
 };
 
 using WIDGET_FLAG = enum struct ESWidgetFlag_t : int {

@@ -107,7 +107,7 @@ private:
   bool m_bIsDragging;
   bool m_bIsFocusingOnWidget;
   int m_iKey;
- std::function<void()> m_fnctCallback;
+  std::function<void()> m_fnctCallback;
   std::shared_ptr<FGUI::CTabs> m_pSelectedTab;
   std::shared_ptr<FGUI::CWidgets> m_pFocusedWidget;
   std::vector<std::shared_ptr<FGUI::CTabs>> m_prgpTabs;

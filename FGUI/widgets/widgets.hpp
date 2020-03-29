@@ -44,7 +44,7 @@ public:
 
   // @brief: set the default title of the widget
   // @params: std::string title = default title of the widget
-  void SetTitle(const std::string & title);
+  void SetTitle(const std::string &title);
 
   // @brief: get the widget's default title
   const std::string &GetTitle();

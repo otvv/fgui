@@ -75,6 +75,12 @@ const FGUI::COLOR CColorList::GetColor(std::size_t index)
   return m_prgpColorInfo[index].m_clrFirst;
 }
 
+//
+const std::vector<FGUI::COLOR_INFO> &CColorList::GetColorInfo()
+{
+  return m_prgpColorInfo;
+}
+
 // ----------------------------------------------- //
 void CColorList::Geometry()
 {
@@ -118,16 +124,16 @@ void CColorList::Geometry()
     static constexpr FGUI::DIMENSION dmColorButtonSize = {20, 16};
 
     // color button body
-    FGUI::RENDER.Outline((arEntryRegion.m_iLeft + 75), (arEntryRegion.m_iTop + 2), dmColorButtonSize.m_iWidth, (dmColorButtonSize.m_iHeight - 2), {220, 220, 220});
-    FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 75) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), {195, 195, 195});
-    FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 75) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), m_prgpColorInfo[i].m_clrFirst);
+    FGUI::RENDER.Outline((arEntryRegion.m_iLeft + 95), (arEntryRegion.m_iTop + 2), dmColorButtonSize.m_iWidth, (dmColorButtonSize.m_iHeight - 2), {220, 220, 220});
+    FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 95) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), {195, 195, 195});
+    FGUI::RENDER.Rectangle((arEntryRegion.m_iLeft + 95) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), m_prgpColorInfo[i].m_clrFirst);
 
     // if the user adds a second color sequence
     if (m_prgpColorInfo[i].m_bIsSecondColorAdded)
     {
-      FGUI::RENDER.Outline((arEntryRegion.m_iLeft + 75) + 25, (arEntryRegion.m_iTop + 2), dmColorButtonSize.m_iWidth, (dmColorButtonSize.m_iHeight - 2), {220, 220, 220});
-      FGUI::RENDER.Rectangle(((arEntryRegion.m_iLeft + 75) + 25) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), {195, 195, 195});
-      FGUI::RENDER.Rectangle(((arEntryRegion.m_iLeft + 75) + 25) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), m_prgpColorInfo[i].m_clrSecond);
+      FGUI::RENDER.Outline((arEntryRegion.m_iLeft + 95) + 25, (arEntryRegion.m_iTop + 2), dmColorButtonSize.m_iWidth, (dmColorButtonSize.m_iHeight - 2), {220, 220, 220});
+      FGUI::RENDER.Rectangle(((arEntryRegion.m_iLeft + 95) + 25) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), {195, 195, 195});
+      FGUI::RENDER.Rectangle(((arEntryRegion.m_iLeft + 95) + 25) + 1, (arEntryRegion.m_iTop + 3), (dmColorButtonSize.m_iWidth - 2), (dmColorButtonSize.m_iHeight - 4), m_prgpColorInfo[i].m_clrSecond);
     }
 
     // color separator

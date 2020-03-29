@@ -39,7 +39,7 @@ using pIsCursorInArea = std::add_pointer_t<bool(const FGUI::AREA &)>;
 
 } // namespace DETAIL
 
-using RENDERING = struct SRendering_t
+using RENDER_MANAGER = struct SRenderManager_t
 {
   DETAIL::pCreateFont CreateFont;
   DETAIL::pGetScreenSize GetScreenSize;
@@ -64,7 +64,7 @@ using INPUT_SYTEM = struct SInputSystem_t
 };
 
 // declarations
-inline RENDERING RENDER;
+inline RENDER_MANAGER RENDER;
 inline INPUT_SYTEM INPUT;
 
 } // namespace FGUI

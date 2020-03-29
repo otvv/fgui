@@ -92,17 +92,16 @@ bool CWidgets::GetFlag(const FGUI::WIDGET_FLAG &flags)
 // ----------------------------------------------- //
 bool CWidgets::IsUnlocked()
 {
-
-  // if the widget doesn't have a medium or we have an invalid page, unlock it
-  if (!m_pMedium || m_iPage <= -1)
+  // if the widget doesn't have a medium or we have an invalid page keep it unlocked
+  if (!m_pMedium || m_iPage < 0)
   {
     return true;
   }
 
-  // otherwise, it will unlock when cetain conditions are met
+  // otherwise, it will lock them until cetain conditions are met
   switch (m_pMedium->m_nType)
   {
-  
+
   case static_cast<int>(WIDGET_TYPE::LISTBOX):
   {
     return std::reinterpret_pointer_cast<FGUI::CListBox>(m_pMedium)->GetIndex() == static_cast<std::size_t>(m_iPage);
@@ -120,7 +119,6 @@ bool CWidgets::IsUnlocked()
       return std::reinterpret_pointer_cast<FGUI::CMultiBox>(m_pMedium)->GetIndex() == static_cast<std::size_t>(m_iPage);
     }
   }
-  
   }
 
   return false;
@@ -138,11 +136,13 @@ void CWidgets::SetMedium(const std::shared_ptr<FGUI::CWidgets> &medium, unsigned
   m_pMedium = medium;
   m_iPage = page;
 }
+
 // ------------------------------------------------ //
 const std::shared_ptr<FGUI::CWidgets> &CWidgets::GetMedium()
 {
   return m_pMedium;
 }
+
 // ----------------------------------------------- //
 int CWidgets::GetPage()
 {

@@ -157,6 +157,44 @@ public:
     return const_cast<FGUI::CBuilder &>(*this);
   }
 
+    CBuilder &Color(const std::string &identifier, std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255, bool gradient = false) const noexcept
+  {
+    if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORLIST))
+    {
+      std::reinterpret_pointer_cast<FGUI::CColorList>(m_pTemporaryWidget)->AddColor(identifier, {red, green, blue, alpha}, gradient);
+    }
+
+    return const_cast<FGUI::CBuilder &>(*this);
+  }
+
+  CBuilder &Color(const FGUI::COLOR &color) const noexcept
+  {
+    if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
+    {
+      std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->SetColor(color);
+    }
+
+    else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORPICKER))
+    {
+    }
+
+    return const_cast<FGUI::CBuilder &>(*this);
+  }
+
+    CBuilder &Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255) const noexcept
+  {
+    if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
+    {
+      std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->SetColor({red, green, blue, alpha});
+    }
+
+    else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORPICKER))
+    {
+    }
+
+    return const_cast<FGUI::CBuilder &>(*this);
+  }
+
   CBuilder &Key(int key = 0)
   {
     if (!m_pTemporaryForm)
@@ -299,6 +337,7 @@ public:
 
     else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
     {
+      std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->SetStyle(static_cast<FGUI::LABEL_STYLE>(style));
     }
 
     else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::TEXTBOX))

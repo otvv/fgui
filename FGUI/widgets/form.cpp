@@ -205,12 +205,13 @@ void CForm::Geometry()
   // widget area
   FGUI::RENDER.Outline(m_ptPosition.m_iX + 10, (m_ptPosition.m_iY + 31) + 20 + 25, m_dmSize.m_iWidth - 20, (m_dmSize.m_iHeight - 31) - 60, {195, 195, 195});
 
-  	// if the window has a function
-		if (m_fnctCallback) {
+  // if the window has a function
+  if (m_fnctCallback)
+  {
 
-			// invoke function
-			m_fnctCallback();
-		}
+    // invoke function
+    m_fnctCallback();
+  }
 
   // don't proceed if the form doesn't have any tabs
   if (m_prgpTabs.empty())
