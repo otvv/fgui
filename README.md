@@ -13,19 +13,19 @@
 
 ***
 
-A multiplatform object-oriented gui framework written in **C++**. This framework is mainly aimed towards game hacking, but you can use it for anything you want.
+A multiplatform object-oriented gui framework written in **C++**. This framework is mainly aimed towards game hacking, but you can use it for anything that you want.
 
 * Easy to use and to customize.
 * Works on multiple graphics libraries. (DirectX, OpenGL, Vulkan, etc)
 * It comes with a built-in config system. (Not implemented yet.)
 
-_You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets documentation and a how to setup guide._
+_You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets, functions documentations and a how to setup guide._
 
 ***
 
-Here is a preview of the default window design: _(PENDING)_
+Here is a preview of the library: _(PENDING)_
 
-The framework is very customizable. You can click [here](https://github.com/otvv/fgui/tree/master/resources) for more examples.
+This library is very customizable. You can click [here](https://github.com/otvv/fgui/tree/master/resources) for more examples.
 
-If you find any bugs, glitches or if you have a feature request feel free to visit the issues tab. 
-If you want to contribute, you can always make a pull request.
+If you find any bugs, glitches or if you have a feature request you can always visit the issues tab. 
+If you want to contribute, feel free to make a pull request.
