@@ -9,7 +9,6 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
-#include <windows.h>
 #endif
 #include <cmath>
 #include <string>
@@ -107,8 +106,8 @@ using COLOR = struct SColor_t
     float flGreen = (std::clamp<int>(color.m_ucGreen, 0, 255) / 255.f);
     float flBlue = (std::clamp<int>(color.m_ucBlue, 0, 255) / 255.f);
 
-    float flMax = std::fmaxf(std::max(flRed, flGreen), flBlue);
-    float flMin = std::fminf(std::min(flRed, flGreen), flBlue);
+    float flMax = std::fmaxf(std::fmaxf(flRed, flGreen), flBlue);
+    float flMin = std::fminf(std::fminf(flRed, flGreen), flBlue);
     float flDelta = (flMax - flMin);
 
     if (flDelta != 0.f)
