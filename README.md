@@ -8,7 +8,7 @@
 </p>
 
 <p align="center"> 
-  <a href="https://discord.gg/Kqz5NhP"><img width="275" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner2" alt="discord server"></a>
+  <a href="https://discord.gg/jF3psdk"><img width="275" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner2" alt="discord server"></a>
 </p>
 
 ***
