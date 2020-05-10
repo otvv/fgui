@@ -284,7 +284,7 @@ void CMultiBox::Update()
       // close dropdown if the user clicks on something else
       if (!FGUI::INPUT.IsCursorInArea(arWidgetRegion))
       {
-        if (FGUI::INPUT.GetKeyPress(107))
+        if (FGUI::INPUT.GetKeyPress(MOUSE_1))
         {
           m_bIsOpened = false;
         }

@@ -78,7 +78,7 @@ void CForm::AddForm(const std::shared_ptr<FGUI::CForm> &form)
   }
 
   // populate the form container
-  m_prgpForms.emplace_back(std::move(form));
+  m_prgpForms.emplace_back(form);
 }
 
 // ----------------------------------------------- //
@@ -100,7 +100,7 @@ void CForm::AddTab(const std::shared_ptr<FGUI::CTabs> &tab)
   tab->m_pParentForm = std::dynamic_pointer_cast<FGUI::CForm>(shared_from_this());
 
   // populate the tab container
-  m_prgpTabs.emplace_back(std::move(tab));
+  m_prgpTabs.emplace_back(tab);
 }
 
 // ----------------------------------------------- //
@@ -227,7 +227,7 @@ void CForm::Geometry()
 
     if (FGUI::INPUT.IsCursorInArea(arTabRegion))
     {
-      if (FGUI::INPUT.GetKeyPress(107))
+      if (FGUI::INPUT.GetKeyPress(MOUSE_1))
       {
         // select tab
         m_pSelectedTab = m_prgpTabs[i];
@@ -323,7 +323,7 @@ void CForm::Update()
   // check if the form received a click
   bool bCheckWidgetClicks = false;
 
-  if (FGUI::INPUT.GetKeyPress(107))
+  if (FGUI::INPUT.GetKeyPress(MOUSE_1))
   {
     // grab screen size
     const FGUI::DIMENSION &dmScreenSize = FGUI::RENDER.GetScreenSize();
@@ -451,7 +451,7 @@ void CForm::Movement()
 
   if (FGUI::INPUT.IsCursorInArea(arDraggableArea))
   {
-    if (FGUI::INPUT.GetKeyPress(107))
+    if (FGUI::INPUT.GetKeyPress(MOUSE_1))
     {
       // drag form
       m_bIsDragging = true;
@@ -469,7 +469,7 @@ void CForm::Movement()
     m_ptPosition.m_iY += ptCursorPosDelta.m_iY;
   }
 
-  if (FGUI::INPUT.GetKeyRelease(107))
+  if (FGUI::INPUT.GetKeyRelease(MOUSE_1))
   {
     m_bIsDragging = false;
   }

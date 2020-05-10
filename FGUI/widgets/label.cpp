@@ -100,7 +100,7 @@ void CLabel::Update()
   {
     if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
     {
-      if (FGUI::INPUT.GetKeyPress(107))
+      if (FGUI::INPUT.GetKeyPress(MOUSE_1))
       {
         if (m_fnctCallback)
         {

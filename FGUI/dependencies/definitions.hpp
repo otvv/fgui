@@ -6,10 +6,6 @@
 #define FGUI_DEFINITIONS_HH
 
 // includes
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#endif
 #include <cmath>
 #include <string>
 #include <stdint.h>
@@ -17,8 +13,6 @@
 
 namespace FGUI
 {
-
-using FONT = unsigned long;
 
 using POINT = struct SPoint_t
 {
@@ -43,6 +37,12 @@ using AREA = struct SArea_t
 using RANGE = struct SRange_t
 {
   float m_flMin, m_flMax;
+};
+
+using VERTEX = struct SVertex_t
+{
+  float m_flX, m_flY, m_flZ, m_flRwh;
+  unsigned long m_ulColor;
 };
 
 using COLOR = struct SColor_t

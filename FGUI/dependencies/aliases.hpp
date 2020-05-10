@@ -10,6 +10,7 @@
 
 // library includes
 #include "definitions.hpp"
+#include "helpers.hpp"
 
 namespace FGUI
 {
@@ -20,12 +21,12 @@ namespace DETAIL
 // drawing functions pointers
 using pCreateFont = std::add_pointer_t<void(FGUI::FONT &, const std::string &, int, int, bool)>;
 using pGetScreenSize = std::add_pointer_t<const FGUI::DIMENSION &()>;
-using pGetTextSize = std::add_pointer_t<const FGUI::DIMENSION &(const FGUI::FONT &, const std::string &)>;
+using pGetTextSize = std::add_pointer_t<const FGUI::DIMENSION &(FGUI::FONT &, const std::string &)>;
 using pDrawRectangle = std::add_pointer_t<void(int, int, int, int, const FGUI::COLOR &)>;
 using pDrawOutline = std::add_pointer_t<void(int, int, int, int, const FGUI::COLOR &)>;
 using pDrawGradient = std::add_pointer_t<void(int, int, int, int, std::size_t, std::size_t, const FGUI::COLOR &, bool)>;
 using pDrawLine = std::add_pointer_t<void(int, int, int, int, const FGUI::COLOR &)>;
-using pDrawText = std::add_pointer_t<void(int, int, const FGUI::FONT &, const FGUI::COLOR &, const std::string &)>;
+using pDrawText = std::add_pointer_t<void(int, int, FGUI::FONT, const FGUI::COLOR &, const std::string &)>;
 
 // input functions pointers
 using pPullInput = std::add_pointer_t<void()>;

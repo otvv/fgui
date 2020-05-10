@@ -94,7 +94,7 @@ void CSlider::Update()
 
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
   {
-    if (FGUI::INPUT.GetKeyPress(107))
+    if (FGUI::INPUT.GetKeyPress(MOUSE_1))
     {
       m_bIsDragging = true;
     }
@@ -103,7 +103,7 @@ void CSlider::Update()
   // if the user is dragging the slider
   if (m_bIsDragging)
   {
-    if (FGUI::INPUT.GetKeyState(107))
+    if (FGUI::INPUT.GetKeyState(MOUSE_1))
     {
       float flXPosDelta = 0.f;
       float flRatio = 0.f;

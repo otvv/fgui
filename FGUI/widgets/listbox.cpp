@@ -160,7 +160,7 @@ void CListBox::Update()
     // cursor position
     FGUI::POINT ptCursorPos = FGUI::INPUT.GetCursorPos();
 
-    if (FGUI::INPUT.GetKeyState(107))
+    if (FGUI::INPUT.GetKeyState(MOUSE_1))
     {
       // move thumb vertically
       ptCursorPos.m_iY -= ptAbsPosition.m_iY;

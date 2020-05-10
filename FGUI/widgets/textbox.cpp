@@ -86,18 +86,18 @@ void CTextBox::Update()
       }
 
       // key input
-      std::string strKeyInput = m_ksStrings.m_strInputSystem[key].data(); // todo: make a function to let the user select wich type of "input system" he wants to use
-      //std::string strKeyInput = m_ksStrings.m_strVirtualKeyCodes[key].data();
+      //std::string strKeyInput = m_ksStrings.m_strInputSystem[key].data(); // todo: make a function to let the user select wich type of "input system" he wants to use
+      std::string strKeyInput = m_ksStrings.m_strVirtualKeyCodes[key].data();
 
       // if the user press ESC or ENTER stop the textbox from listening to key input
-      if (key == 70 /* KEY_ESCAPE */ || key == 64 /* KEY_ENTER */ || key == 51 /* KEY_PAD_ENTER */) // todo: global keys
+      if (key == KEY_ESCAPE || key == KEY_ENTER)
       {
         // block listbox
         m_bIsGettingKey = false;
       }
 
       // upper case handler
-      if (FGUI::INPUT.GetKeyState(79 /* KEY_LSHIFT */) || FGUI::INPUT.GetKeyState(80 /* KEY_RSHIFT */))
+      if (FGUI::INPUT.GetKeyState(KEY_LSHIFT) || FGUI::INPUT.GetKeyState(KEY_RSHIFT))
       {
         std::transform(strKeyInput.begin(), strKeyInput.end(), strKeyInput.begin(), ::toupper);
       }
@@ -111,7 +111,7 @@ void CTextBox::Update()
 
       if (m_strCustomText.length() > 0)
       { 
-        if (key == 66 /* KEY_BACKSPACE*/ && (m_iInputPos > -1))
+        if (key == KEY_BACKSPACE && (m_iInputPos > -1))
         { 
           m_strCustomText.erase(m_iInputPos, 1);
           m_iInputPos--;
@@ -122,7 +122,7 @@ void CTextBox::Update()
           }
         }
 
-        else if (key == 73 /* KEY_DELETE */)
+        else if (key == KEY_DELETE)
         {
           // clear text
           m_strCustomText.clear();
@@ -131,7 +131,7 @@ void CTextBox::Update()
         }
 
         // change the current input position
-        if (key == 89 /* KEY_LEFT */) 
+        if (key == KEY_LEFT) 
         {
           m_iInputPos--;
 
@@ -141,7 +141,7 @@ void CTextBox::Update()
           }
         }
 
-        else if (key == 91 /* KEY_RIGHT */ && m_iInputPos < (static_cast<int>(m_strCustomText.length())))
+        else if (key == KEY_RIGHT && m_iInputPos < (static_cast<int>(m_strCustomText.length())))
         {
           m_iInputPos++;
         }

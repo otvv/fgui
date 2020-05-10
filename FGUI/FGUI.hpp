@@ -24,6 +24,7 @@
 #include "dependencies/aliases.hpp"
 #include "dependencies/builder.hpp"
 #include "dependencies/definitions.hpp"
+#include "dependencies/helpers.hpp"
 
 // widgets
 #include "widgets/button.hpp"

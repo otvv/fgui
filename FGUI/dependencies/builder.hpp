@@ -33,7 +33,7 @@ class CBuilder
 public:
   CBuilder &Widget(const std::shared_ptr<FGUI::CWidgets> &widget)
   {
-    m_pTemporaryWidget = std::move(widget);
+    m_pTemporaryWidget = widget;
     m_pTemporaryTab = nullptr;
     m_pTemporaryForm = nullptr;
 
@@ -42,7 +42,7 @@ public:
 
   CBuilder &Widget(const std::shared_ptr<FGUI::CForm> &form)
   {
-    m_pTemporaryForm = std::move(form);
+    m_pTemporaryForm = form;
     m_pTemporaryWidget = nullptr;
     m_pTemporaryTab = nullptr;
 
@@ -51,7 +51,7 @@ public:
 
   CBuilder &Widget(const std::shared_ptr<FGUI::CTabs> &tab)
   {
-    m_pTemporaryTab = std::move(tab);
+    m_pTemporaryTab = tab;
     m_pTemporaryWidget = nullptr;
     m_pTemporaryForm = nullptr;
 

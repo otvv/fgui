@@ -27,7 +27,7 @@ void CTabs::AddWidget(const std::shared_ptr<FGUI::CWidgets> &widget)
   widget->m_pParentForm = m_pParentForm;
 
   // populate widget container
-  m_prgpWidgets.emplace_back(std::move(widget));
+  m_prgpWidgets.emplace_back(widget);
 }
 
 // ----------------------------------------------- //

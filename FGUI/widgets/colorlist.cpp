@@ -376,7 +376,7 @@ void CColorList::Update()
     // cursor position
     FGUI::POINT ptCursorPos = FGUI::INPUT.GetCursorPos();
 
-    if (FGUI::INPUT.GetKeyState(107))
+    if (FGUI::INPUT.GetKeyState(MOUSE_1))
     {
       // move thumb vertically
       ptCursorPos.m_iY -= (ptAbsPosition.m_iY + 20);
@@ -435,13 +435,13 @@ void CColorList::Update()
   // get cursor position
   const FGUI::POINT &ptCursorPos = FGUI::INPUT.GetCursorPos();
 
-  if (FGUI::INPUT.GetKeyPress(107))
+  if (FGUI::INPUT.GetKeyPress(MOUSE_1))
   {
     bColorHSBSelected = FGUI::INPUT.IsCursorInArea(arColorHSBRegion);
     bColorHueSelected = FGUI::INPUT.IsCursorInArea(arColorHueRegion);
     bAlphaSliderSelected = FGUI::INPUT.IsCursorInArea(arAlphaSliderRegion);
   }
-  else if (FGUI::INPUT.GetKeyRelease(107))
+  else if (FGUI::INPUT.GetKeyRelease(MOUSE_1))
   {
     bColorHSBSelected = false;
     bColorHueSelected = false;

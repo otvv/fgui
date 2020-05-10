@@ -76,7 +76,7 @@ void CKeyBinder::Update()
       if (FGUI::INPUT.GetKeyPress(key))
       { 
         // if the user press ESCAPE
-        if (key == 70 /* KEY_ESCAPE from IInputSystem*/)  // todo: global keys
+        if (key == KEY_ESCAPE)
         { 
           // set the key to an invalid key
           m_nKey = -1;
@@ -89,14 +89,14 @@ void CKeyBinder::Update()
         }
 
         // iterate the rest of the keys
-        else if (key != 70 /* KEY_ESCAPE from IInputSystem */) // todo: global keys
+        else if (key != KEY_ESCAPE)
         { 
           // set key 
           m_nKey = key;
 
           // change status to the currently pressed key
-          m_strStatus = m_kcCodes.m_strInputSystem[key]; // todo: make a function to let the user select wich type of "input system" he wants to use
-          //m_strStatus = m_kcCodes.m_strVirtualKeyCodes[key];
+          //m_strStatus = m_kcCodes.m_strInputSystem[key]; // todo: make a function to let the user select wich type of "input system" he wants to use
+          m_strStatus = m_kcCodes.m_strVirtualKeyCodes[key];
 
           // block keybinder
           m_bIsGettingKey = false;
