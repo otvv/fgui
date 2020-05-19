@@ -7,12 +7,12 @@
 #define FGUI_IMPLEMENTATION
 #include <FGUI/FGUI.hpp>
 
-// Make sure to tell FGUI to use D3D9!
-// Go to: https://github.com/otvv/fgui/wiki/First-Steps#renderer-helpers for more info.
+// NOTE: make sure to tell FGUI to use D3D9:
+// go to: https://github.com/otvv/fgui/wiki/First-Steps#renderer-helpers for more info.
 
 namespace FGUI_D3D9
 {
-  // this could be inside a class or somewhere else.
+	// NOTE: you still need to initialize the device.
 	inline IDirect3DDevice9Ex* m_pDevice;
 
 	inline void CreateFont(FGUI::FONT &_font, const std::string& _family, int _size, int _flags, bool _bold) // TODO: handle font flags
@@ -104,7 +104,7 @@ namespace FGUI_D3D9
 		m_pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtxVertices, sizeof(FGUI::VERTEX));
 	}
   
-  // call this function only once (preferably when you initialize your application)
+  	// NOTE: call this function only once (preferably when you initialize your application)
 	inline void OnEntryPoint()
 	{
 		FGUI::RENDER.CreateFont = FGUI_D3D9::CreateFont;
