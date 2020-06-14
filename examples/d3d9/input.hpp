@@ -74,13 +74,13 @@ namespace FGUI_INPUT_WIN32
   // NOTE: call this function only once (preferably when you initialize your application)
   inline void OnEntryPoint()
   {
-    FGUI::INPUT.PullInput = INPUT_SYSTEM::PullInput;
-    FGUI::INPUT.GetKeyState = INPUT_SYSTEM::GetKeyState;
-    FGUI::INPUT.GetKeyRelease = INPUT_SYSTEM::GetKeyRelease;
-    FGUI::INPUT.GetKeyPress = INPUT_SYSTEM::GetKeyPress;
-    FGUI::INPUT.GetCursorPos = INPUT_SYSTEM::GetCursorPos;
-    FGUI::INPUT.GetCursorPosDelta = INPUT_SYSTEM::GetCursorPosDelta;
-    FGUI::INPUT.GetCursorWheelDelta = INPUT_SYSTEM::GetCursorWheelDelta;
-    FGUI::INPUT.IsCursorInArea = INPUT_SYSTEM::IsCursorInArea;
+    FGUI::INPUT.PullInput = FGUI_INPUT_WIN32::PullInput;
+    FGUI::INPUT.GetKeyState = FGUI_INPUT_WIN32::GetKeyState;
+    FGUI::INPUT.GetKeyRelease = FGUI_INPUT_WIN32::GetKeyRelease;
+    FGUI::INPUT.GetKeyPress = FGUI_INPUT_WIN32::GetKeyPress;
+    FGUI::INPUT.GetCursorPos = FGUI_INPUT_WIN32::GetCursorPos;
+    FGUI::INPUT.GetCursorPosDelta = FGUI_INPUT_WIN32::GetCursorPosDelta;
+    FGUI::INPUT.GetCursorWheelDelta = FGUI_INPUT_WIN32::GetCursorWheelDelta;
+    FGUI::INPUT.IsCursorInArea = FGUI_INPUT_WIN32::IsCursorInArea;
   }
 }
