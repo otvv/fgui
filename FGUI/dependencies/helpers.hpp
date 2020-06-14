@@ -18,33 +18,8 @@
 #define KEY_DELETE 46
 #define KEY_LEFT 37
 #define KEY_RIGHT 39
-
-#ifdef FGUI_USE_D3D9
-
-#include <d3d9.h>
-#include <d3dx9.h>
-#include <dwmapi.h>
-
-#pragma comment(lib, "d3d9.lib")
-#pragma comment(lib, "d3dx9.lib")
-#pragma comment(lib, "dwmapi.lib")
-
-namespace FGUI
-{
-	using FONT = ID3DXFont*;
-}
-#elif FGUI_USE_OPENGL
-
-// TODO: OpenGL support
-
-#else
-
-namespace FGUI
-{
-	using FONT = unsigned long;
-}
-#endif
-
+#define KEY_PAGEUP 33
+#define KEY_PAGEDOWN 34
 #else
 // These keys defaults to virtual key-codes from Source Engine (IInputSystem) 
 #define MOUSE_1 107
@@ -56,6 +31,41 @@ namespace FGUI
 #define KEY_DELETE 73
 #define KEY_LEFT 89
 #define KEY_RIGHT 91
+#define KEY_PAGEUP 76
+#define KEY_PAGEDOWN 77
+#endif
+
+#ifdef FGUI_USE_D3D9
+#include <d3d9.h>
+#include <d3dx9.h>
+
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
+
+namespace FGUI
+{
+	using FONT = ID3DXFont*;
+}
+#elif defined(FGUI_USE_D3D10)
+#include <d3d10.h>
+#include <d3dx10.h>
+
+#pragma comment(lib, "d3d10.lib")
+#pragma comment(lib, "d3dx10.lib")
+
+namespace FGUI
+{
+	using FONT = ID3DX10Font*;
+}
+#elif defined(FGUI_USE_OPENGL)
+
+// TODO: OpenGL support
+
+#else
+namespace FGUI
+{
+	using FONT = unsigned long;
+}
 #endif
 
 #endif // FGUI_HELPERS_HH

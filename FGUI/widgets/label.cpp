@@ -8,7 +8,6 @@
 namespace FGUI
 {
 
-// ----------------------------------------------- //
 CLabel::CLabel()
 {
   m_strTitle = "Label";
@@ -20,26 +19,17 @@ CLabel::CLabel()
   m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE);
 }
 
-// ----------------------------------------------- //
-void CLabel::AddCallback(const std::function<void()> &callback)
+void CLabel::AddCallback(std::function<void()> callback)
 {
   m_fnctCallback = callback;
 }
 
-// ----------------------------------------------- //
-void CLabel::SetStyle(const FGUI::LABEL_STYLE &style)
+void CLabel::SetStyle(FGUI::LABEL_STYLE style)
 {
   m_nStyle = static_cast<int>(style);
 }
 
-// ----------------------------------------------- //
-int CLabel::GetStyle()
-{
-  return m_nStyle;
-}
-
-// ----------------------------------------------- //
-void CLabel::SetColor(const FGUI::COLOR &color)
+void CLabel::SetColor(FGUI::COLOR color)
 {
   if (m_nStyle == static_cast<int>(LABEL_STYLE::COLORED))
   {
@@ -47,23 +37,23 @@ void CLabel::SetColor(const FGUI::COLOR &color)
   }
 }
 
-// ----------------------------------------------- //
-const FGUI::COLOR CLabel::GetColor()
+FGUI::COLOR CLabel::GetColor()
 {
   return m_clrLabel;
 }
 
-// ----------------------------------------------- //
+int CLabel::GetStyle()
+{
+  return m_nStyle;
+}
+
 void CLabel::Geometry()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's title text size
-  const FGUI::DIMENSION &dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
+  FGUI::DIMENSION dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
 
   // widget's area
-  const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, dmTitleTextSize.m_iWidth, dmTitleTextSize.m_iHeight};
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, dmTitleTextSize.m_iWidth, dmTitleTextSize.m_iHeight};
 
   // label body
   if (m_nStyle == static_cast<int>(LABEL_STYLE::NORMAL))
@@ -83,17 +73,13 @@ void CLabel::Geometry()
   }
 }
 
-// ----------------------------------------------- //
 void CLabel::Update()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's title text size
-  const FGUI::DIMENSION &dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
+  FGUI::DIMENSION dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
 
   // widget's area
-  const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, dmTitleTextSize.m_iWidth, dmTitleTextSize.m_iHeight};
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, dmTitleTextSize.m_iWidth, dmTitleTextSize.m_iHeight};
 
   // check if the label is a link
   if (m_nStyle == static_cast<int>(LABEL_STYLE::LINK))
@@ -112,7 +98,6 @@ void CLabel::Update()
   }
 }
 
-// ----------------------------------------------- //
 void CLabel::Input()
 {
 }

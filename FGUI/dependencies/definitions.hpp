@@ -6,7 +6,6 @@
 #define FGUI_DEFINITIONS_HH
 
 // includes
-#include <cmath>
 #include <string>
 #include <stdint.h>
 #include <algorithm>
@@ -41,7 +40,7 @@ using RANGE = struct SRange_t
 
 using VERTEX = struct SVertex_t
 {
-  float m_flX, m_flY, m_flZ, m_flRwh;
+  float m_flX, m_flY, m_flZ, m_flW;
   unsigned long m_ulColor;
 };
 
@@ -49,15 +48,15 @@ using COLOR = struct SColor_t
 {
   SColor_t() = default;
 
-  constexpr SColor_t(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255) : m_ucRed(red), m_ucGreen(green), m_ucBlue(blue), m_ucAlpha(alpha) {}
-  constexpr SColor_t(const SColor_t &color, std::uint8_t alpha) : m_ucRed(color.m_ucRed), m_ucGreen(color.m_ucGreen), m_ucBlue(color.m_ucBlue), m_ucAlpha(alpha) {}
+  SColor_t(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255) : m_ucRed(red), m_ucGreen(green), m_ucBlue(blue), m_ucAlpha(alpha) {}
+  SColor_t(SColor_t color, std::uint8_t alpha) : m_ucRed(color.m_ucRed), m_ucGreen(color.m_ucGreen), m_ucBlue(color.m_ucBlue), m_ucAlpha(alpha) {}
 
-  static SColor_t Interpolate(const SColor_t &color1, const SColor_t &color2, float ttt)
+  static SColor_t Interpolate(SColor_t color1, SColor_t color2, float ttt)
   {
-    float flRed = (std::clamp<int>(color1.m_ucRed, 0, 255) * (1.f - ttt) + std::clamp<int>(color2.m_ucRed, 0, 255) * ttt);
-    float flGreen = (std::clamp<int>(color1.m_ucGreen, 0, 255) * (1.f - ttt) + std::clamp<int>(color2.m_ucGreen, 0, 255) * ttt);
-    float flBlue = (std::clamp<int>(color1.m_ucBlue, 0, 255) * (1.f - ttt) + std::clamp<int>(color2.m_ucBlue, 0, 255) * ttt);
-    float flAlpha = (std::clamp<int>(color1.m_ucAlpha, 0, 255) * (1.f - ttt) + std::clamp<int>(color2.m_ucAlpha, 0, 255) * ttt);
+    float flRed = color1.m_ucRed * (1.f - ttt) + (color2.m_ucRed * ttt);
+    float flGreen = color1.m_ucGreen * (1.f - ttt) + (color2.m_ucGreen * ttt);
+    float flBlue = color1.m_ucBlue * (1.f - ttt) + (color2.m_ucBlue * ttt);
+    float flAlpha = color1.m_ucAlpha * (1.f - ttt) + (color2.m_ucAlpha * ttt);
 
     return SColor_t(flRed, flGreen, flBlue, flAlpha);
   }
@@ -100,25 +99,25 @@ using COLOR = struct SColor_t
     }
   }
 
-  static float GetHue(const SColor_t &color)
+  static float GetHue(SColor_t color)
   {
-    float flRed = (std::clamp<int>(color.m_ucRed, 0, 255) / 255.f);
-    float flGreen = (std::clamp<int>(color.m_ucGreen, 0, 255) / 255.f);
-    float flBlue = (std::clamp<int>(color.m_ucBlue, 0, 255) / 255.f);
+    float flRed = (color.m_ucRed / 255.f);
+    float flGreen = (color.m_ucGreen / 255.f);
+    float flBlue = (color.m_ucBlue / 255.f);
 
     float flMax = std::fmaxf(std::fmaxf(flRed, flGreen), flBlue);
     float flMin = std::fminf(std::fminf(flRed, flGreen), flBlue);
+
     float flDelta = (flMax - flMin);
 
     if (flDelta != 0.f)
     {
-      float flHue = 0.f;
+      static float flHue = 0.f;
 
       if (flRed == flMax)
       {
         flHue = (flGreen - flBlue) / flDelta;
       }
-
       else
       {
         if (flGreen == flMax)
@@ -140,7 +139,6 @@ using COLOR = struct SColor_t
 
       return (flHue / 360.f);
     }
-
     else
     {
       return 0.f;
@@ -155,7 +153,7 @@ using WIDGET_FONT = struct SWidgetFont_t
   std::string m_strFamily;
   int m_iSize;
   bool m_bBold;
-  int m_iFlags;
+  int m_nFlags;
 };
 
 using KEY_CODES = struct SKeyCodes_t
@@ -254,6 +252,8 @@ using WIDGET_FLAG = enum struct ESWidgetFlag_t : int {
   DRAWABLE = 0x1,
   CLICKABLE = 0x2,
   FOCUSABLE = 0x4,
+
+  FULLSCREEN = 0x16 // this is exclusively for Forms
 };
 
 } // namespace FGUI

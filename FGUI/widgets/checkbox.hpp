@@ -27,7 +27,7 @@ public:
 
   // @brief: adds a function callback for the checkbox (it will call the function whenever the user check the checkbox)
   // @params: std::function<void()> callback = function instance
-  void AddCallback(const std::function<void()> &callback);
+  void AddCallback(std::function<void()> callback);
 
   // @brief: populate widget geometry (draw widget)
   void Geometry() override;

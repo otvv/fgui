@@ -8,7 +8,6 @@
 namespace FGUI
 {
 
-// ----------------------------------------------- //
 CTextBox::CTextBox()
 {
   m_strTitle = "TextBox";
@@ -22,35 +21,28 @@ CTextBox::CTextBox()
   m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE);
 }
 
-// ----------------------------------------------- //
-void CTextBox::SetText(const std::string &text)
+void CTextBox::SetText(std::string text)
 {
   m_strCustomText = text;
 }
 
-// ----------------------------------------------- //
-const std::string &CTextBox::GetText()
+std::string CTextBox::GetText()
 {
   return m_strCustomText;
 }
 
-// ----------------------------------------------- //
 void CTextBox::SetLength(unsigned int length)
 {
   m_iLength = length;
 }
 
-// ----------------------------------------------- //
 void CTextBox::Geometry()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's area
-  const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
 
   // widget's title text size
-  const FGUI::DIMENSION &dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
+  FGUI::DIMENSION dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
 
   // textbox body
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion) || m_bIsGettingKey)
@@ -71,7 +63,6 @@ void CTextBox::Geometry()
   FGUI::RENDER.Text(arWidgetRegion.m_iLeft + (dmTitleTextSize.m_iWidth + 20), arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTitleTextSize.m_iHeight / 2), m_ulFont, {35, 35, 35}, m_strCustomText);
 }
 
-// ----------------------------------------------- //
 void CTextBox::Update()
 {
   // if the keybinder is listening for a new key press
@@ -86,23 +77,23 @@ void CTextBox::Update()
       }
 
       // key input
-      //std::string strKeyInput = m_ksStrings.m_strInputSystem[key].data(); // todo: make a function to let the user select wich type of "input system" he wants to use
+      //std::string strKeyInput = m_ksStrings.m_strInputSystem[key].data();
       std::string strKeyInput = m_ksStrings.m_strVirtualKeyCodes[key].data();
 
-      // if the user press ESC or ENTER stop the textbox from listening to key input
+      // if the user press ESC or ENTER, stop the textbox from receiving input
       if (key == KEY_ESCAPE || key == KEY_ENTER)
       {
         // block listbox
         m_bIsGettingKey = false;
       }
 
-      // upper case handler
+      // handle upper case keys
       if (FGUI::INPUT.GetKeyState(KEY_LSHIFT) || FGUI::INPUT.GetKeyState(KEY_RSHIFT))
       {
         std::transform(strKeyInput.begin(), strKeyInput.end(), strKeyInput.begin(), ::toupper);
       }
 
-      // insert text into the textbox
+      // insert text
       if (strKeyInput.length() == 1 && (static_cast<int>(m_strCustomText.length()) < m_iLength))
       {
         m_strCustomText.insert(m_iInputPos, strKeyInput);
@@ -121,7 +112,6 @@ void CTextBox::Update()
             m_iInputPos = 0;
           }
         }
-
         else if (key == KEY_DELETE)
         {
           // clear text
@@ -140,7 +130,6 @@ void CTextBox::Update()
             m_iInputPos = 0;
           }
         }
-
         else if (key == KEY_RIGHT && m_iInputPos < (static_cast<int>(m_strCustomText.length())))
         {
           m_iInputPos++;
@@ -150,14 +139,10 @@ void CTextBox::Update()
   }
 }
 
-// ----------------------------------------------- //
 void CTextBox::Input()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's area
-  const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
 
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
   {

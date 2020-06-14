@@ -22,10 +22,10 @@ public:
 
   // @brief: set a custom text for the textbox
   // @params: std::string text = custom default text
-  void SetText(const std::string &text);
+  void SetText(std::string text);
 
   // @brief: get the current text of the textbox
-  const std::string& GetText();
+  std::string GetText();
 
   // @brief: set custom text length
   // @params: unsigned int length = text length (characters allowed)

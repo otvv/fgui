@@ -8,7 +8,6 @@
 namespace FGUI
 {
 
-// ----------------------------------------------- //
 CButton::CButton()
 {
   m_strTitle = "Button";
@@ -19,23 +18,18 @@ CButton::CButton()
   m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE);
 }
 
-// ----------------------------------------------- //
-void CButton::AddCallback(const std::function<void()> &callback)
+void CButton::AddCallback(std::function<void()> callback)
 {
   m_fnctCallback = callback;
 }
 
-// ----------------------------------------------- //
 void CButton::Geometry()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's area
-  const FGUI::AREA &arWidgetRegion = { ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
 
   // widget's title text size
-  const FGUI::DIMENSION &dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
+  FGUI::DIMENSION dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
 
   // button body
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
@@ -52,19 +46,14 @@ void CButton::Geometry()
     arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTitleTextSize.m_iHeight / 2), m_ulFont, {245, 245, 245}, m_strTitle);
 }
 
-// ----------------------------------------------- //
 void CButton::Update()
 {
 }
 
-// ----------------------------------------------- //
 void CButton::Input()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's area
-  const FGUI::AREA &arWidgetRegion = { ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
 
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
   {

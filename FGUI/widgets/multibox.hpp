@@ -54,19 +54,19 @@ public:
 
   // @brief: set the multibox style (NORMAL = it will select one entry at a time; MULTI = it can select multiple entries at once)
   // @params: FGUI::MULTIBOX_STYLE style = multibox style (type)
-  void SetStyle(const FGUI::MULTIBOX_STYLE &style);
+  void SetStyle(FGUI::MULTIBOX_STYLE style);
 
   // @brief: returns the current style of the multibox (if it's normal or multi)
   int GetStyle();
 
   // @brief: adds a new entry inside the multibox
   // @params: std::string name = entry title, unsigned int value = entry custom value (use true or false if you are using the 'MULTI' style)
-  void AddEntry(const std::string &name, unsigned int value = 0);
+  void AddEntry(std::string name, unsigned int value = 0);
 
   // @brief: adds a function callback for the multibox (it will call the function whenever the user selects something on the multibox)
   // NOTE: this is only recommended if the multibox is using the 'NORMAL' style
   // @params: std::function<void()> callback = function instance
-  void AddCallback(const std::function<void()> &callback);
+  void AddCallback(std::function<void()> callback);
 
   // @brief: populate widget geometry (draw widget)
   void Geometry() override;

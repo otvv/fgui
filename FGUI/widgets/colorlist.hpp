@@ -23,7 +23,7 @@ class CCheckBox;
 
 using COLOR_INFO = struct SColorInfo_t
 {
-  SColorInfo_t(const std::string &identificator, const FGUI::COLOR& color, bool gradient);
+  SColorInfo_t(std::string identificator, FGUI::COLOR color, bool gradient);
 
   std::string m_strIdentificator;
   FGUI::COLOR m_clrFirst;
@@ -39,18 +39,18 @@ public:
 
   // @brief: adds a new color into the list
   // @params: std::string identificator = color identificator (label), FGUI::COLOR color = color, bool gradient = interpolation state (true by default or not)
-  void AddColor(const std::string &identificator, const FGUI::COLOR &color, bool gradient = false);
+  void AddColor(std::string identificator, FGUI::COLOR color, bool gradient = false);
 
   // @brief: set a custom color and the gradient state of an entry on the list
   // @params: std::size_t index = entry index, FGUI::COLOR color = color, bool gradient = gradient state (defaults to false)
-  void SetColor(std::size_t index, const FGUI::COLOR &color, bool gradient = false);
+  void SetColor(std::size_t index, FGUI::COLOR color, bool gradient = false);
 
   // @brief: returns the current color from a entry on the list
   // @params: std::size_t index = entry index (defaults to 0)
-  const FGUI::COLOR GetColor(std::size_t index = 0);
+  FGUI::COLOR GetColor(std::size_t index = 0);
 
   // @brief: get color info
-  const std::vector<FGUI::COLOR_INFO> &GetColorInfo();
+  std::vector<FGUI::COLOR_INFO> GetColorInfo();
 
   // @brief: populate widget geometry (draw widget)
   void Geometry() override;

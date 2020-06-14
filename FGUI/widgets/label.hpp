@@ -28,18 +28,18 @@ public:
 
   // @brief: adds a function callback for the label (it will call the function whenever the user clicks on the label)
   // @params: std::function<void()> callback = function instance
-  void AddCallback(const std::function<void()> &callback);
+  void AddCallback(std::function<void()> callback);
 
   // @brief: set the label style (NORMAL = it will draw a normal label; COLORED = it will draw a colored label; LINK = it will draw a clickable label)
   // @params: FGUI::MULTIBOX_STYLE style = multibox style (type)
-  void SetStyle(const FGUI::LABEL_STYLE &style);
+  void SetStyle(FGUI::LABEL_STYLE style);
 
   // @brief: set the label color (it only works for colored label type)
   // @params: FGUI::COLOR color = label custom color
-  void SetColor(const FGUI::COLOR &color);
+  void SetColor(FGUI::COLOR color);
 
   // @brief: return the current color of the label
-  const FGUI::COLOR GetColor();
+  FGUI::COLOR GetColor();
 
   // @brief: returns the current style of the label
   int GetStyle();

@@ -29,7 +29,7 @@ public:
 
   // @brief: set a custom prefix for the slider
   // @params: std::string prefix = custom prefix (%, ms, °, etc)
-  void SetPrefix(const std::string &prefix);
+  void SetPrefix(std::string prefix);
 
   // @brief: populate widget geometry (draw widget)
   void Geometry() override;

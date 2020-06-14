@@ -34,11 +34,11 @@ public:
 
   // @brief: adds a new entry inside the listbox
   // @params: std::string name = entry title, unsigned int value = entry custom value
-  void AddEntry(const std::string &name, unsigned int value = 0);
+  void AddEntry(std::string name, unsigned int value = 0);
 
   // @brief: adds a function callback for the listbox (it will call the function whenever the user selects something on the listbox)
   // @params: std::function<void()> callback = function instance
-  void AddCallback(const std::function<void()> &callback);
+  void AddCallback(std::function<void()> callback);
 
   // @brief: populate widget geometry (draw widget)
   void Geometry() override;

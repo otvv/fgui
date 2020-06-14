@@ -8,7 +8,6 @@
 namespace FGUI
 {
 
-// ----------------------------------------------- //
 CMultiBox::CMultiBox()
 {
   m_strTitle = "MultiBox";
@@ -26,52 +25,44 @@ CMultiBox::CMultiBox()
   m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE) | static_cast<int>(WIDGET_FLAG::FOCUSABLE);
 }
 
-// ----------------------------------------------- //
 void CMultiBox::SetState(bool onoff)
 {
   m_bIsOpened = onoff;
 }
 
-// ----------------------------------------------- //
 bool CMultiBox::GetState()
 {
   return m_bIsOpened;
 }
 
-// ----------------------------------------------- //
 void CMultiBox::SetIndex(std::size_t index)
 {
   m_uiSelectedEntry = index;
 }
 
-// ----------------------------------------------- //
 std::size_t CMultiBox::GetIndex()
 {
   return m_uiSelectedEntry;
 }
 
-// ----------------------------------------------- //
 void CMultiBox::SetValue(std::size_t index, unsigned int value)
 {
   if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::NORMAL))
   {
     m_prgpNormalEntries.second[index] = value;
   }
-
   else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
   {
     m_prgpMultiEntries.second[index] = value;
   }
 }
 
-// ----------------------------------------------- //
 std::size_t CMultiBox::GetValue(std::size_t index)
 {
   if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::NORMAL))
   {
     return m_prgpNormalEntries.second[m_uiSelectedEntry];
   }
-
   else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
   {
     return m_prgpMultiEntries.second[index];
@@ -80,33 +71,28 @@ std::size_t CMultiBox::GetValue(std::size_t index)
   return {};
 }
 
-// ----------------------------------------------- //
 std::pair<std::vector<std::string>, std::vector<bool>> CMultiBox::GetMultiEntryInfo()
 {
   return m_prgpMultiEntries;
 }
 
-// ----------------------------------------------- //
-void CMultiBox::SetStyle(const FGUI::MULTIBOX_STYLE &style)
+void CMultiBox::SetStyle(FGUI::MULTIBOX_STYLE style)
 {
   m_nStyle = static_cast<int>(style);
 }
 
-// ----------------------------------------------- //
 int CMultiBox::GetStyle()
 {
   return m_nStyle;
 }
 
-// ----------------------------------------------- //
-void CMultiBox::AddEntry(const std::string &name, unsigned int value)
+void CMultiBox::AddEntry(std::string name, unsigned int value)
 {
   if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::NORMAL))
   {
     m_prgpNormalEntries.first.emplace_back(name);
     m_prgpNormalEntries.second.emplace_back(value);
   }
-
   else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
   {
     m_prgpMultiEntries.first.emplace_back(name);
@@ -114,23 +100,18 @@ void CMultiBox::AddEntry(const std::string &name, unsigned int value)
   }
 }
 
-// ----------------------------------------------- //
-void CMultiBox::AddCallback(const std::function<void()> &callback)
+void CMultiBox::AddCallback(std::function<void()> callback)
 {
   m_fnctCallback = callback;
 }
 
-// ----------------------------------------------- //
 void CMultiBox::Geometry()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's area
-  const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmBackupSize.m_iHeight};
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmBackupSize.m_iHeight};
 
   // widget's title text size
-  const FGUI::DIMENSION &dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
+  FGUI::DIMENSION dmTitleTextSize = FGUI::RENDER.GetTextSize(m_ulFont, m_strTitle);
 
   // multibox body
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion) || m_bIsOpened)
@@ -161,7 +142,7 @@ void CMultiBox::Geometry()
       for (std::size_t i = 0; i < m_prgpNormalEntries.first.size(); i++)
       {
         // entry area
-        const FGUI::AREA &arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
+        FGUI::AREA arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
 
         // check if the user is hovering/have selected an entry
         if (FGUI::INPUT.IsCursorInArea(arEntryRegion) || m_uiSelectedEntry == i)
@@ -172,7 +153,7 @@ void CMultiBox::Geometry()
         else
         {
           FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + 1, (arEntryRegion.m_iTop + arEntryRegion.m_iBottom), arEntryRegion.m_iRight - 1, 1, {205, 205, 205});
-          FGUI::RENDER.Text(arEntryRegion.m_iLeft + 5, arEntryRegion.m_iTop + 2, m_ulFont, {0, 0, 0}, m_prgpNormalEntries.first[i]);
+          FGUI::RENDER.Text(arEntryRegion.m_iLeft + 5, arEntryRegion.m_iTop + 2, m_ulFont, {35, 35, 35}, m_prgpNormalEntries.first[i]);
         }
       }
     }
@@ -201,7 +182,6 @@ void CMultiBox::Geometry()
           strMultiString.append(m_prgpMultiEntries.first[i]);
         }
       }
-
       else if (bHasReachedLength && !bIsFirstItem)
       {
         strMultiString.append(" ...");
@@ -227,7 +207,7 @@ void CMultiBox::Geometry()
       for (std::size_t i = 0; i < m_prgpMultiEntries.first.size(); i++)
       {
         // entry area
-        const FGUI::AREA &arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
+        FGUI::AREA arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
 
         // check if the user is hovering/have selected an entry
         if (FGUI::INPUT.IsCursorInArea(arEntryRegion) || m_prgpMultiEntries.second[i])
@@ -238,7 +218,7 @@ void CMultiBox::Geometry()
         else
         {
           FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + 1, (arEntryRegion.m_iTop + arEntryRegion.m_iBottom), arEntryRegion.m_iRight - 1, 1, {205, 205, 205});
-          FGUI::RENDER.Text(arEntryRegion.m_iLeft + 5, arEntryRegion.m_iTop + 2, m_ulFont, {0, 0, 0}, m_prgpMultiEntries.first[i]);
+          FGUI::RENDER.Text(arEntryRegion.m_iLeft + 5, arEntryRegion.m_iTop + 2, m_ulFont, {35, 35, 35}, m_prgpMultiEntries.first[i]);
         }
       }
     }
@@ -251,7 +231,6 @@ void CMultiBox::Geometry()
   FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight - 10) - 5, arWidgetRegion.m_iTop + ((arWidgetRegion.m_iBottom / 2) - 3) + 4, 2, 1, {20, 20, 20});
 }
 
-// ----------------------------------------------- //
 void CMultiBox::Update()
 {
   if (m_bIsOpened)
@@ -266,7 +245,6 @@ void CMultiBox::Update()
 
       m_dmSize.m_iHeight = m_iEntrySpacing + (m_prgpNormalEntries.first.size() * m_iEntrySpacing) + 2;
     }
-
     else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
     {
       // close dropdown list if the user clicks on something else
@@ -275,11 +253,8 @@ void CMultiBox::Update()
         GetParentForm()->SetFocusedWidget(shared_from_this());
       }
 
-      // widget's absolute position
-      const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
       // widget's area
-      const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
+      FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
 
       // close dropdown if the user clicks on something else
       if (!FGUI::INPUT.IsCursorInArea(arWidgetRegion))
@@ -300,14 +275,10 @@ void CMultiBox::Update()
   }
 }
 
-// ----------------------------------------------- //
 void CMultiBox::Input()
 {
-  // widget's absolute position
-  const FGUI::POINT &ptAbsPosition = GetAbsolutePosition();
-
   // widget's area
-  const FGUI::AREA &arWidgetRegion = {ptAbsPosition.m_iX, ptAbsPosition.m_iY, m_dmSize.m_iWidth, m_dmBackupSize.m_iHeight};
+  FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmBackupSize.m_iHeight};
 
   // toggle dropdown list on and off
   if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
@@ -324,7 +295,7 @@ void CMultiBox::Input()
         for (std::size_t i = 0; i < m_prgpNormalEntries.first.size(); i++)
         {
           // entry area
-          const FGUI::AREA &arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
+          FGUI::AREA arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
 
           if (FGUI::INPUT.IsCursorInArea(arEntryRegion))
           {
@@ -342,13 +313,12 @@ void CMultiBox::Input()
           }
         }
       }
-
       else if (m_nStyle == static_cast<int>(MULTIBOX_STYLE::MULTI))
       {
         for (std::size_t i = 0; i < m_prgpMultiEntries.first.size(); i++)
         {
           // entry area
-          const FGUI::AREA &arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
+          FGUI::AREA arEntryRegion = {arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing};
 
           if (FGUI::INPUT.IsCursorInArea(arEntryRegion))
           {

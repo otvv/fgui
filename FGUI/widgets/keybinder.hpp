@@ -17,11 +17,11 @@ public:
   CKeyBinder();
 
   // @brief: set a custom key for the keybinder
-  // @params: int key = custom key code
-  void SetKey(int key);
+  // @params: unsigned int key = custom key code
+  void SetKey(unsigned int key_code);
 
   // @brief: get the current key set on the keybinder
-  int GetKey();
+  unsigned int GetKey();
 
   // @brief: populate widget geometry (draw widget)
   void Geometry() override;
@@ -32,7 +32,7 @@ public:
   // @brief: handle input inside the widget
   void Input() override;
 private:
- int m_nKey;
+ unsigned int m_uiKey;
  std::string m_strStatus;
  bool m_bIsGettingKey;
  FGUI::KEY_CODES m_kcCodes;

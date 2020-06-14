@@ -7,25 +7,24 @@
 #include "listbox.hpp"
 #include "multibox.hpp"
 #include "checkbox.hpp"
+#include "groupbox.hpp"
+#include "slider.hpp"
 
 namespace FGUI
 {
 
-// ----------------------------------------------- //
 void CWidgets::SetPosition(unsigned int x, unsigned int y)
 {
   m_ptPosition.m_iX = x;
   m_ptPosition.m_iY = y;
 }
 
-// ----------------------------------------------- //
-const FGUI::POINT &CWidgets::GetPosition()
+FGUI::POINT CWidgets::GetPosition()
 {
   return m_ptPosition;
 }
 
-// ----------------------------------------------- //
-const FGUI::POINT CWidgets::GetAbsolutePosition()
+FGUI::POINT CWidgets::GetAbsolutePosition()
 {
   static FGUI::POINT ptTemporaryPosition = {0, 0};
 
@@ -37,49 +36,53 @@ const FGUI::POINT CWidgets::GetAbsolutePosition()
   if (m_pParentForm)
   {
     // get the parent form's widget area
-    //const FGUI::AREA &arWidgetArea = {0, 0, 0, 0};
-    const FGUI::AREA &arWidgetArea = m_pParentForm->GetWidgetArea();
+    FGUI::AREA arWidgetArea = m_pParentForm->GetWidgetArea();
 
-    ptTemporaryPosition.m_iX = (m_ptPosition.m_iX + arWidgetArea.m_iLeft);
-    ptTemporaryPosition.m_iY = (m_ptPosition.m_iY + arWidgetArea.m_iTop);
+    ptTemporaryPosition = { (m_ptPosition.m_iX + arWidgetArea.m_iLeft), (m_ptPosition.m_iY + arWidgetArea.m_iTop) };
+
+    // scrolling
+    if (m_pParentGroupBox && std::reinterpret_pointer_cast<FGUI::CGroupBox>(m_pParentGroupBox)->GetScrollbarState())
+    {
+      ptTemporaryPosition.m_iY -= std::reinterpret_pointer_cast<FGUI::CGroupBox>(m_pParentGroupBox)->GetScrollOffset();
+    }
   }
 
   return ptTemporaryPosition;
 }
 
-// ----------------------------------------------- //
 void CWidgets::SetSize(unsigned int width, unsigned int height)
 {
   m_dmSize.m_iWidth = width;
   m_dmSize.m_iHeight = height;
 }
 
-// ----------------------------------------------- //
-const FGUI::DIMENSION &CWidgets::GetSize()
+void CWidgets::SetSize(FGUI::DIMENSION size)
+{
+  m_dmSize.m_iWidth = size.m_iWidth;
+  m_dmSize.m_iHeight = size.m_iHeight;
+}
+
+FGUI::DIMENSION CWidgets::GetSize()
 {
   return m_dmSize;
 }
 
-// ----------------------------------------------- //
-void CWidgets::SetTitle(const std::string &title)
+void CWidgets::SetTitle(std::string title)
 {
   m_strTitle = title;
 }
 
-// ----------------------------------------------- //
-const std::string &CWidgets::GetTitle()
+std::string CWidgets::GetTitle()
 {
   return m_strTitle;
 }
 
-// ----------------------------------------------- //
 void CWidgets::SetFlags(int flags)
 {
   m_nFlags = flags;
 }
 
-// ----------------------------------------------- //
-bool CWidgets::GetFlag(const FGUI::WIDGET_FLAG &flags)
+bool CWidgets::GetFlags(FGUI::WIDGET_FLAG flags)
 {
   if (m_nFlags & static_cast<int>(flags))
   {
@@ -89,9 +92,14 @@ bool CWidgets::GetFlag(const FGUI::WIDGET_FLAG &flags)
   return false;
 }
 
-// ----------------------------------------------- //
 bool CWidgets::IsUnlocked()
-{
+{ 
+  // if the parent form is closed or null, keep widgets locked
+  if (!m_pParentForm || !m_pParentForm->GetState())
+  {
+    return false;
+  }
+
   // if the widget doesn't have a medium or we have an invalid page keep it unlocked
   if (!m_pMedium || m_iPage < 0)
   {
@@ -101,17 +109,18 @@ bool CWidgets::IsUnlocked()
   // otherwise, it will lock them until cetain conditions are met
   switch (m_pMedium->m_nType)
   {
-
   case static_cast<int>(WIDGET_TYPE::LISTBOX):
   {
     return std::reinterpret_pointer_cast<FGUI::CListBox>(m_pMedium)->GetIndex() == static_cast<std::size_t>(m_iPage);
   }
-
   case static_cast<int>(WIDGET_TYPE::CHECKBOX):
   {
     return std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pMedium)->GetState() == static_cast<bool>(m_iPage);
   }
-
+  case static_cast<int>(WIDGET_TYPE::SLIDER) :
+  {
+    return std::reinterpret_pointer_cast<FGUI::CSlider>(m_pMedium)->GetValue() == static_cast<float>(m_iPage);
+  }
   case static_cast<int>(WIDGET_TYPE::MULTIBOX):
   {
     if (std::reinterpret_pointer_cast<FGUI::CMultiBox>(m_pMedium)->GetStyle() == static_cast<int>(MULTIBOX_STYLE::NORMAL))
@@ -124,50 +133,42 @@ bool CWidgets::IsUnlocked()
   return false;
 }
 
-// ----------------------------------------------- //
-const std::shared_ptr<FGUI::CForm> &CWidgets::GetParentForm()
+std::shared_ptr<FGUI::CForm> CWidgets::GetParentForm()
 {
   return m_pParentForm;
 }
 
-// ------------------------------------------------ //
-void CWidgets::SetMedium(const std::shared_ptr<FGUI::CWidgets> &medium, unsigned int page)
+void CWidgets::SetMedium(std::shared_ptr<FGUI::CWidgets> medium, unsigned int page)
 {
   m_pMedium = medium;
   m_iPage = page;
 }
 
-// ------------------------------------------------ //
-const std::shared_ptr<FGUI::CWidgets> &CWidgets::GetMedium()
+std::shared_ptr<FGUI::CWidgets> CWidgets::GetMedium()
 {
   return m_pMedium;
 }
 
-// ----------------------------------------------- //
-int CWidgets::GetPage()
+unsigned int CWidgets::GetPage()
 {
   return m_iPage;
 }
 
-// ----------------------------------------------- //
 int CWidgets::GetType()
 {
   return m_nType;
 }
 
-// ----------------------------------------------- //
-void CWidgets::SetFont(const std::string &family, int size, bool bold, int flags)
+void CWidgets::SetFont(std::string family, unsigned int size, bool bold, int flags)
 {
   FGUI::RENDER.CreateFont(m_ulFont, family, size, flags, bold);
 }
 
-// ----------------------------------------------- //
-void CWidgets::SetFont(const FGUI::WIDGET_FONT &font)
+void CWidgets::SetFont(FGUI::WIDGET_FONT font)
 {
-  FGUI::RENDER.CreateFont(m_ulFont, font.m_strFamily, font.m_iSize, font.m_iFlags, font.m_bBold);
+  FGUI::RENDER.CreateFont(m_ulFont, font.m_strFamily, font.m_iSize, font.m_nFlags, font.m_bBold);
 }
 
-// ----------------------------------------------- //
 FGUI::FONT CWidgets::GetFont()
 {
   return m_ulFont;
