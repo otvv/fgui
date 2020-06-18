@@ -1,10 +1,10 @@
 <p align="center">
-  <img width="178" src="resources/fgui_logo.png" alt="logo">
+  <img width="178" src="resources/repo/fgui_logo.png" alt="logo">
 </p>
 
 <p align="center">
-    <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img src="https://img.shields.io/badge/language-C++-red?style=for-the-badge" alt="c++"></a>
-      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge" alt="mit"></a>
+    <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img src="resources/repo/language.png" alt="c++"></a>
+      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img src="resources/repo/license.png" alt="mit"></a>
 </p>
 
 <p align="center"> 
