@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-    <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img src="resources/repo/language.png" alt="c++"></a>
-      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img src="resources/repo/license.png" alt="mit"></a>
+    <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img src="resources/repo/language.svg" alt="c++"></a>
+      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img src="resources/repo/license.svg" alt="mit"></a>
 </p>
 
 <p align="center"> 
