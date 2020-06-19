@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-    <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img width="110" height="30" src="resources/repo/language.svg" alt="c++"></a>
-      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img width="110" height="30" src="resources/repo/license.svg" alt="mit"></a>
+    <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img width="120" height="30" src="resources/repo/language.svg" alt="c++"></a>
+      <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img width="120" height="30" src="resources/repo/license.svg" alt="mit"></a>
 </p>
 
 <p align="center"> 
