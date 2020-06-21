@@ -25,7 +25,7 @@ namespace FGUI
 		using pDrawGradient = std::add_pointer_t<void(int, int, int, int, FGUI::COLOR, FGUI::COLOR, bool)>;
 		using pDrawLine = std::add_pointer_t<void(int, int, int, int, FGUI::COLOR)>;
 		using pDrawText = std::add_pointer_t<void(int, int, FGUI::FONT, FGUI::COLOR, std::string)>;
-		using pDrawSprite = std::add_pointer_t<void(void*, float, float, float, float, FGUI::COLOR)>;
+		using pDrawSprite = std::add_pointer_t<void(unsigned char*, int, int, float, float, FGUI::COLOR)>;
 
 		// input functions pointers
 		using pPullInput = std::add_pointer_t<void()>;

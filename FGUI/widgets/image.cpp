@@ -20,7 +20,7 @@ namespace FGUI
 		m_clColor = { 255, 255, 255, 255 };
 	}
 	
-	void CImage::SetImage(void* image)
+	void CImage::SetImage(unsigned char* image)
 	{
 		m_pImage = image;
 	}

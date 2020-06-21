@@ -120,13 +120,10 @@ namespace FGUI_D3D9
 		FGUI::RENDER.Sprite = FGUI_D3D9::Sprite;
 	}
 
-	inline void Sprite(void* textuer, float x, float y, float scale, float rotation, FGUI::COLOR _color1)
+	inline void Sprite(unsigned char* textuer, int x, int y, float scale, float rotation, FGUI::COLOR _color1)
 	{
 		IDirect3DTexture9* tex = (IDirect3DTexture9*)textuer;
 		D3DCOLOR color = D3DCOLOR_RGBA(_color1.m_ucRed, _color1.m_ucGreen, _color1.m_ucBlue, _color1.m_ucAlpha);
-
-		float screen_pos_x = x;
-		float screen_pos_y = y;
 
 		D3DSURFACE_DESC surfaceDesc;
 		int level = 0; //The level to get the width/height of (probably 0 if unsure)
@@ -135,7 +132,7 @@ namespace FGUI_D3D9
 		D3DXVECTOR2 spriteCentre = D3DXVECTOR2((float)surfaceDesc.Width / 2, (float)surfaceDesc.Height / 2);
 
 		// Screen position of the sprite
-		D3DXVECTOR2 trans = D3DXVECTOR2(screen_pos_x, screen_pos_y);
+		D3DXVECTOR2 trans = D3DXVECTOR2(x, y);
 
 		// Build our matrix to rotate, scale and position our sprite
 		D3DXMATRIX mat;

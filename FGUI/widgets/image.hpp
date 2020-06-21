@@ -20,7 +20,7 @@ namespace FGUI
 		CImage();
 
 		// @brief: set image texture or data
-		void SetImage(void* image);
+		void SetImage(unsigned char* image);
 
 		// @brief: transforms the scale of the image
 		void SetScale(float scale);
@@ -40,7 +40,7 @@ namespace FGUI
 		// @brief: handle input inside the widget
 		void Input() override;
 	private:
-		void* m_pImage;
+		unsigned char* m_pImage;
 		float m_fScale;
 		float m_fRotation;
 		FGUI::COLOR m_clColor;
