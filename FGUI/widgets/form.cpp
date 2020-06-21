@@ -333,7 +333,7 @@ namespace FGUI
 							pWidgets->Geometry();
 						}
 					}
-					else if (pWidgets->GetType() == static_cast<int>(WIDGET_TYPE::GROUPBOX) || pWidgets->GetType() == static_cast<int>(WIDGET_TYPE::COLORLIST))
+					else if (pWidgets->GetType() == static_cast<int>(WIDGET_TYPE::GROUPBOX) || pWidgets->GetType() == static_cast<int>(WIDGET_TYPE::COLORLIST) || pWidgets->GetType() == static_cast<int>(WIDGET_TYPE::IMAGE))
 					{
 						// draw widgets that needs to be outside of a groupbox
 						pWidgets->Geometry();

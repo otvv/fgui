@@ -14,6 +14,8 @@ namespace FGUI_D3D9
 {
 	// NOTE: you still need to initialize the device.
 	inline IDirect3DDevice9Ex* m_pDevice;
+	// NOTE: to render sprites you need to initialize the sprite first https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatesprite
+	inline ID3DXSprite* m_pSprite;
 
 	inline void CreateFont(FGUI::FONT &_font, const std::string& _family, int _size, int _flags, bool _bold) // TODO: handle font flags
 	{
@@ -115,5 +117,46 @@ namespace FGUI_D3D9
 		FGUI::RENDER.Line = FGUI_D3D9::Line;
 		FGUI::RENDER.Text = FGUI_D3D9::Text;
 		FGUI::RENDER.Gradient = FGUI_D3D9::Gradient;
+		FGUI::RENDER.Sprite = FGUI_D3D9::Sprite;
+	}
+
+	inline void Sprite(void* textuer, float x, float y, float scale, float rotation, FGUI::COLOR _color1)
+	{
+		IDirect3DTexture9* tex = (IDirect3DTexture9*)textuer;
+		D3DCOLOR color = D3DCOLOR_RGBA(_color1.m_ucRed, _color1.m_ucGreen, _color1.m_ucBlue, _color1.m_ucAlpha);
+
+		float screen_pos_x = x;
+		float screen_pos_y = y;
+
+		D3DSURFACE_DESC surfaceDesc;
+		int level = 0; //The level to get the width/height of (probably 0 if unsure)
+		tex->GetLevelDesc(level, &surfaceDesc);
+		// Texture center
+		D3DXVECTOR2 spriteCentre = D3DXVECTOR2((float)surfaceDesc.Width / 2, (float)surfaceDesc.Height / 2);
+
+		// Screen position of the sprite
+		D3DXVECTOR2 trans = D3DXVECTOR2(screen_pos_x, screen_pos_y);
+
+		// Build our matrix to rotate, scale and position our sprite
+		D3DXMATRIX mat;
+
+		D3DXVECTOR2 scaling(scale, scale);
+
+		// out, scaling centre, scaling rotation, scaling, rotation centre, rotation, translation
+		D3DXMatrixTransformation2D(&mat, NULL, 0.0, &scaling, &spriteCentre, rotation, &trans);
+
+		//pDevice->SetRenderState(D3DRS_ZENABLE, false);
+		m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		m_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		m_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		m_pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+		m_pDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		m_pDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+		m_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+		m_pDevice->SetPixelShader(NULL);
+		m_pSprite->Begin(NULL);
+		m_pSprite->SetTransform(&mat); // Tell the sprite about the matrix
+		m_pSprite->Draw(tex, NULL, NULL, NULL, color);
+		m_pSprite->End();
 	}
 }

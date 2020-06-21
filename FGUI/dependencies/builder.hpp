@@ -23,6 +23,7 @@
 #include "../widgets/slider.hpp"
 #include "../widgets/tabs.hpp"
 #include "../widgets/textbox.hpp"
+#include "../widgets/image.hpp"
 #include "../widgets/widgets.hpp"
 
 namespace FGUI
