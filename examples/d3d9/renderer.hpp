@@ -120,8 +120,21 @@ namespace FGUI_D3D9
 		FGUI::RENDER.Sprite = FGUI_D3D9::Sprite;
 	}
 
-	inline void Sprite(unsigned char* textuer, int x, int y, float scale, float rotation, FGUI::COLOR _color1)
+	inline void Sprite(unsigned char* textuer, int x, int y, int clip_w, int clip_h, float scale, float rotation, FGUI::COLOR _color1)
 	{
+		D3DVIEWPORT9 viewport_old;
+		pDevice->GetViewport(&viewport_old);
+
+		D3DVIEWPORT9 vp;
+		vp.X = (DWORD)x;
+		vp.Y = (DWORD)y;
+		vp.Width = (DWORD)width_clipping;
+		vp.Height = (DWORD)height_clipping;
+		vp.MinZ = 0.0f;
+		vp.MaxZ = 1.0f;
+
+		pDevice->SetViewport(&vp);
+
 		IDirect3DTexture9* tex = (IDirect3DTexture9*)textuer;
 		D3DCOLOR color = D3DCOLOR_RGBA(_color1.m_ucRed, _color1.m_ucGreen, _color1.m_ucBlue, _color1.m_ucAlpha);
 
@@ -155,5 +168,8 @@ namespace FGUI_D3D9
 		m_pSprite->SetTransform(&mat); // Tell the sprite about the matrix
 		m_pSprite->Draw(tex, NULL, NULL, NULL, color);
 		m_pSprite->End();
+
+		//restore viewport
+		pDevice->SetViewport(&viewport_old);
 	}
 }

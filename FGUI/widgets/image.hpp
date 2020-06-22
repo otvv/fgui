@@ -31,6 +31,9 @@ namespace FGUI
 		// @brief: sets color modulation of the image
 		void SetColor(FGUI::COLOR color);
 
+		// @brief: sets background color
+		void SetBgColor(FGUI::COLOR color);
+
 		// @brief: populate widget geometry (draw widget)
 		void Geometry() override;
 
@@ -44,6 +47,7 @@ namespace FGUI
 		float m_fScale;
 		float m_fRotation;
 		FGUI::COLOR m_clColor;
+		FGUI::COLOR m_clBGColor;
 	};
 
 } // namespace FGUI
