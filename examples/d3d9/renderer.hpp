@@ -20,7 +20,7 @@ namespace FGUI_D3D9
 		D3DXCreateFont(m_pDevice, _size, 0, _bold ? FW_BOLD : FW_NORMAL, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _family.c_str(), &_font);
 	}
 
-	inlineb FGUI::DIMENSION GetScreenSize()
+	inline FGUI::DIMENSION GetScreenSize()
 	{
 		static int iWidth = GetSystemMetrics(SM_CXSCREEN);
 		static int iHeight = GetSystemMetrics(SM_CYSCREEN);
