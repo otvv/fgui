@@ -15,12 +15,12 @@ namespace FGUI_D3D9
 	// NOTE: you still need to initialize the device.
 	inline IDirect3DDevice9Ex* m_pDevice;
 
-	inline void CreateFont(FGUI::FONT &_font, const std::string& _family, int _size, int _flags, bool _bold) // TODO: handle font flags
+	inline void CreateFont(FGUI::FONT &_font, std::string _family, int _size, int _flags, bool _bold) // TODO: handle font flags
 	{
 		D3DXCreateFont(m_pDevice, _size, 0, _bold ? FW_BOLD : FW_NORMAL, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _family.c_str(), &_font);
 	}
 
-	inline const FGUI::DIMENSION& GetScreenSize()
+	inlineb FGUI::DIMENSION GetScreenSize()
 	{
 		static int iWidth = GetSystemMetrics(SM_CXSCREEN);
 		static int iHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -28,7 +28,7 @@ namespace FGUI_D3D9
 		return { iWidth, iHeight };
 	}
 
-	inline const FGUI::DIMENSION& GetTextSize(FGUI::FONT &_font, const std::string& _text)
+	inline FGUI::DIMENSION GetTextSize(FGUI::FONT _font, std::string _text)
 	{
 		RECT rectFontSize = { 0, 0 };
 
@@ -38,7 +38,7 @@ namespace FGUI_D3D9
 		return { (rectFontSize.right - rectFontSize.left), (rectFontSize.bottom - rectFontSize.top) };
 	}
 
-	inline void Text(int _x, int _y, FGUI::FONT _font, const FGUI::COLOR& _color, const std::string& _text)
+	inline void Text(int _x, int _y, FGUI::FONT _font, FGUI::COLOR _color, std::string _text)
 	{
 		D3DCOLOR dwColor = D3DCOLOR_RGBA(_color.m_ucRed, _color.m_ucGreen, _color.m_ucBlue, _color.m_ucAlpha);
 
@@ -47,7 +47,7 @@ namespace FGUI_D3D9
 		_font->DrawText(0, _text.c_str(), _text.length(), &rectFontSize, DT_NOCLIP, dwColor);
 	}
 
-	inline void Rectangle(int _x, int _y, int _width, int _height, const FGUI::COLOR& _color)
+	inline void Rectangle(int _x, int _y, int _width, int _height, FGUI::COLOR _color)
 	{
 		D3DCOLOR dwColor = D3DCOLOR_RGBA(_color.m_ucRed, _color.m_ucGreen, _color.m_ucBlue, _color.m_ucAlpha);
 
@@ -63,7 +63,7 @@ namespace FGUI_D3D9
 		m_pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtxVertices, sizeof(FGUI::VERTEX));
 	}
 
-	inline void Outline(int _x, int _y, int _width, int _height, const FGUI::COLOR& _color)
+	inline void Outline(int _x, int _y, int _width, int _height, FGUI::COLOR _color)
 	{
 		// WARNING: do not repeat this at home.
 		Rectangle(_x, _y, _width, 1, _color);
@@ -72,7 +72,7 @@ namespace FGUI_D3D9
 		Rectangle(_x, _y + _height - 1, _width, 1, _color);
 	}
 
-	inline void Line(int _from_x, int _from_y, int _to_x, int _to_y, const FGUI::COLOR& _color)
+	inline void Line(int _from_x, int _from_y, int _to_x, int _to_y, FGUI::COLOR _color)
 	{
 		D3DCOLOR dwColor = D3DCOLOR_RGBA(_color.m_ucRed, _color.m_ucGreen, _color.m_ucBlue, _color.m_ucAlpha);
 		
@@ -86,7 +86,7 @@ namespace FGUI_D3D9
 		m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 1, &vtxVertices, sizeof(FGUI::VERTEX));
 	}
 
-	inline void Gradient(int _x, int _y, int _width, int _height, const FGUI::COLOR &_color1, const FGUI::COLOR &_color2, bool _horizontal)
+	inline void Gradient(int _x, int _y, int _width, int _height, FGUI::COLOR _color1, const FGUI::COLOR _color2, bool _horizontal)
 	{
 		// there's probably a better way to do this kind of gradient as well.
 		D3DCOLOR dwColor1 = D3DCOLOR_RGBA(_color1.m_ucRed, _color1.m_ucGreen, _color1.m_ucBlue, _color1.m_ucAlpha);
