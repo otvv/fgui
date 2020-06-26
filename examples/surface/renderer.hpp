@@ -52,7 +52,7 @@ namespace FGUI_SURFACE
   inline void Gradient(int _x, int _y, int _width, int _height, FGUI::COLOR _color1, FGUI::COLOR _color2, bool _horizontal)
   {
     ISurface->DrawSetColor(_color1.m_ucRed, _color1.m_ucGreen, _color1.m_ucBlue, _color1.m_ucAlpha);
-    ISurface->DrawFilledRectFade(_x, _y, _x + _width, _y, +_height, 255, 255, _horizontal);
+    ISurface->DrawFilledRectFade(_x, _y, _x + _width, _y +_height, 255, 255, _horizontal);
 
     ISurface->DrawSetColor(_color2.m_ucRed, _color2.m_ucGreen, _color2.m_ucBlue, _color2.m_ucAlpha);
     ISurface->DrawFilledRectFade(_x, _y, _x + _width, _y + _height, 0, 255, _horizontal);
