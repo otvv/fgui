@@ -27,5 +27,5 @@ Here is a preview of the library: _(PENDING)_
 
 In this [link](https://github.com/otvv/fgui/tree/master/resources) you can see more examples of what you can do with FGUI.
 
-If you find bugs, glitches, feel free to visit the issues tab. 
+If you find bugs, glitches, or anything wrong, feel free to visit the issues tab. 
 If you want to contribute, you can always make a pull request. (Just make sure to follow the code style.)
