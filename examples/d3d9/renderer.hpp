@@ -86,7 +86,7 @@ namespace FGUI_D3D9
 		m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 1, &vtxVertices, sizeof(FGUI::VERTEX));
 	}
 
-	inline void Gradient(int _x, int _y, int _width, int _height, FGUI::COLOR _color1, const FGUI::COLOR _color2, bool _horizontal)
+	inline void Gradient(int _x, int _y, int _width, int _height, FGUI::COLOR _color1, FGUI::COLOR _color2, bool _horizontal)
 	{
 		// there's probably a better way to do this kind of gradient as well.
 		D3DCOLOR dwColor1 = D3DCOLOR_RGBA(_color1.m_ucRed, _color1.m_ucGreen, _color1.m_ucBlue, _color1.m_ucAlpha);
