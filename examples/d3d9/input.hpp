@@ -13,6 +13,7 @@ namespace FGUI_INPUT_WIN32
 {
    inline std::array<bool, 256> m_prgpCurrentPressedKeys, m_prgpOldPressedKeys;
    inline FGUI::POINT m_ptCursorPosition, m_ptCursorPositionDelta;
+   inline int m_iCursorWheelDelta;
 
    inline void PullInput()
   {
