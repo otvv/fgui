@@ -4,34 +4,19 @@
 
 #ifdef FGUI_IMPLEMENTATION
 
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-// NOTE: DON'T INCLUDE THIS HEADER FILE INSIDE THE LIBRARY!
-
-// dependencies
-#include "dependencies/aliases.hpp"
-#include "dependencies/builder.hpp"
-#include "dependencies/definitions.hpp"
-#include "dependencies/helpers.hpp"
+// misc
+#include "misc/aliases.hpp"
+#include "misc/builder.hpp"
+#include "misc/definitions.hpp"
+#include "misc/helpers.hpp"
 
 // widgets
 #include "widgets/button.hpp"
 #include "widgets/checkbox.hpp"
 #include "widgets/colorlist.hpp"
-#include "widgets/form.hpp"
-#include "widgets/groupbox.hpp"
+#include "widgets/colorpicker.hpp"
+#include "widgets/combobox.hpp"
+#include "widgets/container.hpp"
 #include "widgets/keybinder.hpp"
 #include "widgets/label.hpp"
 #include "widgets/listbox.hpp"

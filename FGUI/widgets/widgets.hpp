@@ -8,115 +8,141 @@
 // includes
 #include <memory>
 #include <string>
+#include <fstream>
 
 // library includes
-#include "form.hpp"
-#include "../dependencies/aliases.hpp"
-#include "../dependencies/definitions.hpp"
+#include "../misc/aliases.hpp"
+#include "../misc/definitions.hpp"
+
+// external dependencies
+#include "../dependencies/external/json.hpp"
 
 namespace FGUI
 {
+  class CContainer;
 
-class CForm;
-class CGroupBox;
-class CTabs;
+  class CWidgets : public std::enable_shared_from_this<FGUI::CWidgets>
+  {
+    friend class FGUI::CContainer;
+  public:
+    // @brief: set the default position of the widget
+    // @params: unsigned int x, unsigned int y = pixels coordinates (on the screen)
+    void SetPosition(unsigned int x, unsigned int y);
 
-class CWidgets : public std::enable_shared_from_this<FGUI::CWidgets>
-{
-  friend class FGUI::CForm;
-  friend class FGUI::CTabs;
-  friend class FGUI::CGroupBox;
-public:
-  // @brief: set the default position of the widget
-  // @params: unsigned int x, unsigned int y = pixels coordinates (on the screen)
-  void SetPosition(unsigned int x, unsigned int y);
+    // @brief: get the default position of the widget
+    FGUI::POINT GetPosition();
 
-  // @brief: get the default position of the widget
-  FGUI::POINT GetPosition();
+    // @brief: get the widget's absolute position
+    FGUI::POINT GetAbsolutePosition();
 
-  // @brief: get the widget's absolute position
-  FGUI::POINT GetAbsolutePosition();
+    // @brief: set the default size of the widget
+    // @params: unsigned int width, unsigned int height = width and height of the menu in pixels
+    void SetSize(unsigned int width, unsigned int height);
 
-  // @brief: set the default size of the widget
-  // @params: unsigned int width, unsigned int height = width and height of the menu in pixels
-  void SetSize(unsigned int width, unsigned int height);
+    // @brief: set the default size of the widget
+    // @params: FGUI::DIMENSION size = width and height of the menu in pixels
+    void SetSize(FGUI::DIMENSION size);
 
-  // @brief: set the default size of the form
-  // @params: FGUI::DIMENSION size = width and height of the menu in pixels
-  void SetSize(FGUI::DIMENSION size);
+    // @brief: get the widget default size
+    FGUI::DIMENSION GetSize();
 
-  // @brief: get the widget default size
-  FGUI::DIMENSION GetSize();
+    // @brief: set the default title of the widget
+    // @params: std::string title = default title of the widget
+    void SetTitle(std::string title);
 
-  // @brief: set the default title of the widget
-  // @params: std::string title = default title of the widget
-  void SetTitle(std::string title);
+    // @brief: get the widget's default title
+    std::string GetTitle();
 
-  // @brief: get the widget's default title
-  std::string GetTitle();
+    // @brief: adds a new tooltip to the widget
+    // @params: std::string tooltio = widget brief description
+    void SetTooltip(std::string tooltip);
 
-  // @brief: set the widget flags
-  // @params: int flags = widget default/custom flags
-  void SetFlags(int flags);
+    // @brief: get the widget's current tooltip
+    std::string GetTooltip(); 
 
-  // @brief: return true if the widget has the flag we're looking for
-  // @params: FGUI::WIDGET_FLAG flag = widget flag
-  bool GetFlags(FGUI::WIDGET_FLAG flags);
+    // @brief: set the widget flags
+    // @params: int flags = widget default/custom flag
+    void SetFlags(int flags);
 
-  // @brief: checks if the widget is unlocked (can be drawned)
-  bool IsUnlocked();
+    // @brief: return true if the widget has the flag we're looking for
+    // @params: FGUI::WIDGET_FLAG flag = widget flag
+    bool GetFlags(FGUI::WIDGET_FLAG flags);
 
-  // @brief: return an instance of the widget's parent form
-  std::shared_ptr<FGUI::CForm> GetParentForm();
+    // @brief: checks if the widget is unlocked (can be drawned)
+    bool IsUnlocked();
 
-  // @brief: set the widget that will behave like a medium (controller) for the parent widget
-  // @params: std::shared_ptr<FGUI::CWidgets> medium = controller (element that will control the other)
-  // unsigned int page = widget page
-  void SetMedium(std::shared_ptr<FGUI::CWidgets> medium, unsigned int page);
+    // @brief: set the widget that will behave like a medium (controller) for the parent widget
+    // @params: std::shared_ptr<FGUI::CWidgets> medium = controller (element that will control the other)
+    // unsigned int page = widget page
+    void SetMedium(std::shared_ptr<FGUI::CWidgets> medium, unsigned int page);
 
-  // @brief: return an instance of the current medium (controller widget)
-  std::shared_ptr<FGUI::CWidgets> GetMedium();
+    // @brief: return an instance of the current medium (controller widget)
+    std::shared_ptr<FGUI::CWidgets> GetMedium();
 
-  // @brief: get current widget page
-  unsigned int GetPage();
+    // @brief: set current widget page
+    // @params: unsigned int page = widget page
+    void SetPage(unsigned int page);
 
-  // @brief: return the widget type (family)
-  int GetType();
+    // @brief: get current widget page
+    unsigned int GetPage();
 
-  // @brief: set the default font of the widget
-  // @params: std::string family = font family name, unsigned int size = font size, bool bold = make the font bold,  int flags = font flags
-  void SetFont(std::string family, unsigned int size, bool bold = false, int flags = 0x0);
+    // @brief: return the widget type (family)
+    int GetType();
 
-  // @brief: set the default font of the widget
-  // @params: FGUI::WIDGET_FONT font = widget font struct
-  void SetFont(FGUI::WIDGET_FONT font);
+    // @brief: set the default font of the widget
+    // @params: std::string family = font family name, unsigned int size = font size, int flags = font flags, bool bold = make the font bold
+    void SetFont(std::string family, unsigned int size, int flags, bool bold);
 
-  // @brief: get the widget's default font
-  FGUI::FONT GetFont();
+    // @brief: set the default font of the widget
+    // @params: FGUI::WIDGET_FONT font = widget font struct
+    void SetFont(FGUI::WIDGET_FONT font);
 
-protected:
+    // @brief: get the widget's default font
+    FGUI::FONT GetFont();
 
-  // @brief: populate widget geometry (draw widget)
-  virtual void Geometry() = 0;
+    // @brief: get the container behaving like a window
+    std::shared_ptr<FGUI::CWidgets> GetWindowContainer();
 
-  // @brief: handle update operations on the widget
-  virtual void Update() = 0;
+    // @brief: set the parent widget of the current widget
+    // @params: std::shared_ptr<FGUI::CWidgets> parent = parent widget
+    void SetParentWidget(std::shared_ptr<FGUI::CWidgets> parent);
 
-  // @brief: handle input inside the widget
-  virtual void Input() = 0;
+    // @brief: get the current parent widget
+    std::shared_ptr<FGUI::CWidgets> GetParentWidget();
 
-protected:
-  int m_nFlags;
-  int m_nType;
-  int m_iPage;
-  std::shared_ptr<FGUI::CForm> m_pParentForm;
-  std::shared_ptr<FGUI::CWidgets> m_pParentGroupBox;
-  std::shared_ptr<FGUI::CWidgets> m_pMedium;
-  std::string m_strTitle;
-  FGUI::FONT m_ulFont;
-  FGUI::DIMENSION m_dmSize;
-  FGUI::POINT m_ptPosition;
-};
+  protected:
+
+    // @brief: populate widget geometry (draw widget)
+    virtual void Geometry() = 0;
+
+    // @brief: handle update operations on the widget
+    virtual void Update() = 0;
+
+    // @brief: handle input inside the widget
+    virtual void Input() = 0;
+
+    // @brief: save the widget state
+    // @params: nlohmann::json module = json module 
+    virtual void Save(nlohmann::json& module) = 0;
+
+    // @brief: load the widget state
+    // @params: std::string file = file name/path to load
+    virtual void Load(std::string file) = 0;
+
+    // @brief: handle widget tooltips
+    virtual void Tooltip() = 0;
+
+    int m_nFlags;
+    int m_nType;
+    unsigned int m_uiPage;
+    std::shared_ptr<FGUI::CWidgets> m_pParentWidget;
+    std::shared_ptr<FGUI::CWidgets> m_pMediumWidget;
+    std::string m_strTooltip;
+    std::string m_strTitle;
+    FGUI::FONT m_anyFont;
+    FGUI::DIMENSION m_dmSize;
+    FGUI::POINT m_ptPosition;
+  };
 
 } // namespace FGUI
 

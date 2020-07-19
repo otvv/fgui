@@ -3,59 +3,75 @@
 //
 
 // library includes
-#include "multibox.hpp"
+#include "combobox.hpp"
 #include "container.hpp"
 
 namespace FGUI
 {
-
-  CMultiBox::CMultiBox()
+  CComboBox::CComboBox()
   {
-    m_strTitle = "MultiBox";
+    m_strTitle = "ComboBox";
     m_anyFont = 0;
     m_dmSize = { 150, 20 };
     m_dmBackupSize = { m_dmSize };
     m_iEntrySpacing = 20;
+    m_ullSelectedEntry = 0;
     m_prgpEntries = {};
+    m_fnctCallback = nullptr;
     m_bIsOpened = false;
     m_strTooltip = "";
-    m_nType = static_cast<int>(WIDGET_TYPE::MULTIBOX);
+    m_nType = static_cast<int>(WIDGET_TYPE::COMBOBOX);
     m_nFlags = static_cast<int>(WIDGET_FLAG::DRAWABLE) | static_cast<int>(WIDGET_FLAG::CLICKABLE) | static_cast<int>(WIDGET_FLAG::FOCUSABLE) | static_cast<int>(WIDGET_FLAG::SAVABLE);
   }
 
-  void CMultiBox::SetState(bool onoff)
+  void CComboBox::SetState(bool onoff)
   {
     m_bIsOpened = onoff;
   }
 
-  bool CMultiBox::GetState()
+  bool CComboBox::GetState()
   {
     return m_bIsOpened;
   }
 
-  void CMultiBox::SetValue(std::size_t index, bool value)
+  void CComboBox::SetIndex(std::size_t index)
+  {
+    m_ullSelectedEntry = index;
+  }
+
+  std::size_t CComboBox::GetIndex()
+  {
+    return m_ullSelectedEntry;
+  }
+
+  void CComboBox::SetValue(std::size_t index, unsigned int value)
   {
     m_prgpEntries.second[index] = value;
   }
 
-  std::size_t CMultiBox::GetValue(std::size_t index)
+  std::size_t CComboBox::GetValue()
   {
-    return m_prgpEntries.second[index];
+    return m_prgpEntries.second[m_ullSelectedEntry];
   }
 
-  void CMultiBox::AddEntry(std::string name, bool value)
+  void CComboBox::AddEntry(std::string name, unsigned int value)
   {
     m_prgpEntries.first.emplace_back(name);
     m_prgpEntries.second.emplace_back(value);
   }
 
-  void CMultiBox::Geometry()
+  void CComboBox::AddCallback(std::function<void()> callback)
+  {
+    m_fnctCallback = callback;
+  }
+
+  void CComboBox::Geometry()
   {
     FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmBackupSize.m_iHeight };
 
     FGUI::DIMENSION dmTitleTextSize = FGUI::RENDER.GetTextSize(m_anyFont, m_strTitle);
 
-    // multibox body
+    // combobox body
     if (FGUI::INPUT.IsCursorInArea(arWidgetRegion) || m_bIsOpened)
     {
       FGUI::RENDER.Outline(arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop, arWidgetRegion.m_iRight, arWidgetRegion.m_iBottom, { 195, 195, 195 });
@@ -67,45 +83,11 @@ namespace FGUI
       FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + 1), (arWidgetRegion.m_iTop + 1), (arWidgetRegion.m_iRight - 2), (arWidgetRegion.m_iBottom - 2), { 255, 255, 255 });
     }
 
-    // multibox label
+    // combobox label
     FGUI::RENDER.Text((arWidgetRegion.m_iLeft + 10), arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTitleTextSize.m_iHeight / 2), m_anyFont, { 35, 35, 35 }, m_strTitle + ":");
 
-    // string format
-    std::string strMultiString = { };
-
-    for (std::size_t i = 0; i < m_prgpEntries.first.size(); ++i)
-    {
-      // switches
-      bool bHasReachedLength = strMultiString.length() > 15;
-      bool bIsFirstItem = strMultiString.length() == 0;
-
-      if (m_prgpEntries.second[i] && !bHasReachedLength)
-      {
-        if (!m_prgpEntries.first[i].empty())
-        {
-          if (!bIsFirstItem)
-          {
-            strMultiString.append(", ");
-          }
-
-          strMultiString.append(m_prgpEntries.first[i]);
-        }
-      }
-      else if (bHasReachedLength && !bIsFirstItem)
-      {
-        strMultiString.append(" ...");
-
-        break;
-      }
-    }
-
-    if (strMultiString.length() == 0)
-    {
-      strMultiString.assign("None");
-    }
-
     // draw current selected entry
-    FGUI::RENDER.Text(arWidgetRegion.m_iLeft + (dmTitleTextSize.m_iWidth + 20), arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTitleTextSize.m_iHeight / 2), m_anyFont, { 35, 35, 35 }, strMultiString);
+    FGUI::RENDER.Text(arWidgetRegion.m_iLeft + (dmTitleTextSize.m_iWidth + 20), arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTitleTextSize.m_iHeight / 2), m_anyFont, { 35, 35, 35 }, m_prgpEntries.first[m_ullSelectedEntry]);
 
     if (m_bIsOpened)
     {
@@ -118,7 +100,7 @@ namespace FGUI
         FGUI::AREA arEntryRegion = { arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop + 21) + (static_cast<int>(i) * m_iEntrySpacing), arWidgetRegion.m_iRight, m_iEntrySpacing };
 
         // check if the user is hovering/have selected an entry
-        if (FGUI::INPUT.IsCursorInArea(arEntryRegion) || m_prgpEntries.second[i])
+        if (FGUI::INPUT.IsCursorInArea(arEntryRegion) || m_ullSelectedEntry == i)
         {
           FGUI::RENDER.Rectangle(arEntryRegion.m_iLeft + 1, arEntryRegion.m_iTop, arEntryRegion.m_iRight - 2, arEntryRegion.m_iBottom, { 25, 145, 255 });
           FGUI::RENDER.Text(arEntryRegion.m_iLeft + 5, arEntryRegion.m_iTop + 2, m_anyFont, { 255, 255, 255 }, m_prgpEntries.first[i]);
@@ -131,14 +113,14 @@ namespace FGUI
       }
     }
 
-    // multibox dropdown arrow body
+    // combobox dropdown arrow body
     FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight - 10) - 8, arWidgetRegion.m_iTop + ((arWidgetRegion.m_iBottom / 2) - 3) + 1, 8, 1, { 20, 20, 20 });
     FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight - 10) - 7, arWidgetRegion.m_iTop + ((arWidgetRegion.m_iBottom / 2) - 3) + 2, 6, 1, { 20, 20, 20 });
     FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight - 10) - 6, arWidgetRegion.m_iTop + ((arWidgetRegion.m_iBottom / 2) - 3) + 3, 4, 1, { 20, 20, 20 });
     FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight - 10) - 5, arWidgetRegion.m_iTop + ((arWidgetRegion.m_iBottom / 2) - 3) + 4, 2, 1, { 20, 20, 20 });
   }
 
-  void CMultiBox::Update()
+  void CComboBox::Update()
   {
     if (m_bIsOpened)
     {
@@ -154,7 +136,7 @@ namespace FGUI
     }
   }
 
-  void CMultiBox::Input()
+  void CComboBox::Input()
   {
     FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmBackupSize.m_iHeight };
 
@@ -175,39 +157,35 @@ namespace FGUI
           if (FGUI::INPUT.IsCursorInArea(arEntryRegion))
           {
             // select an entry
-            m_prgpEntries.second[i] = !m_prgpEntries.second[i];
+            m_ullSelectedEntry = i;
 
-            if (m_prgpEntries.second[i])
+            if (m_ullSelectedEntry == i)
             {
+              if (m_fnctCallback)
+              {
+                // call function
+                m_fnctCallback();
+              }
+               
               // close dropdown list after selecting something
-              // NOTE: maybe remove this?
               m_bIsOpened = false;
             }
-          } 
+          }
         }
       }
     }
   }
 
-  void CMultiBox::Save(nlohmann::json& module)
+  void CComboBox::Save(nlohmann::json& module)
   {
     // remove spaces from widget name
     std::string strFormatedWidgetName = GetTitle();
     std::replace(strFormatedWidgetName.begin(), strFormatedWidgetName.end(), ' ', '_');
 
-    for (std::size_t i = 0; i < m_prgpEntries.first.size(); i++)
-    {
-      bool bDummyChecked = m_prgpEntries.second[i];
-
-      // remove spaces from the entry name
-      std::string strFormatedEntryName = m_prgpEntries.first[i];
-      std::replace(strFormatedEntryName.begin(), strFormatedEntryName.end(), ' ', '_');
-
-      module[strFormatedWidgetName][strFormatedEntryName] = bDummyChecked;
-    }
+    module[strFormatedWidgetName] = m_ullSelectedEntry;
   }
 
-  void CMultiBox::Load(std::string file)
+  void CComboBox::Load(std::string file)
   {
     nlohmann::json jsModule;
 
@@ -224,18 +202,11 @@ namespace FGUI
     std::string strFormatedWidgetName = GetTitle();
     std::replace(strFormatedWidgetName.begin(), strFormatedWidgetName.end(), ' ', '_');
 
-    for (std::size_t i = 0; i < m_prgpEntries.first.size(); i++)
-    {
-      // remove spaces from the entry name
-      std::string strFormatedEntryName = m_prgpEntries.first[i];
-      std::replace(strFormatedEntryName.begin(), strFormatedEntryName.end(), ' ', '_');
-
-      // change widget state to the one stored on file
-      SetValue(i, jsModule[strFormatedWidgetName][strFormatedEntryName]);
-    }
+    // change widget selected entry to the one stored on file
+    m_ullSelectedEntry = jsModule[strFormatedWidgetName];
   }
 
-  void CMultiBox::Tooltip()
+  void CComboBox::Tooltip()
   {
     if (m_strTooltip.length() > 1 && !m_bIsOpened)
     {

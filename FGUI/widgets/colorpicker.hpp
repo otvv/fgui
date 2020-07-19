@@ -2,26 +2,25 @@
 // FGUI - feature rich graphical user interface
 //
 
-#ifndef FGUI_BUTTON_HH
-#define FGUI_BUTTON_HH
-
-// includes
-#include <functional>
+#ifndef FGUI_COLORPICKER_HH
+#define FGUI_COLORPICKER_HH
 
 // library includes
 #include "widgets.hpp"
 
 namespace FGUI
 {
-
-  class CButton : public FGUI::CWidgets
+  class CColorPicker : public FGUI::CWidgets
   {
   public:
-    CButton();
+    CColorPicker();
 
-    // @brief: adds a function callback for the button (it will call the function whenever the user clicks the button)
-    // @params: std::function<void()> callback = function instance
-    void AddCallback(std::function<void()> callback);
+    // @brief: sets the default color 
+    // @args: FGUI::COLOR color = default color
+    void SetColor(FGUI::COLOR color);
+
+    // @brief: returns the current color
+    FGUI::COLOR GetColor();
 
     // @brief: populate widget geometry (draw widget)
     void Geometry() override;
@@ -43,9 +42,11 @@ namespace FGUI
     // @brief: handle widget tooltips
     void Tooltip() override;
   private:
-    std::function<void()> m_fnctCallback;
+    FGUI::COLOR m_clrDefault;
+    bool m_bIsOpened;
+    FGUI::PRECISION m_prRelativePos;
   };
 
 } // namespace FGUI
 
-#endif // FGUI_BUTTON_HH
+#endif // FGUI_COLORPICKER_HH
