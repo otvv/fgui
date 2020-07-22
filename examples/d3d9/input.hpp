@@ -36,17 +36,17 @@ namespace FGUI_INPUT_WIN32
         ptLastKnownPosition = m_ptCursorPosition;
     }
 
-    inline bool GetKeyHeld(unsigned int _key_code)
+    inline bool IsKeyHeld(unsigned int _key_code)
     {
         return m_prgpCurrentPressedKeys.at(_key_code);
     }
 
-    inline bool GetKeyRelease(unsigned int _key_code)
+    inline bool IsKeyReleased(unsigned int _key_code)
     {
         return (!m_prgpCurrentPressedKeys.at(_key_code) && m_prgpOldPressedKeys.at(_key_code));
     }
 
-    inline bool GetKeyPress(unsigned int _key_code)
+    inline bool IsKeyPressed(unsigned int _key_code)
     {
         return (m_prgpCurrentPressedKeys.at(_key_code) && !m_prgpOldPressedKeys.at(_key_code));
     }
@@ -76,9 +76,9 @@ namespace FGUI_INPUT_WIN32
     inline void OnEntryPoint()
     {
         FGUI::INPUT.PullInput = FGUI_INPUT_WIN32::PullInput;
-        FGUI::INPUT.GetKeyHeld = FGUI_INPUT_WIN32::GetKeyHeld;
-        FGUI::INPUT.GetKeyRelease = FGUI_INPUT_WIN32::GetKeyRelease;
-        FGUI::INPUT.GetKeyPress = FGUI_INPUT_WIN32::GetKeyPress;
+        FGUI::INPUT.GetKeyHeld = FGUI_INPUT_WIN32::IsKeyHeld;
+        FGUI::INPUT.GetKeyRelease = FGUI_INPUT_WIN32::IsKeyReleased;
+        FGUI::INPUT.GetKeyPress = FGUI_INPUT_WIN32::IsKeyPressed;
         FGUI::INPUT.GetCursorPos = FGUI_INPUT_WIN32::GetCursorPos;
         FGUI::INPUT.GetCursorPosDelta = FGUI_INPUT_WIN32::GetCursorPosDelta;
         FGUI::INPUT.GetCursorWheelDelta = FGUI_INPUT_WIN32::GetCursorWheelDelta;
