@@ -76,9 +76,9 @@ namespace FGUI_INPUT_WIN32
     inline void OnEntryPoint()
     {
         FGUI::INPUT.PullInput = FGUI_INPUT_WIN32::PullInput;
-        FGUI::INPUT.GetKeyHeld = FGUI_INPUT_WIN32::IsKeyHeld;
-        FGUI::INPUT.GetKeyRelease = FGUI_INPUT_WIN32::IsKeyReleased;
-        FGUI::INPUT.GetKeyPress = FGUI_INPUT_WIN32::IsKeyPressed;
+        FGUI::INPUT.IsKeyHeld = FGUI_INPUT_WIN32::IsKeyHeld;
+        FGUI::INPUT.IsKeyReleased = FGUI_INPUT_WIN32::IsKeyReleased;
+        FGUI::INPUT.IsKeyPressed = FGUI_INPUT_WIN32::IsKeyPressed;
         FGUI::INPUT.GetCursorPos = FGUI_INPUT_WIN32::GetCursorPos;
         FGUI::INPUT.GetCursorPosDelta = FGUI_INPUT_WIN32::GetCursorPosDelta;
         FGUI::INPUT.GetCursorWheelDelta = FGUI_INPUT_WIN32::GetCursorWheelDelta;
