@@ -15,7 +15,7 @@ namespace FGUI
   public:
     CColorPicker();
 
-    // @brief: sets the default color
+    // @brief: sets the default color 
     // @args: FGUI::COLOR color = default color
     void SetColor(FGUI::COLOR color);
 
@@ -32,16 +32,15 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module
-    void Save(nlohmann::json &module) override;
+    // @params: nlohmann::json module = json module 
+    void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
     // @params: std::string file = file name/path to load
     void Load(std::string file) override;
-
+    
     // @brief: handle widget tooltips
     void Tooltip() override;
-
   private:
     FGUI::COLOR m_clrDefault;
     bool m_bIsOpened;

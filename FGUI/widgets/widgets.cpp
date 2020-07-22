@@ -27,17 +27,17 @@ namespace FGUI
 
   FGUI::POINT CWidgets::GetAbsolutePosition()
   {
-    static FGUI::POINT ptTemporaryPosition = {0, 0};
+    static FGUI::POINT ptTemporaryPosition = { 0, 0 };
 
-    static constexpr int iContainerWindowHeaderSize = 35; // NOTE: feel free to change this
+    static constexpr int iHeaderSize = 35; // NOTE: feel free to change this
 
     if (!m_pParentWidget)
     {
-      return {m_ptPosition.m_iX, m_ptPosition.m_iY};
+      return { m_ptPosition.m_iX, m_ptPosition.m_iY };
     }
 
-    ptTemporaryPosition = {(m_ptPosition.m_iX + m_pParentWidget->GetAbsolutePosition().m_iX),
-                           (m_ptPosition.m_iY + m_pParentWidget->GetAbsolutePosition().m_iY)};
+    ptTemporaryPosition = { (m_ptPosition.m_iX + m_pParentWidget->GetAbsolutePosition().m_iX), 
+      (m_ptPosition.m_iY + m_pParentWidget->GetAbsolutePosition().m_iY) };
 
     // scrollbar movement
     if (m_pParentWidget->GetType() == static_cast<int>(WIDGET_TYPE::CONTAINER) && std::reinterpret_pointer_cast<FGUI::CContainer>(m_pParentWidget)->GetScrollBarState())
@@ -49,7 +49,7 @@ namespace FGUI
     if (m_pParentWidget == GetWindowContainer())
     {
       ptTemporaryPosition.m_iX += 10;
-      ptTemporaryPosition.m_iY += iContainerWindowHeaderSize;
+      ptTemporaryPosition.m_iY += iHeaderSize;
     }
 
     else if (m_pParentWidget != GetWindowContainer())
@@ -88,7 +88,7 @@ namespace FGUI
     return m_strTitle;
   }
 
-  void CWidgets::SetTooltip(std::string tooltip)
+    void CWidgets::SetTooltip(std::string tooltip)
   {
     m_strTooltip = tooltip;
   }
@@ -116,7 +116,7 @@ namespace FGUI
   bool CWidgets::IsUnlocked()
   {
     // if the widget doesn't have a medium or we have an invalid page keep it unlocked
-    if (!m_pMediumWidget || m_iPage < 0)
+    if (!m_pMediumWidget || m_uiPage == 0)
     {
       return true;
     }
@@ -124,35 +124,35 @@ namespace FGUI
     // otherwise, it will lock them until certain conditions are met
     switch (m_pMediumWidget->GetType())
     {
-    case static_cast<int>(WIDGET_TYPE::LISTBOX):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CListBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::CHECKBOX):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pMediumWidget)->GetState() == static_cast<bool>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::SLIDER):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CSlider>(m_pMediumWidget)->GetValue() == static_cast<float>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::COMBOBOX):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CComboBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::TABS):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CTabs>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
-    }
+      case static_cast<int>(WIDGET_TYPE::LISTBOX) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CListBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_uiPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::CHECKBOX) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pMediumWidget)->GetState() == static_cast<bool>(m_uiPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::SLIDER) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CSlider>(m_pMediumWidget)->GetValue() == static_cast<float>(m_uiPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::COMBOBOX) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CComboBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_uiPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::TABS) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CTabs>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_uiPage);
+      }
     }
 
     return false;
   }
 
-  void CWidgets::SetMedium(std::shared_ptr<FGUI::CWidgets> medium, int page)
+  void CWidgets::SetMedium(std::shared_ptr<FGUI::CWidgets> medium, unsigned int page)
   {
     m_pMediumWidget = medium;
-    m_iPage = page;
+    m_uiPage = page;
   }
 
   std::shared_ptr<FGUI::CWidgets> CWidgets::GetMedium()
@@ -160,14 +160,14 @@ namespace FGUI
     return m_pMediumWidget;
   }
 
-  void CWidgets::SetPage(int page)
+  void CWidgets::SetPage(unsigned int page)
   {
-    m_iPage = page;
+    m_uiPage = page;
   }
 
-  int CWidgets::GetPage()
+  unsigned int CWidgets::GetPage()
   {
-    return m_iPage;
+    return m_uiPage;
   }
 
   int CWidgets::GetType()

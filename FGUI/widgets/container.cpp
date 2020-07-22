@@ -32,7 +32,7 @@ namespace FGUI
 
     if (!GetParentWidget())
     {
-      if (FGUI::INPUT.IsKeyPressed(GetKey()))
+      if (FGUI::INPUT.GetKeyPress(GetKey()))
       {
         SetState(!GetState());
       }
@@ -308,7 +308,7 @@ namespace FGUI
 
       if (FGUI::INPUT.IsCursorInArea(arDraggableArea))
       {
-        if (FGUI::INPUT.IsKeyPressed(MOUSE_1))
+        if (FGUI::INPUT.GetKeyPress(MOUSE_1))
         {
           bIsDraggingContainer = true;
         }
@@ -324,7 +324,7 @@ namespace FGUI
         m_ptPosition.m_iY += ptCursorPosDelta.m_iY;
       }
 
-      if (FGUI::INPUT.IsKeyReleased(MOUSE_1))
+      if (FGUI::INPUT.GetKeyRelease(MOUSE_1))
       {
         bIsDraggingContainer = false;
       }
@@ -341,7 +341,7 @@ namespace FGUI
 
         if (FGUI::INPUT.IsCursorInArea(arScrollBarRegion))
         {
-          if (FGUI::INPUT.IsKeyPressed(MOUSE_1))
+          if (FGUI::INPUT.GetKeyPress(MOUSE_1))
           {
             bIsDraggingThumb = true;
           }
@@ -353,7 +353,7 @@ namespace FGUI
 
           static constexpr int iLinesToScroll = 2;
 
-          if (FGUI::INPUT.IsKeyHeld(MOUSE_1))
+          if (FGUI::INPUT.GetKeyHeld(MOUSE_1))
           {
             m_iWidgetScrollOffset += (ptCursorPosDelta.m_iY * iLinesToScroll);
           }
@@ -395,7 +395,7 @@ namespace FGUI
             pWidgetToSkip->Update();
 
             // check if the skipped widget can be clicked
-            if (GetFocusedWidget()->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arSkippedWidgetRegion) && FGUI::INPUT.IsKeyPressed(MOUSE_1) && bSkipWidget)
+            if (GetFocusedWidget()->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arSkippedWidgetRegion) && FGUI::INPUT.GetKeyPress(MOUSE_1) && bSkipWidget)
             {
               pWidgetToSkip->Input();
 
@@ -412,7 +412,7 @@ namespace FGUI
           pWidgetToSkip->Update();
 
           // check if the skipped widget can be clicked
-          if (GetFocusedWidget()->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arSkippedWidgetRegion) && FGUI::INPUT.IsKeyPressed(MOUSE_1) && bSkipWidget)
+          if (GetFocusedWidget()->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arSkippedWidgetRegion) && FGUI::INPUT.GetKeyPress(MOUSE_1) && bSkipWidget)
           {
             pWidgetToSkip->Input();
 
@@ -450,7 +450,7 @@ namespace FGUI
             pWidgets->Update();
 
             // check if the widget can be clicked
-            if (pWidgets->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arWidgetRegion) && FGUI::INPUT.IsKeyPressed(MOUSE_1) && !bSkipWidget)
+            if (pWidgets->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arWidgetRegion) && FGUI::INPUT.GetKeyPress(MOUSE_1) && !bSkipWidget)
             {
               pWidgets->Input();
 
@@ -470,7 +470,7 @@ namespace FGUI
           pWidgets->Update();
 
           // check if the widget can be clicked
-          if (pWidgets->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arWidgetRegion) && FGUI::INPUT.IsKeyPressed(MOUSE_1) && !bSkipWidget)
+          if (pWidgets->GetFlags(WIDGET_FLAG::CLICKABLE) && FGUI::INPUT.IsCursorInArea(arWidgetRegion) && FGUI::INPUT.GetKeyPress(MOUSE_1) && !bSkipWidget)
           {
             pWidgets->Input();
 
@@ -554,9 +554,9 @@ namespace FGUI
         // avoid drawing tooltips when a widget is being focused
         if (!std::reinterpret_pointer_cast<FGUI::CContainer>(pWidgets->GetParentWidget())->GetFocusedWidget())
         {
-          FGUI::AREA arWidgetRegion = {pWidgets->GetAbsolutePosition().m_iX, pWidgets->GetAbsolutePosition().m_iY, pWidgets->GetSize().m_iWidth, pWidgets->GetSize().m_iHeight};
+          FGUI::AREA arWidgetsRegion = {pWidgets->GetAbsolutePosition().m_iX, pWidgets->GetAbsolutePosition().m_iY, pWidgets->GetSize().m_iWidth, pWidgets->GetSize().m_iHeight};
 
-          if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
+          if (FGUI::INPUT.IsCursorInArea(arWidgetsRegion))
           {
             pWidgets->Tooltip();
           }

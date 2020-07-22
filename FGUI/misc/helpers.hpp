@@ -6,8 +6,7 @@
 #define FGUI_HELPERS_HH
 
 // This is used to supress unused variable warnings
-template <typename T>
-inline void IGNORE(T &&){};
+template <typename T> inline void IGNORE(T &&) { };
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -25,7 +24,7 @@ inline void IGNORE(T &&){};
 #define KEY_PAGEUP 33
 #define KEY_PAGEDOWN 34
 #else
-// These keys defaults to virtual key-codes from Source Engine (IInputSystem)
+// These keys defaults to virtual key-codes from Source Engine (IInputSystem) 
 #define MOUSE_1 107
 #define KEY_ESCAPE 70
 #define KEY_ENTER 64
@@ -48,7 +47,7 @@ inline void IGNORE(T &&){};
 
 namespace FGUI
 {
-  using FONT = ID3DXFont *;
+  using FONT = ID3DXFont*;
 }
 #elif defined(FGUI_USE_D3D10)
 #include <d3d10.h>
@@ -59,7 +58,7 @@ namespace FGUI
 
 namespace FGUI
 {
-  using FONT = ID3DX10Font *;
+  using FONT = ID3DX10Font*;
 }
 #elif defined(FGUI_USE_OPENGL)
 

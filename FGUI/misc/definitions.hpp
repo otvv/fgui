@@ -160,7 +160,7 @@ namespace FGUI
   using KEY_CODES = struct SKeyCodes_t
   {
     // Valve's IInputSystem
-    const std::string_view m_strInputSystem[117] = {"'", "0", "1", "2", "3", "4", "5", "6", "7",
+    const std::string_view m_strInputSystem[117] = { "'", "0", "1", "2", "3", "4", "5", "6", "7",
                                                     "8", "9", "A", "B", "C", "D", "E", "F", "G", "H",
                                                     "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
                                                     "S", "T", "U", "V", "W", "X", "Y", "Z", "NUM0",
@@ -173,10 +173,10 @@ namespace FGUI
                                                     "RCONTROL", "LWIN", "RWIN", "APP", "UP", "LEFT", "DOWN",
                                                     "RIGHT", "F1", "F2", "F3", "F4", "F5", "F6", "F7",
                                                     "F8", "F9", "F10", "F11", "F12", "", "", "",
-                                                    "MOUSE1", "MOUSE2", "MOUSE3", "MOUSE4", "MOUSE5", "", ""};
+                                                    "MOUSE1", "MOUSE2", "MOUSE3", "MOUSE4", "MOUSE5", "", "" };
 
     // Windows Virtual Key Codes (VK)
-    const std::string_view m_strVirtualKeyCodes[222] = {"MOUSE1", "MOUSE2", "", "MOUSE3", "MOUSE4", "MOUSE5", "",
+    const std::string_view m_strVirtualKeyCodes[222] = { "MOUSE1", "MOUSE2", "", "MOUSE3", "MOUSE4", "MOUSE5", "",
                                                         "BACKSPACE", "TAB", "", "", "", "ENTER", "", "", "SHIFT", "CONTROL", "ALT",
                                                         "PAUSE", "CAPSLOCK", "", "", "", "", "", "", "ESC", "", "", "", "",
                                                         "SPACE", "PAGE UP", "PAGE DOWN", "END", "HOME", "LEFT", "UP", "RIGHT",
@@ -193,13 +193,13 @@ namespace FGUI
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", ";", "+", ",", "-", ".", "/?", "~", "", "", "", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                                                        "", "", "", "", "{", "\\", "}", "/"};
+                                                        "", "", "", "", "{", "\\", "}", "/" };
   };
 
   using KEY_STRINGS = struct SKeyStrings_t
   {
     // Valve's IInputSystem
-    const std::string_view m_strInputSystem[117] = {"'", "0", "1", "2", "3", "4", "5", "6", "7",
+    const std::string_view m_strInputSystem[117] = { "'", "0", "1", "2", "3", "4", "5", "6", "7",
                                                     "8", "9", "a", "b", "c", "d", "e", "f", "g", "h",
                                                     "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
                                                     "s", "t", "u", "v", "w", "x", "y", "z", "",
@@ -212,10 +212,10 @@ namespace FGUI
                                                     "", "", "", "", "", "", "",
                                                     "", "", "", "", "", "", "", "",
                                                     "", "", "", "", "", "", "", "",
-                                                    "", "", "", "", "", "", ""};
+                                                    "", "", "", "", "", "", "" };
 
     // Windows Virtual Key Codes (VK)
-    const std::string_view m_strVirtualKeyCodes[222] = {"", "", "", "", "", "", "",
+    const std::string_view m_strVirtualKeyCodes[222] = { "", "", "", "", "", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "",
                                                         " ", "", "", "", "", "", "", "",
@@ -232,7 +232,7 @@ namespace FGUI
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", ";", "+", ",", "-", ".", "/?", "~", "", "", "", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                                                        "", "", "", "", "{", "\\", "}", "/"};
+                                                        "", "", "", "", "{", "\\", "}", "/" };
   };
 
   using WIDGET_TYPE = enum struct ESWidgetType_t : int {
@@ -260,7 +260,7 @@ namespace FGUI
 
     FULLSCREEN = 0x20 // this is exclusively for containers
   };
-
+  
 } // namespace FGUI
 
 #endif // FGUI_DEFINITIONS_HH
