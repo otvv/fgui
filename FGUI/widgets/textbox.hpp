@@ -14,7 +14,7 @@
 
 namespace FGUI
 {
-    using TEXTBOX_STYLE = enum struct ESTextBox_Style : int {
+  using TEXTBOX_STYLE = enum struct ESTextBox_Style : int {
     NORMAL = 1,
     UPPERCASE,
     PASSWORD
@@ -50,8 +50,8 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module 
-    void Save(nlohmann::json& module) override;
+    // @params: nlohmann::json module = json module
+    void Save(nlohmann::json &module) override;
 
     // @brief: load the widget state
     // @params: std::string file = file name/path to load
@@ -59,9 +59,11 @@ namespace FGUI
 
     // @brief: handle widget tooltips
     void Tooltip() override;
+
   private:
     int m_nStyle;
     std::string m_strCustomText;
+    unsigned int m_uiInputPos;
     unsigned int m_uiLength;
     bool m_bIsGettingKey;
     FGUI::KEY_STRINGS m_ksStrings;

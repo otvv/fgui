@@ -16,6 +16,7 @@ namespace FGUI
     m_strCustomText = "Sample Text";
     m_uiLength = 24;
     m_anyFont = 0;
+    m_uiInputPos = 0;
     m_strTooltip = "";
     m_nStyle = static_cast<int>(TEXTBOX_STYLE::NORMAL);
     m_nType = static_cast<int>(WIDGET_TYPE::TEXTBOX);
@@ -70,7 +71,7 @@ namespace FGUI
     }
     else if (m_nStyle == static_cast<int>(FGUI::TEXTBOX_STYLE::UPPERCASE))
     {
-      std::transform(m_strCustomText.begin(), m_strCustomText.end(),m_strCustomText.begin(), ::toupper);
+      std::transform(m_strCustomText.begin(), m_strCustomText.end(), m_strCustomText.begin(), ::toupper);
 
       FGUI::RENDER.Text(arWidgetRegion.m_iLeft + (dmTitleTextSize.m_iWidth + 20), arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTitleTextSize.m_iHeight / 2), m_anyFont, {35, 35, 35}, m_strCustomText);
     }
@@ -87,7 +88,7 @@ namespace FGUI
     {
       for (std::size_t key = 0; key < 256; key++)
       {
-        if (!FGUI::INPUT.GetKeyPress(key))
+        if (!FGUI::INPUT.IsKeyPressed(key))
         {
           continue;
         }
@@ -104,43 +105,40 @@ namespace FGUI
         }
 
         // handle upper case keys
-        if (FGUI::INPUT.GetKeyHeld(KEY_LSHIFT) || FGUI::INPUT.GetKeyHeld(KEY_RSHIFT))
+        if (FGUI::INPUT.IsKeyHeld(KEY_LSHIFT) || FGUI::INPUT.IsKeyHeld(KEY_RSHIFT))
         {
           std::transform(strKeyInput.begin(), strKeyInput.end(), strKeyInput.begin(), ::toupper);
         }
 
-        // input position
-        std::size_t ulInputPos = 0;
-
         // insert text
         if (strKeyInput.length() == 1 && (m_strCustomText.length() < m_uiLength))
         {
-          m_strCustomText.insert(ulInputPos, strKeyInput);
-          ulInputPos++;
+          m_strCustomText.insert(m_uiInputPos, strKeyInput);
+          m_uiInputPos++;
         }
 
         if (m_strCustomText.length() > 0)
         {
-          if (key == KEY_BACKSPACE && (ulInputPos > 0))
+          if (key == KEY_BACKSPACE && (m_uiInputPos > 0))
           {
-            m_strCustomText.erase(ulInputPos, 1);
-            ulInputPos--;
+            m_strCustomText.erase(m_uiInputPos, 1);
+            m_uiInputPos--;
           }
           else if (key == KEY_DELETE)
           {
             // clear text
+            m_uiInputPos = 0;
             m_strCustomText.clear();
-            ulInputPos = 0;
           }
 
           // change the current input position
           if (key == KEY_LEFT)
           {
-            ulInputPos--;
+            m_uiInputPos--;
           }
-          else if (key == KEY_RIGHT && (ulInputPos < m_strCustomText.length()))
+          else if (key == KEY_RIGHT && (m_uiInputPos < m_strCustomText.length()))
           {
-            ulInputPos++;
+            m_uiInputPos++;
           }
         }
       }
@@ -193,12 +191,12 @@ namespace FGUI
     {
       FGUI::DIMENSION dmTooltipTextSize = FGUI::RENDER.GetTextSize(m_anyFont, m_strTooltip);
 
-      FGUI::AREA arWidgetRegion = {(FGUI::INPUT.GetCursorPos().m_iX + 10), (FGUI::INPUT.GetCursorPos().m_iY + 10), (dmTooltipTextSize.m_iWidth + 10), (dmTooltipTextSize.m_iHeight + 10)};
+      FGUI::AREA arTooltipRegion = {(FGUI::INPUT.GetCursorPos().m_iX + 10), (FGUI::INPUT.GetCursorPos().m_iY + 10), (dmTooltipTextSize.m_iWidth + 10), (dmTooltipTextSize.m_iHeight + 10)};
 
-      FGUI::RENDER.Outline(arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop, arWidgetRegion.m_iRight, arWidgetRegion.m_iBottom, {180, 95, 95});
-      FGUI::RENDER.Rectangle((arWidgetRegion.m_iLeft + 1), (arWidgetRegion.m_iTop + 1), (arWidgetRegion.m_iRight - 2), (arWidgetRegion.m_iBottom - 2), {225, 90, 75});
-      FGUI::RENDER.Text(arWidgetRegion.m_iLeft + (arWidgetRegion.m_iRight / 2) - (dmTooltipTextSize.m_iWidth / 2),
-                        arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - (dmTooltipTextSize.m_iHeight / 2), m_anyFont, {245, 245, 245}, m_strTooltip);
+      FGUI::RENDER.Outline(arTooltipRegion.m_iLeft, arTooltipRegion.m_iTop, arTooltipRegion.m_iRight, arTooltipRegion.m_iBottom, {180, 95, 95});
+      FGUI::RENDER.Rectangle((arTooltipRegion.m_iLeft + 1), (arTooltipRegion.m_iTop + 1), (arTooltipRegion.m_iRight - 2), (arTooltipRegion.m_iBottom - 2), {225, 90, 75});
+      FGUI::RENDER.Text(arTooltipRegion.m_iLeft + (arTooltipRegion.m_iRight / 2) - (dmTooltipTextSize.m_iWidth / 2),
+                        arTooltipRegion.m_iTop + (arTooltipRegion.m_iBottom / 2) - (dmTooltipTextSize.m_iHeight / 2), m_anyFont, {245, 245, 245}, m_strTooltip);
     }
   }
 

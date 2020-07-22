@@ -17,7 +17,7 @@ namespace FGUI
   namespace DETAIL
   {
     // drawing functions pointers
-    using pCreateFont = std::add_pointer_t<void(FGUI::FONT&, std::string, int, int, bool)>;
+    using pCreateFont = std::add_pointer_t<void(FGUI::FONT &, std::string, int, int, bool)>;
     using pGetScreenSize = std::add_pointer_t<FGUI::DIMENSION()>;
     using pGetTextSize = std::add_pointer_t<FGUI::DIMENSION(FGUI::FONT, std::string)>;
     using pDrawRectangle = std::add_pointer_t<void(int, int, int, int, FGUI::COLOR)>;
@@ -28,9 +28,9 @@ namespace FGUI
 
     // input functions pointers
     using pPullInput = std::add_pointer_t<void()>;
-    using pGetKeyHeld = std::add_pointer_t<bool(unsigned int)>;
-    using pGetKeyPress = std::add_pointer_t<bool(unsigned int)>;
-    using pGetKeyRelease = std::add_pointer_t<bool(unsigned int)>;
+    using pIsKeyHeld = std::add_pointer_t<bool(unsigned int)>;
+    using pIsKeyReleased = std::add_pointer_t<bool(unsigned int)>;
+    using pIsKeyPressed = std::add_pointer_t<bool(unsigned int)>;
     using pGetCursorPos = std::add_pointer_t<FGUI::POINT()>;
     using pGetCursorPosDelta = std::add_pointer_t<FGUI::POINT()>;
     using pGetCursorWheelDelta = std::add_pointer_t<int()>;
@@ -53,9 +53,9 @@ namespace FGUI
   using INPUT_SYTEM = struct SInputSystem_t
   {
     DETAIL::pPullInput PullInput;
-    DETAIL::pGetKeyHeld GetKeyHeld;
-    DETAIL::pGetKeyRelease GetKeyRelease;
-    DETAIL::pGetKeyPress GetKeyPress;
+    DETAIL::pIsKeyHeld IsKeyHeld;
+    DETAIL::pIsKeyReleased IsKeyReleased;
+    DETAIL::pIsKeyPressed IsKeyPressed;
     DETAIL::pGetCursorPos GetCursorPos;
     DETAIL::pGetCursorPosDelta GetCursorPosDelta;
     DETAIL::pGetCursorWheelDelta GetCursorWheelDelta;
