@@ -13,7 +13,7 @@ namespace FGUI
     m_strTitle = "Tabs";
     m_anyFont = 0;
     m_ullSelectedEntry = 0;
-    m_dmSize = { 110, 25 };
+    m_dmSize = {110, 25};
     m_iEntrySpacing = 113;
     m_prgpTabs = {};
     m_strTooltip = "";
@@ -46,17 +46,17 @@ namespace FGUI
 
     for (std::size_t i = 0; i < m_prgpTabs.size(); i++)
     {
-      FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX + (static_cast<int>(i) * m_iEntrySpacing), GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
+      FGUI::AREA arWidgetRegion = {GetAbsolutePosition().m_iX + (static_cast<int>(i) * m_iEntrySpacing), GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
 
       if (m_ullSelectedEntry == i)
       {
-        FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop - 5), arWidgetRegion.m_iRight, (arWidgetRegion.m_iBottom + 5), { 45, 45, 45 });
-        FGUI::RENDER.Text((arWidgetRegion.m_iLeft + 20), (arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - 5), m_anyFont, { 255, 255, 255 }, m_prgpTabs[i]);
+        FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, (arWidgetRegion.m_iTop - 5), arWidgetRegion.m_iRight, (arWidgetRegion.m_iBottom + 5), {45, 45, 45});
+        FGUI::RENDER.Text((arWidgetRegion.m_iLeft + 20), (arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - 5), m_anyFont, {255, 255, 255}, m_prgpTabs[i]);
       }
       else
       {
-        FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop, arWidgetRegion.m_iRight, arWidgetRegion.m_iBottom, { 45, 45, 45 });
-        FGUI::RENDER.Text((arWidgetRegion.m_iLeft + 20), (arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - 5), m_anyFont, { 255, 255, 255 }, m_prgpTabs[i]);
+        FGUI::RENDER.Rectangle(arWidgetRegion.m_iLeft, arWidgetRegion.m_iTop, arWidgetRegion.m_iRight, arWidgetRegion.m_iBottom, {45, 45, 45});
+        FGUI::RENDER.Text((arWidgetRegion.m_iLeft + 20), (arWidgetRegion.m_iTop + (arWidgetRegion.m_iBottom / 2) - 5), m_anyFont, {255, 255, 255}, m_prgpTabs[i]);
       }
     }
   }
@@ -65,11 +65,11 @@ namespace FGUI
   {
     for (std::size_t i = 0; i < m_prgpTabs.size(); i++)
     {
-      FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX + (static_cast<int>(i) * m_iEntrySpacing), GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
+      FGUI::AREA arWidgetRegion = {GetAbsolutePosition().m_iX + (static_cast<int>(i) * m_iEntrySpacing), GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight};
 
       if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
       {
-        if (FGUI::INPUT.GetKeyPress(MOUSE_1))
+        if (FGUI::INPUT.IsKeyPressed(MOUSE_1))
         {
           m_ullSelectedEntry = i;
         }
@@ -81,7 +81,7 @@ namespace FGUI
   {
   }
 
-  void CTabs::Save(nlohmann::json& module)
+  void CTabs::Save(nlohmann::json &module)
   {
     IGNORE(module);
   }

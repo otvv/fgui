@@ -24,6 +24,7 @@ namespace FGUI
   class CWidgets : public std::enable_shared_from_this<FGUI::CWidgets>
   {
     friend class FGUI::CContainer;
+
   public:
     // @brief: set the default position of the widget
     // @params: unsigned int x, unsigned int y = pixels coordinates (on the screen)
@@ -58,7 +59,7 @@ namespace FGUI
     void SetTooltip(std::string tooltip);
 
     // @brief: get the widget's current tooltip
-    std::string GetTooltip(); 
+    std::string GetTooltip();
 
     // @brief: set the widget flags
     // @params: int flags = widget default/custom flag
@@ -73,18 +74,18 @@ namespace FGUI
 
     // @brief: set the widget that will behave like a medium (controller) for the parent widget
     // @params: std::shared_ptr<FGUI::CWidgets> medium = controller (element that will control the other)
-    // unsigned int page = widget page
-    void SetMedium(std::shared_ptr<FGUI::CWidgets> medium, unsigned int page);
+    // int page = widget page
+    void SetMedium(std::shared_ptr<FGUI::CWidgets> medium, int page);
 
     // @brief: return an instance of the current medium (controller widget)
     std::shared_ptr<FGUI::CWidgets> GetMedium();
 
     // @brief: set current widget page
-    // @params: unsigned int page = widget page
-    void SetPage(unsigned int page);
+    // @params: int page = widget page
+    void SetPage(int page);
 
     // @brief: get current widget page
-    unsigned int GetPage();
+    int GetPage();
 
     // @brief: return the widget type (family)
     int GetType();
@@ -111,7 +112,6 @@ namespace FGUI
     std::shared_ptr<FGUI::CWidgets> GetParentWidget();
 
   protected:
-
     // @brief: populate widget geometry (draw widget)
     virtual void Geometry() = 0;
 
@@ -122,8 +122,8 @@ namespace FGUI
     virtual void Input() = 0;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module 
-    virtual void Save(nlohmann::json& module) = 0;
+    // @params: nlohmann::json module = json module
+    virtual void Save(nlohmann::json &module) = 0;
 
     // @brief: load the widget state
     // @params: std::string file = file name/path to load
@@ -134,7 +134,7 @@ namespace FGUI
 
     int m_nFlags;
     int m_nType;
-    unsigned int m_uiPage;
+    int m_iPage;
     std::shared_ptr<FGUI::CWidgets> m_pParentWidget;
     std::shared_ptr<FGUI::CWidgets> m_pMediumWidget;
     std::string m_strTooltip;
