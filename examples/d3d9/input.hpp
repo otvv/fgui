@@ -13,7 +13,6 @@ namespace FGUI_INPUT_WIN32
 {
     inline std::array<bool, 256> m_prgpCurrentPressedKeys, m_prgpOldPressedKeys;
     inline FGUI::POINT m_ptCursorPosition, m_ptCursorPositionDelta;
-    inline int m_iCursorWheelDelta;
 
     inline void PullInput()
     {
@@ -60,12 +59,7 @@ namespace FGUI_INPUT_WIN32
     {
         return m_ptCursorPositionDelta;
     }
-
-    inline int GetCursorWheelDelta()
-    {
-        return m_iCursorWheelDelta;
-    }
-
+    
     inline bool IsCursorInArea(FGUI::AREA area)
     {
         return (GetCursorPos().m_iX > area.m_iLeft && GetCursorPos().m_iY > area.m_iTop &&
@@ -81,7 +75,6 @@ namespace FGUI_INPUT_WIN32
         FGUI::INPUT.IsKeyPressed = FGUI_INPUT_WIN32::IsKeyPressed;
         FGUI::INPUT.GetCursorPos = FGUI_INPUT_WIN32::GetCursorPos;
         FGUI::INPUT.GetCursorPosDelta = FGUI_INPUT_WIN32::GetCursorPosDelta;
-        FGUI::INPUT.GetCursorWheelDelta = FGUI_INPUT_WIN32::GetCursorWheelDelta;
         FGUI::INPUT.IsCursorInArea = FGUI_INPUT_WIN32::IsCursorInArea;
     }
 }
