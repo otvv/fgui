@@ -79,5 +79,8 @@ namespace FGUI_IINPUT_SYSTEM
         FGUI::INPUT.GetCursorPos = FGUI_IINPUT_SYSTEM::GetCursorPos;
         FGUI::INPUT.GetCursorPosDelta = FGUI_IINPUT_SYSTEM::GetCursorPosDelta;
         FGUI::INPUT.IsCursorInArea = FGUI_IINPUT_SYSTEM::IsCursorInArea;
+        
+        // set input type
+        FGUI::INPUT.SetInputType(FGUI::INPUT_TYPE::INPUT_SYSTEM)
     }
 }
