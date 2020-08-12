@@ -4,11 +4,13 @@
 
 #ifdef FGUI_IMPLEMENTATION
 
+// internal
+#include "internal/aliases.hpp"
+#include "internal/definitions.hpp"
+#include "internal/helpers.hpp"
+
 // misc
-#include "misc/aliases.hpp"
 #include "misc/builder.hpp"
-#include "misc/definitions.hpp"
-#include "misc/helpers.hpp"
 
 // widgets
 #include "widgets/button.hpp"
@@ -22,9 +24,8 @@
 #include "widgets/listbox.hpp"
 #include "widgets/multibox.hpp"
 #include "widgets/slider.hpp"
-#include "widgets/tabs.hpp"
+#include "widgets/tabpanel.hpp"
 #include "widgets/textbox.hpp"
 #include "widgets/widgets.hpp"
 
 #endif // FGUI_IMPLEMENTATION
-

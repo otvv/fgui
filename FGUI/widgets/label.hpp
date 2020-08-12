@@ -18,7 +18,8 @@ namespace FGUI
   using LABEL_STYLE = enum struct ESLabelStyle_t : int {
     NORMAL = 1,
     COLORED,
-    LINK
+    LINK,
+    SEPARATOR
   };
 
   class CLabel : public FGUI::CWidgets
@@ -55,11 +56,11 @@ namespace FGUI
 
     // @brief: save the widget state
     // @params: nlohmann::json module = json module
-    void Save(nlohmann::json &module) override;
+    void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: std::string file = file name/path to load
-    void Load(std::string file) override;
+    // @params: nlohmann::json module = json module
+    void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips
     void Tooltip() override;

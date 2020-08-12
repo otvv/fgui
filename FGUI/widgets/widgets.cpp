@@ -9,7 +9,7 @@
 #include "container.hpp"
 #include "listbox.hpp"
 #include "slider.hpp"
-#include "tabs.hpp"
+#include "tabpanel.hpp"
 
 namespace FGUI
 {
@@ -27,17 +27,17 @@ namespace FGUI
 
   FGUI::POINT CWidgets::GetAbsolutePosition()
   {
-    static FGUI::POINT ptTemporaryPosition = {0, 0};
+    static FGUI::POINT ptTemporaryPosition = { 0, 0 };
 
     static constexpr int iContainerWindowHeaderSize = 35; // NOTE: feel free to change this
 
     if (!m_pParentWidget)
     {
-      return {m_ptPosition.m_iX, m_ptPosition.m_iY};
+      return { m_ptPosition.m_iX, m_ptPosition.m_iY };
     }
 
-    ptTemporaryPosition = {(m_ptPosition.m_iX + m_pParentWidget->GetAbsolutePosition().m_iX),
-                           (m_ptPosition.m_iY + m_pParentWidget->GetAbsolutePosition().m_iY)};
+    ptTemporaryPosition = { (m_ptPosition.m_iX + m_pParentWidget->GetAbsolutePosition().m_iX),
+                           (m_ptPosition.m_iY + m_pParentWidget->GetAbsolutePosition().m_iY) };
 
     // scrollbar movement
     if (m_pParentWidget->GetType() == static_cast<int>(WIDGET_TYPE::CONTAINER) && std::reinterpret_pointer_cast<FGUI::CContainer>(m_pParentWidget)->GetScrollBarState())
@@ -124,26 +124,26 @@ namespace FGUI
     // otherwise, it will lock them until certain conditions are met
     switch (m_pMediumWidget->GetType())
     {
-    case static_cast<int>(WIDGET_TYPE::LISTBOX):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CListBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::CHECKBOX):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pMediumWidget)->GetState() == static_cast<bool>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::SLIDER):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CSlider>(m_pMediumWidget)->GetValue() == static_cast<float>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::COMBOBOX):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CComboBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
-    }
-    case static_cast<int>(WIDGET_TYPE::TABS):
-    {
-      return std::reinterpret_pointer_cast<FGUI::CTabs>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
-    }
+      case static_cast<int>(WIDGET_TYPE::LISTBOX) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CListBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::CHECKBOX) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CCheckBox>(m_pMediumWidget)->GetState() == static_cast<bool>(m_iPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::SLIDER) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CSlider>(m_pMediumWidget)->GetValue() == static_cast<float>(m_iPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::COMBOBOX) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CComboBox>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
+      }
+      case static_cast<int>(WIDGET_TYPE::TABPANEL) :
+      {
+        return std::reinterpret_pointer_cast<FGUI::CTabPanel>(m_pMediumWidget)->GetIndex() == static_cast<std::size_t>(m_iPage);
+      }
     }
 
     return false;
@@ -158,16 +158,6 @@ namespace FGUI
   std::shared_ptr<FGUI::CWidgets> CWidgets::GetMedium()
   {
     return m_pMediumWidget;
-  }
-
-  void CWidgets::SetPage(int page)
-  {
-    m_iPage = page;
-  }
-
-  int CWidgets::GetPage()
-  {
-    return m_iPage;
   }
 
   int CWidgets::GetType()

@@ -22,9 +22,13 @@ namespace FGUI
     // @brief: handle container rendering
     void Render();
 
-    // @brief: save widget state into a file
+    // @brief: save container state into a file
     // @params: std::string file = file name/path
     void SaveToFile(std::string file);
+
+    // @brief: load container state from a file
+    // @params: std::string file = file name/path
+    void LoadFromFile(std::string file);
 
     // @brief: toggles on or off the container
     // @params: bool state = container state (on/off)
@@ -77,17 +81,18 @@ namespace FGUI
 
     // @brief: save the widget state
     // @params: nlohmann::json module = json module
-    void Save(nlohmann::json &module) override;
+    void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: std::string file = file name/path to load
-    void Load(std::string file) override;
+    // @params: nlohmann::json module = json module
+    void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips
     void Tooltip() override;
 
   private:
     bool m_bIsOpened;
+    std::string m_strConfigName;
     bool m_bScrollBarState;
     unsigned int m_uiKey;
     std::shared_ptr<FGUI::CWidgets> m_pFocusedWidget;

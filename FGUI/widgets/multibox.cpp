@@ -183,7 +183,7 @@ namespace FGUI
               // NOTE: maybe remove this?
               m_bIsOpened = false;
             }
-          } 
+          }
         }
       }
     }
@@ -207,31 +207,26 @@ namespace FGUI
     }
   }
 
-  void CMultiBox::Load(std::string file)
+  void CMultiBox::Load(nlohmann::json& module)
   {
-    nlohmann::json jsModule;
-
-    std::ifstream ifsFileToLoad(file, std::ifstream::binary);
-
-    if (ifsFileToLoad.fail())
-    {
-      return; // TODO: handle this properly
-    }
-
-    jsModule = nlohmann::json::parse(ifsFileToLoad);
-
     // remove spaces from widget name
     std::string strFormatedWidgetName = GetTitle();
     std::replace(strFormatedWidgetName.begin(), strFormatedWidgetName.end(), ' ', '_');
 
-    for (std::size_t i = 0; i < m_prgpEntries.first.size(); i++)
+    if (module.contains(strFormatedWidgetName))
     {
-      // remove spaces from the entry name
-      std::string strFormatedEntryName = m_prgpEntries.first[i];
-      std::replace(strFormatedEntryName.begin(), strFormatedEntryName.end(), ' ', '_');
+      for (std::size_t i = 0; i < m_prgpEntries.first.size(); i++)
+      {
+        // remove spaces from the entry name
+        std::string strFormatedEntryName = m_prgpEntries.first[i];
+        std::replace(strFormatedEntryName.begin(), strFormatedEntryName.end(), ' ', '_');
 
-      // change widget state to the one stored on file
-      SetValue(i, jsModule[strFormatedWidgetName][strFormatedEntryName]);
+        if (module.contains(strFormatedEntryName))
+        {
+          // change widget state to the one stored on file
+          SetValue(i, module[strFormatedWidgetName][strFormatedEntryName]);
+        }
+      }
     }
   }
 
@@ -241,12 +236,12 @@ namespace FGUI
     {
       FGUI::DIMENSION dmTooltipTextSize = FGUI::RENDER.GetTextSize(m_anyFont, m_strTooltip);
 
-      FGUI::AREA arTooltipRegion = {(FGUI::INPUT.GetCursorPos().m_iX + 10), (FGUI::INPUT.GetCursorPos().m_iY + 10), (dmTooltipTextSize.m_iWidth + 10), (dmTooltipTextSize.m_iHeight + 10)};
+      FGUI::AREA arTooltipRegion = { (FGUI::INPUT.GetCursorPos().m_iX + 10), (FGUI::INPUT.GetCursorPos().m_iY + 10), (dmTooltipTextSize.m_iWidth + 10), (dmTooltipTextSize.m_iHeight + 10) };
 
-      FGUI::RENDER.Outline(arTooltipRegion.m_iLeft, arTooltipRegion.m_iTop, arTooltipRegion.m_iRight, arTooltipRegion.m_iBottom, {180, 95, 95});
-      FGUI::RENDER.Rectangle((arTooltipRegion.m_iLeft + 1), (arTooltipRegion.m_iTop + 1), (arTooltipRegion.m_iRight - 2), (arTooltipRegion.m_iBottom - 2), {225, 90, 75});
+      FGUI::RENDER.Outline(arTooltipRegion.m_iLeft, arTooltipRegion.m_iTop, arTooltipRegion.m_iRight, arTooltipRegion.m_iBottom, { 180, 95, 95 });
+      FGUI::RENDER.Rectangle((arTooltipRegion.m_iLeft + 1), (arTooltipRegion.m_iTop + 1), (arTooltipRegion.m_iRight - 2), (arTooltipRegion.m_iBottom - 2), { 225, 90, 75 });
       FGUI::RENDER.Text(arTooltipRegion.m_iLeft + (arTooltipRegion.m_iRight / 2) - (dmTooltipTextSize.m_iWidth / 2),
-                        arTooltipRegion.m_iTop + (arTooltipRegion.m_iBottom / 2) - (dmTooltipTextSize.m_iHeight / 2), m_anyFont, {245, 245, 245}, m_strTooltip);
+        arTooltipRegion.m_iTop + (arTooltipRegion.m_iBottom / 2) - (dmTooltipTextSize.m_iHeight / 2), m_anyFont, { 245, 245, 245 }, m_strTooltip);
     }
   }
 

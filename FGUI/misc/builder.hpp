@@ -22,7 +22,7 @@
 #include "../widgets/listbox.hpp"
 #include "../widgets/multibox.hpp"
 #include "../widgets/slider.hpp"
-#include "../widgets/tabs.hpp"
+#include "../widgets/tabpanel.hpp"
 #include "../widgets/textbox.hpp"
 #include "../widgets/widgets.hpp"
 
@@ -34,7 +34,7 @@ namespace FGUI
     // @brief: add a new widget to the queue (to be spawned by the builder pattern)
     // @params: std::shared_ptr<FGUI::CWidgets> widget = widget that will be spawned
     // @note: NEEDS TO BE INITIALIZED FIRST!
-    CBuilder &Widget(std::shared_ptr<FGUI::CWidgets> widget)
+    CBuilder& Widget(std::shared_ptr<FGUI::CWidgets> widget)
     {
       m_pTemporaryWidget = widget;
 
@@ -43,7 +43,7 @@ namespace FGUI
 
     // @brief: set widget default title
     // @params: std::string title = widget title/name
-    CBuilder &Title(std::string title)
+    CBuilder& Title(std::string title)
     {
       m_pTemporaryWidget->SetTitle(title);
 
@@ -52,7 +52,7 @@ namespace FGUI
 
     // @brief: set widget default position
     // @params: unsigned int x = left position (in pixels), unsigned y = top position (in pixels)
-    CBuilder &Position(unsigned int x, unsigned int y)
+    CBuilder& Position(unsigned int x, unsigned int y)
     {
       m_pTemporaryWidget->SetPosition(x, y);
 
@@ -61,7 +61,7 @@ namespace FGUI
 
     // @brief: sets the current widget tooltip
     // @params: std::string tooltip = widget custom tooltip
-    CBuilder &Tooltip(std::string tooltip)
+    CBuilder& Tooltip(std::string tooltip)
     {
       m_pTemporaryWidget->SetTooltip(tooltip);
 
@@ -70,7 +70,7 @@ namespace FGUI
 
     // @brief: set widget default size
     // @params: unsigned int width = widget width, unsigned int height = widget height
-    CBuilder &Size(unsigned int width, unsigned int height)
+    CBuilder& Size(unsigned int width, unsigned int height)
     {
       m_pTemporaryWidget->SetSize(width, height);
 
@@ -79,7 +79,7 @@ namespace FGUI
 
     // @brief: set the widget default font
     // @params: std::string family = font family/name, int size = font size (tall), bool bold = make the font bold, int flags = font custom flags (shadow, outline, etc)
-    CBuilder &Font(std::string family, int size, bool bold = false, int flags = 0x0)
+    CBuilder& Font(std::string family, int size, bool bold = false, int flags = 0x0)
     {
       m_pTemporaryWidget->SetFont(family, size, flags, bold);
 
@@ -88,7 +88,7 @@ namespace FGUI
 
     // @brief: set the widget default font
     // @params: FGUI::WIDGET_FONT font = widget font struct (same as above)
-    CBuilder &Font(FGUI::WIDGET_FONT font)
+    CBuilder& Font(FGUI::WIDGET_FONT font)
     {
       m_pTemporaryWidget->SetFont(font);
 
@@ -97,7 +97,7 @@ namespace FGUI
 
     // @brief: change widget default flags
     // @params: FGUI::WIDGET_FLAG flags = widget custom flag (DRAWABLE, CLICKABLE, etc)
-    CBuilder &Flags(FGUI::WIDGET_FLAG flags)
+    CBuilder& Flags(FGUI::WIDGET_FLAG flags)
     {
       m_pTemporaryWidget->SetFlags(static_cast<int>(flags));
 
@@ -106,7 +106,7 @@ namespace FGUI
 
     // @brief: container scrollbar state
     // @params: bool state = scrollbar state (enabled/disabled)
-    CBuilder &ScrollBar(bool onoff)
+    CBuilder& ScrollBar(bool onoff)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::CONTAINER))
       {
@@ -119,7 +119,7 @@ namespace FGUI
     // @brief: set the widget medium (controller)
     // @params: std::shared_ptr<FGUI::CWidgets> medium = widget that will "control" the current widget
     // int page = page to draw current widget according to the controller state (selected entry, value, state, etc)
-    CBuilder &Medium(std::shared_ptr<FGUI::CWidgets> medium, int page)
+    CBuilder& Medium(std::shared_ptr<FGUI::CWidgets> medium, int page)
     {
       m_pTemporaryWidget->SetMedium(medium, page);
 
@@ -128,7 +128,7 @@ namespace FGUI
 
     // @brief: add a new color to the colorlist
     // @params: std::string identifier = color name, FGUI::COLOR color = default color, bool gradient = gradient status (enable/disable interpolation)
-    CBuilder &Color(std::string identifier, FGUI::COLOR color, bool gradient = false)
+    CBuilder& Color(std::string identifier, FGUI::COLOR color, bool gradient = false)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORLIST))
       {
@@ -141,11 +141,11 @@ namespace FGUI
     // @brief: add a new color to the colorlist
     // @params: std::string identifier = color name, std::uint8_t red = red color (0 - 255), std::uint8_t green = green color (0 - 255),
     // std::uint8_t blue = blue color (0 - 255), std::uint8_t alpha = color alpha (0 - 255), bool gradient = gradient status (enable/disable interpolation)
-    CBuilder &Color(std::string identifier, std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255, bool gradient = false)
+    CBuilder& Color(std::string identifier, std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255, bool gradient = false)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORLIST))
       {
-        std::reinterpret_pointer_cast<FGUI::CColorList>(m_pTemporaryWidget)->AddColor(identifier, {red, green, blue, alpha}, gradient);
+        std::reinterpret_pointer_cast<FGUI::CColorList>(m_pTemporaryWidget)->AddColor(identifier, { red, green, blue, alpha }, gradient);
       }
 
       return *this;
@@ -153,7 +153,7 @@ namespace FGUI
 
     // @brief: set the default color of a widget (colorpicker/label)
     // @params: FGUI::COLOR color = widget color
-    CBuilder &Color(FGUI::COLOR color)
+    CBuilder& Color(FGUI::COLOR color)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
       {
@@ -170,25 +170,43 @@ namespace FGUI
     // @brief: set the default color of a widget (colorpicker/label)
     // @params: std::uint8_t red = red color (0 - 255), std::uint8_t green = green color (0 - 255),
     // std::uint8_t blue = blue color (0 - 255), std::uint8_t alpha = color alpha (0 - 255)
-    CBuilder &Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255)
+    CBuilder& Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
       {
-        std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->SetColor({red, green, blue, alpha});
+        std::reinterpret_pointer_cast<FGUI::CLabel>(m_pTemporaryWidget)->SetColor({ red, green, blue, alpha });
       }
       else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORPICKER))
       {
-        std::reinterpret_pointer_cast<FGUI::CColorPicker>(m_pTemporaryWidget)->SetColor({red, green, blue, alpha});
+        std::reinterpret_pointer_cast<FGUI::CColorPicker>(m_pTemporaryWidget)->SetColor({ red, green, blue, alpha });
       }
 
       return *this;
     };
 
+    // @brief: set the pixelation of the color pallet
+    // @params: unsigned int pixelation = pixelation amount
+    // @note: this is used as a form of optimization for the ColorList and ColorPicker.
+    // but it can be used as a form of customization as well.
+    CBuilder& Pixelation(unsigned int pixelation)
+    {
+      if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORLIST))
+      {
+        std::reinterpret_pointer_cast<FGUI::CColorList>(m_pTemporaryWidget)->SetPixelation(pixelation);
+      }
+      else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COLORPICKER))
+      {
+        std::reinterpret_pointer_cast<FGUI::CColorPicker>(m_pTemporaryWidget)->SetPixelation(pixelation);
+      }
+
+      return *this;
+    }
+
     // @brief: set the default key of a widget (keybinder and containers)
     // @params: unsigned int key = default key
     // @note: key = selected key on keybinders
     // key = toggle key on window containers
-    CBuilder &Key(unsigned int key)
+    CBuilder& Key(unsigned int key)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::KEYBINDER))
       {
@@ -207,7 +225,7 @@ namespace FGUI
 
     // @brief: set the default text of a widget (textbox and labels)
     // @params: std::string text = default text
-    CBuilder &Text(std::string text)
+    CBuilder& Text(std::string text)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::TEXTBOX))
       {
@@ -223,7 +241,7 @@ namespace FGUI
 
     // @brief: set the selected index of a widget (combobox, multibox and listbox)
     // @params: std::size_T index = selected index
-    CBuilder &Index(std::size_t index)
+    CBuilder& Index(std::size_t index)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LISTBOX))
       {
@@ -239,7 +257,7 @@ namespace FGUI
 
     // @brief: set the default value of a widget (slider)
     // @params: float value = default value
-    CBuilder &Value(float value)
+    CBuilder& Value(float value)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::SLIDER))
       {
@@ -251,7 +269,7 @@ namespace FGUI
 
     // @brief: set the default prefix of a slider
     // @params: std::string prefix = slider prefix (ms, %, °, etc)
-    CBuilder &Prefix(std::string prefix)
+    CBuilder& Prefix(std::string prefix)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::SLIDER))
       {
@@ -267,7 +285,7 @@ namespace FGUI
     // state = set combobox dropdown list state (on/off)
     // state = set multibox dropdown list state (on/off)
     // state = set container state (on/off)
-    CBuilder &State(bool state)
+    CBuilder& State(bool state)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::CHECKBOX))
       {
@@ -294,7 +312,7 @@ namespace FGUI
 
     // @brief: add a new entry to the widget (combobox, multibox and listbox)
     // @params: std::string title = entry title, unsigned int value = custom value
-    CBuilder &Entry(std::string title, unsigned int value = 0)
+    CBuilder& Entry(std::string title, unsigned int value = 0)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COMBOBOX))
       {
@@ -312,11 +330,12 @@ namespace FGUI
       return *this;
     };
 
-    // @brief: set the style of a widget (label and textbox)
+    // @brief: set the style of a widget (label, textbox and tabs)
     // @params: int style
     // @note: style = label style (normal, colored and link - FGUI::LABEL_STYLE)
     // style = textbox style (normal, uppercase and password (hidden) - FGUI::TEXTBOX_STYLE)
-    CBuilder &Style(int style)
+    // style = tab style (horizontal and vertical - FGUI::TAB_STYLE)
+    CBuilder& Style(int style)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::LABEL))
       {
@@ -326,13 +345,17 @@ namespace FGUI
       {
         std::reinterpret_pointer_cast<FGUI::CTextBox>(m_pTemporaryWidget)->SetStyle(static_cast<FGUI::TEXTBOX_STYLE>(style));
       }
+      else if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::TABPANEL))
+      {
+        std::reinterpret_pointer_cast<FGUI::CTabPanel>(m_pTemporaryWidget)->SetStyle(static_cast<FGUI::TAB_STYLE>(style));
+      }
 
       return *this;
     };
 
     // @brief: add a callback to a widget
     // @params: std::function<void()> callback = function to call
-    CBuilder &Callback(std::function<void()> callback)
+    CBuilder& Callback(std::function<void()> callback)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::COMBOBOX))
       {
@@ -367,7 +390,7 @@ namespace FGUI
 
     // @brief: widget value range (sliders)
     // @params: float min = min value, float max = max value
-    CBuilder &Range(float min, float max)
+    CBuilder& Range(float min, float max)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::SLIDER))
       {
@@ -379,7 +402,7 @@ namespace FGUI
 
     // @brief: set the text length of textboxes
     // @params: unsigned int length = text max length
-    CBuilder &Length(unsigned int length)
+    CBuilder& Length(unsigned int length)
     {
       if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::TEXTBOX))
       {
@@ -391,11 +414,11 @@ namespace FGUI
 
     // @brief: adds a new tab button inside the tab panel
     // @params: std::string tab = tab name
-    CBuilder &Tab(std::string tab)
+    CBuilder& Tab(std::string tab)
     {
-      if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::TABS))
+      if (m_pTemporaryWidget->GetType() == static_cast<int>(WIDGET_TYPE::TABPANEL))
       {
-        std::reinterpret_pointer_cast<FGUI::CTabs>(m_pTemporaryWidget)->AddTab(tab);
+        std::reinterpret_pointer_cast<FGUI::CTabPanel>(m_pTemporaryWidget)->AddTab(tab);
       }
 
       return *this;
@@ -404,7 +427,7 @@ namespace FGUI
     // @brief: spawn widget inside a container
     // @params: std::shared_ptr<FGUI::CContainer> container = target container
     // padding = toggles widget padding on/off (defaults to true)
-    CBuilder &SpawnIn(std::shared_ptr<FGUI::CContainer> container, bool padding = true)
+    CBuilder& SpawnIn(std::shared_ptr<FGUI::CContainer> container, bool padding = true)
     {
       container->AddWidget(m_pTemporaryWidget, padding);
 

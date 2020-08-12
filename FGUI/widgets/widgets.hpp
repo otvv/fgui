@@ -9,10 +9,11 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <exception>
 
-// library includes
-#include "../misc/aliases.hpp"
-#include "../misc/definitions.hpp"
+// library internal includes
+#include "../internal/aliases.hpp"
+#include "../internal/definitions.hpp"
 
 // external dependencies
 #include "../dependencies/external/json.hpp"
@@ -24,7 +25,6 @@ namespace FGUI
   class CWidgets : public std::enable_shared_from_this<FGUI::CWidgets>
   {
     friend class FGUI::CContainer;
-
   public:
     // @brief: set the default position of the widget
     // @params: unsigned int x, unsigned int y = pixels coordinates (on the screen)
@@ -80,13 +80,6 @@ namespace FGUI
     // @brief: return an instance of the current medium (controller widget)
     std::shared_ptr<FGUI::CWidgets> GetMedium();
 
-    // @brief: set current widget page
-    // @params: int page = widget page
-    void SetPage(int page);
-
-    // @brief: get current widget page
-    int GetPage();
-
     // @brief: return the widget type (family)
     int GetType();
 
@@ -123,11 +116,11 @@ namespace FGUI
 
     // @brief: save the widget state
     // @params: nlohmann::json module = json module
-    virtual void Save(nlohmann::json &module) = 0;
+    virtual void Save(nlohmann::json& module) = 0;
 
     // @brief: load the widget state
-    // @params: std::string file = file name/path to load
-    virtual void Load(std::string file) = 0;
+    // @params: nlohmann::json module = json module
+    virtual void Load(nlohmann::json& module) = 0;
 
     // @brief: handle widget tooltips
     virtual void Tooltip() = 0;
