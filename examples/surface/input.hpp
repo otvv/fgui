@@ -81,6 +81,6 @@ namespace FGUI_IINPUT_SYSTEM
         FGUI::INPUT.IsCursorInArea = FGUI_IINPUT_SYSTEM::IsCursorInArea;
         
         // set input type
-        FGUI::INPUT.SetInputType(FGUI::INPUT_TYPE::INPUT_SYSTEM)
+        FGUI::INPUT.SetInputType(FGUI::INPUT_TYPE::INPUT_SYSTEM);
     }
 }
