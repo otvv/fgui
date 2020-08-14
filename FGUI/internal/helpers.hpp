@@ -98,8 +98,6 @@ namespace FGUI {
   };
 
   using FONT = CFont*;
-
-  std::unordered_map<std::wstring, FGUI::FONT> fonts;
 }
 #else
 namespace FGUI
