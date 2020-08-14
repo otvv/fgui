@@ -78,6 +78,6 @@ namespace FGUI_INPUT_WIN32
         FGUI::INPUT.IsCursorInArea = FGUI_INPUT_WIN32::IsCursorInArea;
         
         // set input type
-        FGUI::INPUT.SetInputType(FGUI::INPUT_TYPE::WIN_32)
+        FGUI::INPUT.SetInputType(FGUI::INPUT_TYPE::WIN_32);
     }
 }
