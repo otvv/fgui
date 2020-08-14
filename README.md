@@ -15,14 +15,14 @@
 
 A multiplatform object-oriented gui framework written in **C++**. This framework is mainly aimed towards game hacking, but you can use it for anything.
 * Easy to use and to customize.
-* Works with DirectX 9/10 and Valve's DirectX 9 wrapper: Surface. (OpenGL/Glut will come later..)
+* Works with DirectX 9/10 and Valve's DirectX 9 wrapper: Surface. (OpenGL will come later.)
 * It comes with a built-in config system. (The library is using [json](https://github.com/nlohmann/json) as a file parser.)
 
 _You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets, function documentation and a how to setup guide._
 
 ***
 
-Here is a image of the default design of the library: _(PENDING)_
+Here is an image of the default design of the library: _(PENDING)_
 
 In this [link](https://github.com/otvv/fgui/tree/master/resources) you can see more examples of what you can do with FGUI.
 
