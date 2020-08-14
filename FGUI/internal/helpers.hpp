@@ -73,7 +73,34 @@ namespace FGUI
 #elif defined(FGUI_USE_OPENGL)
 
 // TODO: OpenGL support
+#elif defined(FGUI_USE_D2D)
+#include <D2D1.h>
+#include <unordered_map>
+#include <dwrite_1.h>
+#include <string_view>
+#pragma comment( lib, "dxgi" )
+#pragma comment( lib, "d2d1" )
+#pragma comment( lib, "dcomp" )
+#pragma comment( lib, "dwrite" )
 
+typedef DWORD D3DCOLOR;
+
+#define D3DCOLOR_ARGB(a,r,g,b) \
+    ((D3DCOLOR)((((a)&0xff)<<24)|(((r)&0xff)<<16)|(((g)&0xff)<<8)|((b)&0xff)))
+#define D3DCOLOR_RGBA(r,g,b,a) D3DCOLOR_ARGB(a,r,g,b)
+
+namespace FGUI {
+  
+  struct CFont {
+    std::wstring name;
+    float size;
+    IDWriteTextFormat* textFmt;
+  };
+
+  using FONT = CFont*;
+
+  std::unordered_map<std::wstring, FGUI::FONT> fonts;
+}
 #else
 namespace FGUI
 {
