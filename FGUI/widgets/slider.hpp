@@ -17,22 +17,23 @@ namespace FGUI
     CSlider();
 
     // @brief: set a custom value for the slider
-    // @params: float value = custom slider value (defaults to 0)
+    // @args: float value = custom slider value (defaults to 0)
     void SetValue(float value);
 
     // @brief: get the current value from the slider
     float GetValue();
 
     // @brief: set the slider range (boundaries)
-    // @params: float min = min value acceptable by the slider, float max = max value reachable by the slider
+    // @args: float min = min value acceptable by the slider, float max = max value reachable by the slider
     void SetRange(float min, float max);
 
     // @brief: set a custom prefix for the slider
-    // @params: std::string prefix = custom prefix (%, ms, °, etc)
+    // @args: std::string prefix = custom prefix (%, ms, °, etc)
     void SetPrefix(std::string prefix);
 
     // @brief: populate widget geometry (draw widget)
-    void Geometry() override;
+    // @args: FGUI::WIDGET_STATUS status = widget status (HOVERED, etc)
+    void Geometry(FGUI::WIDGET_STATUS status) override;
 
     // @brief: handle update operations on the widget
     void Update() override;
@@ -41,15 +42,16 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module 
+    // @args: nlohmann::json module = json module 
     void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips
     void Tooltip() override;
+
   private:
     float m_flValue;
     bool m_bIsDragging;

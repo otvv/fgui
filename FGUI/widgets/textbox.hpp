@@ -7,6 +7,7 @@
 
 // includes
 #include <string>
+#include <ctype.h>
 #include <algorithm>
 
 // library includes
@@ -26,22 +27,23 @@ namespace FGUI
     CTextBox();
 
     // @brief: set a custom text for the textbox
-    // @params: std::string text = custom default text
+    // @args: std::string text = custom default text
     void SetText(std::string text);
 
     // @brief: get the current text of the textbox
     std::string GetText();
 
     // @brief: set custom text length
-    // @params: unsigned int length = text length (characters allowed)
+    // @args: unsigned int length = text length (characters allowed)
     void SetLength(unsigned int length);
 
     // @brief: set the textbox style (NORMAL = normal text; UPPERCASE = all text will be on uppercase; PASSWORD = all typed text will be replaced by a '*')
-    // @params: FGUI::TEXTBOX_STYLE style = textbox style (flag)
+    // @args: FGUI::TEXTBOX_STYLE style = textbox style (flag)
     void SetStyle(FGUI::TEXTBOX_STYLE style);
 
     // @brief: populate widget geometry (draw widget)
-    void Geometry() override;
+    // @args: FGUI::WIDGET_STATUS status = widget status (HOVERED, etc)
+    void Geometry(FGUI::WIDGET_STATUS status) override;
 
     // @brief: handle update operations on the widget
     void Update() override;
@@ -50,11 +52,11 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips
@@ -62,6 +64,7 @@ namespace FGUI
 
   private:
     int m_nStyle;
+    std::vector<std::string> m_prgstrBackupText;
     std::string m_strCustomText;
     unsigned int m_uiInputPos;
     unsigned int m_uiLength;

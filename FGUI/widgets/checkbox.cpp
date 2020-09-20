@@ -35,7 +35,7 @@ namespace FGUI
     m_fnctCallback = callback;
   }
 
-  void CCheckBox::Geometry()
+  void CCheckBox::Geometry(FGUI::WIDGET_STATUS status)
   {
     FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
 
@@ -45,7 +45,7 @@ namespace FGUI
 
     if (m_bIsChecked)
     {
-      if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
+      if (status == FGUI::WIDGET_STATUS::HOVERED)
       {
         FGUI::RENDER.Outline((arWidgetRegion.m_iLeft - 1), (arWidgetRegion.m_iTop - 1), arWidgetRegion.m_iRight, arWidgetRegion.m_iBottom, { 180, 25, 25 });
       }
@@ -54,7 +54,7 @@ namespace FGUI
     }
     else
     {
-      if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
+      if (status == FGUI::WIDGET_STATUS::HOVERED)
       {
         FGUI::RENDER.Outline((arWidgetRegion.m_iLeft - 1), (arWidgetRegion.m_iTop - 1), arWidgetRegion.m_iRight, arWidgetRegion.m_iBottom, { 195, 195, 195 });
       }
@@ -66,8 +66,8 @@ namespace FGUI
 
   void CCheckBox::Update()
   {
-    m_dmSize = { 16, 16 }; // this is required to keep the widget from being padded on groupboxes
-
+    m_dmSize = { 16, 16 }; // this is required to keep the widget from being padded on Containers
+    
     if (m_bIsChecked)
     {
       if (m_fnctCallback)
@@ -80,12 +80,7 @@ namespace FGUI
 
   void CCheckBox::Input()
   {
-    FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
-
-    if (FGUI::INPUT.IsCursorInArea(arWidgetRegion))
-    {
-      m_bIsChecked = !m_bIsChecked;
-    }
+    m_bIsChecked = !m_bIsChecked;
   }
 
   void CCheckBox::Save(nlohmann::json& module)

@@ -2,54 +2,39 @@
 // FGUI - feature rich graphical user interface
 //
 
-#ifndef FGUI_COMBOBOX_HH
-#define FGUI_COMBOBOX_HH
+#ifndef FGUI_ITEMSELECTOR_HH
+#define FGUI_ITEMSELECTOR_HH
 
 // includes
-#include <string>
 #include <functional>
-#include <utility>
-#include <vector>
 
 // library includes
 #include "widgets.hpp"
 
 namespace FGUI
 {
-
-  class CComboBox : public FGUI::CWidgets
+  class CItemSelector : public FGUI::CWidgets
   {
   public:
-    CComboBox();
+    CItemSelector();
 
-    // @brief: set the combobox state (toggle dropdown list on/off)
-    // @args: bool onoff = dropdown state
-    void SetState(bool onoff);
-
-    // @brief: get the combobox state (dropdown list enabled or not)
-    bool GetState();
-
-    // @brief: set the combobox selected index
+    // @brief: set the item selector selected index
     // @args: std::size_t index = selected index (starting with 0)
     void SetIndex(std::size_t index);
 
-    // @brief: get the combobox selected index (entry)
+    // @brief: get the item selector selected index (entry)
     std::size_t GetIndex();
 
-    // @brief: sets a custom value to a specific entry on the dropdown
+    // @brief: sets a custom value to a specific entry inside the item selector
     // @args: std::size_t index = entry index, unsigned int value = custom value
     void SetValue(std::size_t index, unsigned int value);
 
-    // @brief: get the combobox selected entry custom value
+    // @brief: get the item selector selected entry custom value
     std::size_t GetValue();
 
-    // @brief: adds a new entry inside the combobox
+    // @brief: adds a new entry inside the item selector
     // @args: std::string name = entry title, unsigned int value = entry custom value
     void AddEntry(std::string name, unsigned int value = 0);
-
-    // @brief: adds a function callback for the combobox (it will call the function whenever the user selects something on the combobox)
-    // @args: std::function<void()> callback = function instance
-    void AddCallback(std::function<void()> callback);
 
     // @brief: populate widget geometry (draw widget)
     // @args: FGUI::WIDGET_STATUS status = widget status (HOVERED, etc)
@@ -73,15 +58,10 @@ namespace FGUI
     void Tooltip() override;
 
   private:
-    bool m_bIsOpened;
-    int m_iEntrySpacing;
-    int m_iCustomHeight;
-    int m_iScrollThumbPosition;
-    bool m_bIsDraggingThumb;
+    FGUI::RANGE m_rngBoundaries;
     std::size_t m_ullSelectedEntry;
     std::pair<std::vector<std::string>, std::vector<int>> m_prgpEntries;
-    std::function<void()> m_fnctCallback;
   };
 } // namespace FGUI
 
-#endif // FGUI_COMBOBOX_HH
+#endif // FGUI_ITEMSELECTOR_HH

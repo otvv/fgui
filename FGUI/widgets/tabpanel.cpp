@@ -4,6 +4,7 @@
 
 // library includes
 #include "tabpanel.hpp"
+#include "container.hpp"
 
 namespace FGUI
 {
@@ -46,7 +47,7 @@ namespace FGUI
     return m_nStyle;
   }
 
-  void CTabPanel::Geometry()
+  void CTabPanel::Geometry(FGUI::WIDGET_STATUS status)
   {
     // don't proceed if the tab container is empty
     if (m_prgpTabButtons.empty())
@@ -93,6 +94,8 @@ namespace FGUI
         }
       }
     }
+
+    IGNORE_ARGS(status);
   }
 
   void CTabPanel::Update()
@@ -119,6 +122,12 @@ namespace FGUI
         if (FGUI::INPUT.IsKeyPressed(MOUSE_1))
         {
           m_ullSelectedEntry = i;
+
+          // loose focus if another tab is selected
+          if (m_ullSelectedEntry != i)
+          { 
+            std::reinterpret_pointer_cast<FGUI::CContainer>(GetParentWidget())->SetFocusedWidget(nullptr);
+          }
         }
       }
     }
@@ -130,12 +139,12 @@ namespace FGUI
 
   void CTabPanel::Save(nlohmann::json& module)
   {
-    IGNORE_ARG(module);
+    IGNORE_ARGS(module);
   }
 
   void CTabPanel::Load(nlohmann::json& module)
   {
-    IGNORE_ARG(module);
+    IGNORE_ARGS(module);
   }
 
   void CTabPanel::Tooltip()

@@ -4,6 +4,7 @@
 
 // library includes
 #include "listbox.hpp"
+#include "container.hpp"
 
 namespace FGUI
 {
@@ -13,6 +14,7 @@ namespace FGUI
     m_strTitle = "ListBox";
     m_anyFont = 0;
     m_iEntrySpacing = 20;
+    m_dmSize = {250, 300};
     m_ullSelectedEntry = 0;
     m_iScrollThumbPosition = 0;
     m_fnctCallback = nullptr;
@@ -49,7 +51,7 @@ namespace FGUI
     m_fnctCallback = callback;
   }
 
-  void CListBox::Geometry()
+  void CListBox::Geometry(FGUI::WIDGET_STATUS status)
   {
     FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
 
@@ -97,7 +99,7 @@ namespace FGUI
       iEntriesDisplayed++;
     }
 
-    static constexpr FGUI::DIMENSION dmScrollBarThumbWidth = { 8, 5 };
+    static constexpr FGUI::DIMENSION dmScrollBarThumb = { 8, 5 };
 
     // calculate thumb position
     float flCalculatedPosition = static_cast<float>(m_iScrollThumbPosition) / static_cast<float>(m_prgpEntries.first.size());
@@ -124,12 +126,14 @@ namespace FGUI
 
     if (m_prgpEntries.first.size() > 50)
     {
-      FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 4), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumbWidth.m_iWidth, dmScrollBarThumbWidth.m_iHeight, { 220, 223, 231 });
+      FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 4), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumb.m_iWidth, dmScrollBarThumb.m_iHeight, { 220, 223, 231 });
     }
     else
     {
-      FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 4), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumbWidth.m_iWidth, flCalculatedSize, { 220, 223, 231 });
+      FGUI::RENDER.Rectangle((arScrollBarRegion.m_iLeft + 4), (arScrollBarRegion.m_iTop + flCalculatedPosition) + 5, dmScrollBarThumb.m_iWidth, flCalculatedSize, { 220, 223, 231 });
     }
+    
+    IGNORE_ARGS(status);
   }
 
   void CListBox::Update()
@@ -173,15 +177,21 @@ namespace FGUI
         m_bIsDraggingThumb = false;
       }
     }
+
+    // stop scrolling if another widget is being focused
+    if (std::reinterpret_pointer_cast<FGUI::CContainer>(GetParentWidget())->GetFocusedWidget())
+    {
+      m_bIsDraggingThumb = false;
+    }
   }
 
   void CListBox::Input()
   {
     FGUI::AREA arWidgetRegion = { GetAbsolutePosition().m_iX, GetAbsolutePosition().m_iY, m_dmSize.m_iWidth, m_dmSize.m_iHeight };
 
-    static constexpr FGUI::DIMENSION dmScrollBarThumbWidth = { 8, 5 };
+    static constexpr FGUI::DIMENSION dmScrollBarThumb = { 8, 5 };
 
-    FGUI::AREA arScrollBarRegion = { ((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight) - 15), arWidgetRegion.m_iTop, dmScrollBarThumbWidth.m_iWidth, (m_dmSize.m_iHeight - m_iEntrySpacing) };
+    FGUI::AREA arScrollBarRegion = { ((arWidgetRegion.m_iLeft + arWidgetRegion.m_iRight) - 15), arWidgetRegion.m_iTop, dmScrollBarThumb.m_iWidth, (m_dmSize.m_iHeight - m_iEntrySpacing) };
 
     if (FGUI::INPUT.IsCursorInArea(arScrollBarRegion))
     {
@@ -254,5 +264,4 @@ namespace FGUI
         arTooltipRegion.m_iTop + (arTooltipRegion.m_iBottom / 2) - (dmTooltipTextSize.m_iHeight / 2), m_anyFont, { 245, 245, 245 }, m_strTooltip);
     }
   }
-
 } // namespace FGUI

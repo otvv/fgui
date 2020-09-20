@@ -19,18 +19,19 @@ namespace FGUI
     CCheckBox();
 
     // @brief: set the checkbox state (toggle on/off)
-    // @params: bool onoff = checkbox state
+    // @args: bool onoff = checkbox state
     void SetState(bool onoff);
 
     // @brief: get the checkbox state (toggled or not)
     bool GetState();
 
     // @brief: adds a function callback for the checkbox (it will call the function whenever the user check the checkbox)
-    // @params: std::function<void()> callback = function instance
+    // @args: std::function<void()> callback = function instance
     void AddCallback(std::function<void()> callback);
 
     // @brief: populate widget geometry (draw widget)
-    void Geometry() override;
+    // @args: FGUI::WIDGET_STATUS status = widget status (HOVERED, etc)
+    void Geometry(FGUI::WIDGET_STATUS status) override;
 
     // @brief: handle update operations on the widget
     void Update() override;
@@ -39,11 +40,11 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips

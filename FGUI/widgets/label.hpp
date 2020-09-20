@@ -28,15 +28,15 @@ namespace FGUI
     CLabel();
 
     // @brief: adds a function callback for the label (it will call the function whenever the user clicks on the label)
-    // @params: std::function<void()> callback = function instance
+    // @args: std::function<void()> callback = function instance
     void AddCallback(std::function<void()> callback);
 
     // @brief: set the label style (NORMAL = it will draw a normal label; COLORED = it will draw a colored label; LINK = it will draw a clickable label)
-    // @params: FGUI::LABEL_STYLE style = label style (type)
+    // @args: FGUI::LABEL_STYLE style = label style (type)
     void SetStyle(FGUI::LABEL_STYLE style);
 
     // @brief: set the label color (it only works for colored label type)
-    // @params: FGUI::COLOR color = label custom color
+    // @args: FGUI::COLOR color = label custom color
     void SetColor(FGUI::COLOR color);
 
     // @brief: return the current color of the label
@@ -46,7 +46,8 @@ namespace FGUI
     int GetStyle();
 
     // @brief: populate widget geometry (draw widget)
-    void Geometry() override;
+    // @args: FGUI::WIDGET_STATUS status = widget status (HOVERED, etc)
+    void Geometry(FGUI::WIDGET_STATUS status) override;
 
     // @brief: handle update operations on the widget
     void Update() override;
@@ -55,11 +56,11 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips

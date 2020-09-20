@@ -66,7 +66,7 @@ namespace FGUI
       pIsCursorInArea IsCursorInArea;
 
       // @brief: set the input type
-      // @params: FGUI::INPUT_TYPE = input type (NONE, WIN_32, INPUT_SYSTEM or CUSTOM)
+      // @args: FGUI::INPUT_TYPE = input type (NONE, WIN_32, INPUT_SYSTEM or CUSTOM)
       // @note: make sure to set this when you initialize your widgets
       void SetInputType(FGUI::INPUT_TYPE type)
       {

@@ -23,7 +23,7 @@ namespace FGUI
     CListBox();
 
     // @brief: set the listbox selected index
-    // @params: std::size_t index = selected index (starting with 0)
+    // @args: std::size_t index = selected index (starting with 0)
     void SetIndex(std::size_t index);
 
     // @brief: get the listbox selected index (entry)
@@ -33,15 +33,16 @@ namespace FGUI
     int GetValue();
 
     // @brief: adds a new entry inside the listbox
-    // @params: std::string name = entry title, unsigned int value = entry custom value
-    void AddEntry(std::string name, unsigned int value);
+    // @args: std::string name = entry title, unsigned int value = entry custom value
+    void AddEntry(std::string name, unsigned int value = 0);
 
     // @brief: adds a function callback for the listbox (it will call the function whenever the user selects something on the listbox)
-    // @params: std::function<void()> callback = function instance
+    // @args: std::function<void()> callback = function instance
     void AddCallback(std::function<void()> callback);
 
     // @brief: populate widget geometry (draw widget)
-    void Geometry() override;
+    // @args: FGUI::WIDGET_STATUS status = widget status (HOVERED, etc)
+    void Geometry(FGUI::WIDGET_STATUS status) override;
 
     // @brief: handle update operations on the widget
     void Update() override;
@@ -50,11 +51,11 @@ namespace FGUI
     void Input() override;
 
     // @brief: save the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Save(nlohmann::json& module) override;
 
     // @brief: load the widget state
-    // @params: nlohmann::json module = json module
+    // @args: nlohmann::json module = json module
     void Load(nlohmann::json& module) override;
 
     // @brief: handle widget tooltips

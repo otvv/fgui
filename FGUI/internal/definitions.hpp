@@ -166,9 +166,9 @@ namespace FGUI
                                                     "S", "T", "U", "V", "W", "X", "Y", "Z", "NUM0",
                                                     "NUM1", "NUM2", "NUM3", "NUM4", "NUM5", "NUM6", "NUM7",
                                                     "NUM8", "NUM9", "/", "*", "-", "+", "NUMENTER", ",", "[",
-                                                    "]", "Ç", "'", "´", ",", ".", "/", "\\", "-", "=",
-                                                    "ENTER", "SPACE", "BACKSPACE", "TAB", "CAPSLOCK", "NUMLCK", "ESCAPE",
-                                                    "SCRLK", "INSERT", "DELETE", "HOME", "END", "PAGE UP", "PAGE DOWN",
+                                                    "]", "; (Ç)", "'", "´", ",", ".", "/", "\\", "-", "=",
+                                                    "ENTER", "SPACE", "BACKSPACE", "TAB", "CAPSLOCK", "NUMLOCK", "ESCAPE",
+                                                    "SCROLL", "INSERT", "DELETE", "HOME", "END", "PAGEUP", "PAGEDOWN",
                                                     "PAUSE", "LSHIFT", "RSHIFT", "ALT", "RALT", "LCONTROL",
                                                     "RCONTROL", "LWIN", "RWIN", "APP", "UP", "LEFT", "DOWN",
                                                     "RIGHT", "F1", "F2", "F3", "F4", "F5", "F6", "F7",
@@ -179,7 +179,7 @@ namespace FGUI
     const std::string_view m_strVirtualKeyCodes[223] = { "INVALID", "MOUSE1", "MOUSE2", "", "MOUSE3", "MOUSE4", "MOUSE5", "",
                                                         "BACKSPACE", "TAB", "", "", "", "ENTER", "", "", "SHIFT", "CONTROL", "ALT",
                                                         "PAUSE", "CAPSLOCK", "", "", "", "", "", "", "ESC", "", "", "", "",
-                                                        "SPACE", "PAGE UP", "PAGE DOWN", "END", "HOME", "LEFT", "UP", "RIGHT",
+                                                        "SPACE", "PAGEUP", "PAGEDOWN", "END", "HOME", "LEFT", "UP", "RIGHT",
                                                         "DOWN", "", "", "", "", "INS", "DEL", "", "0", "1", "2", "3",
                                                         "4", "5", "6", "7", "8", "9", "", "", "", "", "", "", "", "A",
                                                         "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
@@ -188,12 +188,15 @@ namespace FGUI
                                                         "NUM6", "NUM7", "NUM8", "NUM9", "*", "+", "_", "-", ".", "/", "F1",
                                                         "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                                                        "", "", "", "", "SCROLL LOCK", "", "", "", "", "", "", "", "", "", "",
+                                                        "", "", "", "", "SCROLL", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", "", "LSHIFT", "RSHIFT", "LCONTROL", "RCONTROL", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", ";", "+", ",", "-", ".", "/?", "~", "", "", "", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", "", "{", "\\", "}", "/" };
+
+    // Custom Key Codes
+    const std::string_view m_strCustomKeyCodes[256] = { "MAP YOUR KEYS HERE", "MAP YOUR KEYS HERE" };
   };
 
   using KEY_STRINGS = struct SKeyStrings_t
@@ -233,15 +236,18 @@ namespace FGUI
                                                         "", "", "", ";", "+", ",", "-", ".", "/?", "~", "", "", "", "", "",
                                                         "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                                                         "", "", "", "", "{", "\\", "}", "/" };
+
+    // Custom Key Codes
+    const std::string_view m_strCustomKeyCodes[256] = { "MAP YOUR KEYS HERE", "MAP YOUR KEYS HERE" };
   };
 
   using WIDGET_TYPE = enum struct ESWidgetType_t : int {
     BUTTON = 0,
     CHECKBOX,
-    COLORLIST,
     COLORPICKER,
     COMBOBOX,
     CONTAINER,
+    ITEMSELECTOR,
     KEYBINDER,
     LABEL,
     LISTBOX,
@@ -252,12 +258,21 @@ namespace FGUI
   };
 
   using WIDGET_FLAG = enum struct ESWidgetFlag_t : int {
-    DRAWABLE = 0x1,
-    CLICKABLE = 0x2,
-    SAVABLE = 0x4,
-    FOCUSABLE = 0x8,
+    DRAW_FIRST = 0x1,
+    DRAWABLE = 0x2,
+    CLICKABLE = 0x4,
+    SAVABLE = 0x8,
+    FOCUSABLE = 0x10,
 
-    FULLSCREEN = 0x20 // this is exclusively for window containers
+    FULLSCREEN = 0x20, // this is exclusively for window Containers
+    LIMIT = 0x40 // this is exclusively for window Containers
+  };
+
+  using WIDGET_STATUS = enum struct ESWidgetState_t : int {
+    NONE = 0,
+    HOVERED
+
+    // TODO: add more status flags
   };
 
 } // namespace FGUI
