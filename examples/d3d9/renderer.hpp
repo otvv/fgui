@@ -53,10 +53,10 @@ namespace FGUI_D3D9
 
 		const FGUI::VERTEX vtxVertices[4] =
 		{
-			{_x, _y + _height, 0.f, 1.f, dwColor },
-			{_x, _y, 0.f, 1.f, dwColor},
-			{_x + _width, _y + _height, 0.f, 1.f, dwColor},
-			{_x + _width, _y, 0.f, 1.f, dwColor},
+			{_x, _y + _height, 0, 1, dwColor },
+			{_x, _y, 0, 1, dwColor},
+			{_x + _width, _y + _height, 0, 1, dwColor},
+			{_x + _width, _y, 0, 1, dwColor},
 		};
 
 		m_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
@@ -78,8 +78,8 @@ namespace FGUI_D3D9
 		
 		const FGUI::VERTEX vtxVertices[2] =
 		{
-			{_from_x, _from_y, 0.f, 0.f, dwColor },
-			{_from_x + _to_x, _from_y + _to_y, 0.f, 0.f, dwColor}
+			{_from_x, _from_y, 0, 0, dwColor },
+			{_from_x + _to_x, _from_y + _to_y, 0, 0, dwColor}
 		};
 
 		m_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
@@ -94,10 +94,10 @@ namespace FGUI_D3D9
 
 		const FGUI::VERTEX vtxVertices[4] = 
 		{ 
-			{ _x, _y, 0.0f, 1.0f, dwColor1 },
-			{ _x + _width, _y, 0.0f, 1.0f, _horizontal ? dwColor2 : dwColor1 },
-			{ _x, _y + _height, 0.0f, 1.0f, _horizontal ? dwColor1 : dwColor2 },
-			{ _x + _width, _y + _height, 0.0f, 1.0f, dwColor2 }
+			{ _x, _y, 0, 1, dwColor1 },
+			{ _x + _width, _y, 0, 1, _horizontal ? dwColor2 : dwColor1 },
+			{ _x, _y + _height, 0, 1, _horizontal ? dwColor1 : dwColor2 },
+			{ _x + _width, _y + _height, 0, 1, dwColor2 }
 		};
 
 		m_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
