@@ -20,11 +20,12 @@ A multiplatform object-oriented gui framework written in **C++**. This framework
 
 _You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets, function documentation and a how to setup guide._
 
+Here is some images of the default design of the library: 
+![img1](resources/repo/fgui_default_layout_1.png)
 ***
-
-Here is an image of the default design of the library: _(PENDING)_
+![img2](resources/repo/fgui_default_layout_2.png)
 
 In this [link](https://github.com/otvv/fgui/tree/master/resources) you can see more examples of what you can do with FGUI.
 
-If you find bugs or glitches feel free to visit the issues tab. 
+If you find bugs or glitches feel free to visit the issues tab or report it on the Discord server. 
 If you want to contribute, you can always make a pull request.
