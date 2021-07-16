@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-   <a href="https://www.buymeacoffee.com/otvv"><img width="120" height="30" src="resources/repo/sponsor.svg" alt="buy me a coffe"></a>
+   <a href="https://www.buymeacoffee.com/otvv"><img width="160" height="40" src="resources/repo/sponsor.svg" alt="buy me a coffe"></a>
 </p>
 
 <p align="center">
