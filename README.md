@@ -3,16 +3,16 @@
 </p>
 
 <p align="center">
+   <a href="https://www.buymeacoffee.com/otvv"><img width="120" height="30" src="resources/repo/sponsor.svg" alt="buy me a coffe"></a>
+</p>
+
+<p align="center">
     <a href="https://en.wikipedia.org/wiki/C%2B%2B"><img width="120" height="30" src="resources/repo/language.svg" alt="c++"></a>
     <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img width="120" height="30" src="resources/repo/license.svg" alt="mit"></a>
 </p>
 
 <p align="center"> 
   <a href="https://discord.gg/jF3psdk"><img width="245" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner3" alt="discord"></a>
-</p>
-
-<p align="center">
-   <a href="https://www.buymeacoffee.com/otvv" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 120px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 </p>
 
 ***
