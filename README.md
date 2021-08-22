@@ -21,7 +21,7 @@ A multiplatform object-oriented gui framework written in **C++**. This framework
 
 	* Easy to use and to customize.
 	* Works with DirectX 9/10 and Valve's DirectX 9 wrapper: Surface. (OpenGL will come later.)
-	* It comes with a built-in config system. (The library is using [json](https://github.com/nlohmann/json) as a file parser.)
+	* It comes with a built-in config system. (The library is using json (https://github.com/nlohmann/json) as a file parser.)
 
 You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets, function documentation and a how to setup guide.
 
