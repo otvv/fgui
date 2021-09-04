@@ -12,7 +12,7 @@
 </p>
 
 <p align="center"> 
-  <a href="https://discord.gg/jF3psdk"><img width="245" src="https://discordapp.com/api/guilds/626007641037996073/widget.png?style=banner3" alt="discord"></a>
+  <a href="https://discord.gg/jF3psdk"><img width="245" src="https://discord.com/api/guilds/626007641037996073/widget.png?style=banner3" alt="discord"></a>
 </p>
 
 ***
