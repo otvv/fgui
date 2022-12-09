@@ -21,8 +21,6 @@ A multiplatform object-oriented gui framework written in **C++**. This framework
 
 You can visit the [wiki (currently under construction)](https://github.com/otvv/fgui/wiki) page for widgets, function documentation and a how to setup guide.
 
-Here are some images of the default design of the library:
-
 ![img1](resources/repo/fgui_default_layout_1.png)
 ![img2](resources/repo/fgui_default_layout_2.png)
 
