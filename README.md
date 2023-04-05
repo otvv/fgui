@@ -25,7 +25,7 @@ _You can visit the [wiki (currently under construction)](https://github.com/otvv
 ***
 
 Here is a preview of the default window design:
-![img](https://raw.githubusercontent.com/otvv/fgui/master/resources/menu_example_1.png)
+![img](https://raw.githubusercontent.com/otvv/fgui/4a84d7e98e23c3924906289d4837ea4ccf12c9a6/resources/menu_example.png)
 
 The framework is very customizable. You can click [here](https://github.com/otvv/fgui/tree/master/resources) for more examples.
 
