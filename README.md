@@ -7,10 +7,6 @@
     <a href="https://github.com/otvv/fgui/blob/master/LICENSE"><img width="120" height="30" src="resources/repo/license.svg" alt="mit"></a>
 </p>
 
-<p align="center"> 
-  <a href="https://discord.gg/jF3psdk"><img width="245" src="https://discord.com/api/guilds/626007641037996073/widget.png?style=banner3" alt="discord"></a>
-</p>
-
 ***
 
 A multiplatform object-oriented gui framework written in **C++**. This framework is mainly aimed towards game hacking, but you can use it for anything.
